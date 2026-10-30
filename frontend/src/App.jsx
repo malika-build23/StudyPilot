@@ -1,21 +1,47 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import AppLayout from './components/layout/AppLayout';
+
+// Pages
+import LandingPage from './pages/LandingPage';
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
+import SubjectsPage from './pages/SubjectsPage';
+import SubjectWorkspacePage from './pages/SubjectWorkspacePage';
+import ProfilePage from './pages/ProfilePage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-white">
-          AI Study Agent
-        </h1>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
 
-        <p className="text-blue-400 mt-4 text-lg">
-          Your AI-powered learning companion.
-        </p>
+          {/* Protected Student Workspace Routes */}
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/subjects" element={<SubjectsPage />} />
+            <Route path="/subjects/:id" element={<SubjectWorkspacePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
 
-        <button className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700">
-          Get Started
-        </button>
-      </div>
-    </div>
+          {/* Catch-all 404 Route */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
