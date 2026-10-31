@@ -192,7 +192,7 @@ const SubjectWorkspacePage = () => {
   const studyToolsSuite = [
     {
       title: 'Interactive Quizzes & Mock Tests',
-      phase: 'Phase 3 Active',
+      badge: 'Assessments',
       desc: 'Adaptive mock exams and topic-wise practice tests synthesized from your course materials to evaluate concept retention and identify weak zones.',
       icon: CheckCircle,
       color: 'bg-emerald-50 text-emerald-600',
@@ -202,7 +202,7 @@ const SubjectWorkspacePage = () => {
     },
     {
       title: 'Mistake Analysis & Weak Topics',
-      phase: 'Phase 3 Active',
+      badge: 'Diagnostics',
       desc: 'Deterministic mistake grading, multi-attempt score trends, and rule-based weak area detection with tailored revision directives.',
       icon: Brain,
       color: 'bg-amber-50 text-amber-600',
@@ -212,7 +212,7 @@ const SubjectWorkspacePage = () => {
     },
     {
       title: 'Study Planner & Readiness Analytics',
-      phase: 'Phase 4 & 6 Active',
+      badge: 'Adaptive Routine',
       desc: 'Real-time exam countdowns, automated day-by-day study schedules, syllabus coverage tracking, and dynamic plan adjustment.',
       icon: BarChart2,
       color: 'bg-purple-50 text-purple-600',
@@ -289,7 +289,7 @@ const SubjectWorkspacePage = () => {
                 Course Study Materials
               </h3>
               <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
-                Phase 2 Active
+                Course Library
               </span>
             </div>
             <p className="text-xs text-slate-500">
@@ -355,7 +355,7 @@ const SubjectWorkspacePage = () => {
             </div>
 
             <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">
-              Part B Enabled
+              AI Analysis
             </span>
           </div>
 
@@ -393,23 +393,23 @@ const SubjectWorkspacePage = () => {
             </div>
           </div>
           <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">
-            Phase 3 Part B Active
+            Diagnostic Engine
           </span>
         </div>
-        {/* Phase 5 - AI Mnemonics Generator */}
-<MnemonicGenerator
-  subjectId={id}
-  selectedMaterial={selectedMaterial}
-/>
-{/* Phase 5 - AI Diagram Generator */}
-<DiagramGenerator
-  subjectId={id}
-  selectedMaterial={selectedMaterial}
-/>
+        {/* AI Mnemonics Generator */}
+        <MnemonicGenerator
+          subjectId={id}
+          selectedMaterial={selectedMaterial}
+        />
+        {/* AI Diagram Generator */}
+        <DiagramGenerator
+          subjectId={id}
+          selectedMaterial={selectedMaterial}
+        />
 
         <PerformanceAnalyticsView subjectId={id} />
       </div>
-      {/* PHASE 5 PART B: FLASHCARDS, SPACED REPETITION & CLEAN NOTES */}
+      {/* FLASHCARDS, SPACED REPETITION & CLEAN NOTES */}
       <div className="space-y-4 pt-4 border-t border-slate-200/80">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -418,7 +418,7 @@ const SubjectWorkspacePage = () => {
             </div>
             <div>
               <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                Phase 5: Flashcards, Spaced Revision & Clean Notes
+                Active Recall, Spaced Revision & Clean Notes
               </h3>
               <p className="text-xs text-slate-500">
                 Active recall question decks, intelligent SM-2 memory retention, and handwritten OCR conversion
@@ -426,7 +426,7 @@ const SubjectWorkspacePage = () => {
             </div>
           </div>
           <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
-            Phase 5 Part B Active
+            Spaced Learning Suite
           </span>
         </div>
 
@@ -544,7 +544,7 @@ const SubjectWorkspacePage = () => {
                 Study Tools & Assessment Suite
               </h3>
               <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
-                Phase 3 & 4 Ready
+                Assessment & Planning Suite
               </span>
             </div>
             <p className="text-xs text-slate-500">
@@ -552,7 +552,7 @@ const SubjectWorkspacePage = () => {
             </p>
           </div>
           <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full self-start sm:self-auto">
-            All 3 Tools Active & Functional
+            Integrated Learning Loop
           </span>
         </div>
 
@@ -570,7 +570,7 @@ const SubjectWorkspacePage = () => {
                       <Icon className="w-4 h-4" />
                     </div>
                     <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
-                      {mod.phase}
+                      {mod.badge}
                     </span>
                   </div>
 

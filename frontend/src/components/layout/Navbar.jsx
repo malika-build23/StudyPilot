@@ -36,8 +36,8 @@ const Navbar = () => {
           <a href="#workflow" className="hover:text-blue-600 transition-colors">
             Study Method
           </a>
-          <a href="#roadmap" className="hover:text-blue-600 transition-colors">
-            Phase Roadmap
+          <a href="#suite" className="hover:text-blue-600 transition-colors">
+            Platform Suite
           </a>
         </nav>
 

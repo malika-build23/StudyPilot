@@ -217,8 +217,8 @@ const FlashcardsPage = () => {
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
               AI Flashcards
             </h1>
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
-              Phase 5
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700">
+              Active Recall
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">

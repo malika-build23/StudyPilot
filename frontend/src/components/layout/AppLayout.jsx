@@ -17,6 +17,10 @@ const AppLayout = ({ onOpenNewSubject }) => {
     if (path === '/dashboard') return { title: 'Academic Dashboard', subtitle: 'Overview of your learning progress' };
     if (path === '/subjects') return { title: 'My Subjects', subtitle: 'Manage your individual subject workspaces' };
     if (path.startsWith('/subjects/')) return { title: 'Subject Workspace', subtitle: 'Dedicated study space and tools' };
+    if (path === '/flashcards') return { title: 'AI Flashcards', subtitle: 'Active-recall decks and concept mastery' };
+    if (path === '/revision') return { title: 'Spaced Revision', subtitle: 'SM-2 spaced repetition memory retention' };
+    if (path === '/clean-notes') return { title: 'Clean Notes AI', subtitle: 'Convert handwritten notes into structured study guides' };
+    if (path === '/exams') return { title: 'Exam DateSheet & Planner', subtitle: 'University schedules and adaptive prep timeline' };
     if (path === '/profile') return { title: 'Student Profile', subtitle: 'Your account credentials and academic info' };
     return { title: 'StudyPilot AI', subtitle: 'Your Personal Academic Companion' };
   };

@@ -245,7 +245,7 @@ const DashboardPage = () => {
                 </h3>
               </div>
               <span className="text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
-                Phase 4 Active
+                Live DateSheet
               </span>
             </div>
 
@@ -421,7 +421,7 @@ const DashboardPage = () => {
             </p>
           </div>
           <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full self-start sm:self-auto">
-            All 3 Tools Active & Functional
+            Comprehensive Suite Active
           </span>
         </div>
 
@@ -433,8 +433,8 @@ const DashboardPage = () => {
                 <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                   <CheckCircle2 className="w-4 h-4" />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
-                  Phase 3 Active
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                  Assessments
                 </span>
               </div>
               <h4 className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
@@ -468,8 +468,8 @@ const DashboardPage = () => {
                 <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
                   <TrendingUp className="w-4 h-4" />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
-                  Phase 3 Active
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100">
+                  Diagnostics
                 </span>
               </div>
               <h4 className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
@@ -506,8 +506,8 @@ const DashboardPage = () => {
                 <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
                   <CalendarDays className="w-4 h-4" />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
-                  Phase 4 & 6 Active
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-100">
+                  Adaptive Routine
                 </span>
               </div>
               <h4 className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
@@ -536,7 +536,7 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* 5. Phase 3 Part B: Diagnostic Performance & Topic Mastery Analytics */}
+      {/* 5. Diagnostic Performance & Topic Mastery Analytics */}
       <div id="dashboard-diagnostic" className="space-y-4 pt-4 border-t border-slate-200/80">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -553,7 +553,7 @@ const DashboardPage = () => {
             </div>
           </div>
           <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">
-            Phase 3 Part B Active
+            Live Diagnostics
           </span>
         </div>
 

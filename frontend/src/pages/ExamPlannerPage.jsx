@@ -638,7 +638,7 @@ const ExamPlannerPage = () => {
             { id: 'practical', label: 'Practical & Internal', icon: Beaker, count: practicalExams.length },
             { id: 'calendar', label: 'Calendar View', icon: Calendar },
             { id: 'completed', label: 'Completed Exams', icon: CheckCheck, count: completedExams.length },
-            { id: 'schedules', label: 'Adaptive Study Plans', icon: BrainCircuit, badge: 'Phase 6' },
+            { id: 'schedules', label: 'Adaptive Study Plans', icon: BrainCircuit, badge: 'Adaptive' },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;

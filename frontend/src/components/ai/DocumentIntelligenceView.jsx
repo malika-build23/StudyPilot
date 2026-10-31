@@ -592,7 +592,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                     Hierarchical Syllabus Classification
                   </h4>
                   <p className="text-xs text-slate-500">
-                    Syllabus tree mapping for Phase 3 adaptive quiz generation and diagnostic tracking
+                    Syllabus tree mapping for adaptive quiz generation and diagnostic tracking
                   </p>
                 </div>
 
