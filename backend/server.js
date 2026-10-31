@@ -27,7 +27,7 @@ const diagramRoutes = require('./routes/diagramRoutes');
 const flashcardRoutes = require('./routes/flashcardRoutes');
 const revisionRoutes = require('./routes/revisionRoutes');
 const cleanNoteRoutes = require('./routes/cleanNoteRoutes');
-
+const resourceRoutes = require('./routes/resourceRoutes');
 // Express Application
 const app = express();
 
@@ -95,7 +95,7 @@ app.use('/api/diagrams', diagramRoutes);
 app.use('/api/flashcards', flashcardRoutes);
 app.use('/api/revision', revisionRoutes);
 app.use('/api/clean-notes', cleanNoteRoutes);
-
+app.use('/api/resources', resourceRoutes);
 // 404 Handler
 app.use((req, res, next) => {
   res.status(404).json({

@@ -5,6 +5,7 @@ import { dashboardAPI, subjectsAPI, examsAPI } from '../services/api';
 import WorkflowBanner from '../components/common/WorkflowBanner';
 import SubjectModal from '../components/subjects/SubjectModal';
 import PerformanceAnalyticsView from '../components/analytics/PerformanceAnalyticsView';
+import SmartResourceFinder from '../components/resources/SmartResourceFinder';
 import {
   BookOpen,
   FileText,
@@ -228,6 +229,8 @@ const DashboardPage = () => {
 
       {/* 3. The StudyPilot Method Workflow Banner */}
       <WorkflowBanner />
+      <SmartResourceFinder />
+
 
       {/* 4. Bottom Grid: Upcoming Examinations (Empty State) & Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
