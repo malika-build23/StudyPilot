@@ -133,6 +133,14 @@ export const AuthProvider = ({ children }) => {
     return updateProfile({ name: newName });
   };
 
+  const updateUser = (userData) => {
+    setUser((prev) => {
+      const updated = { ...prev, ...userData };
+      localStorage.setItem('studypilot_user', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   const value = {
     user,
     token,
@@ -144,6 +152,7 @@ export const AuthProvider = ({ children }) => {
     googleLogin,
     updateProfile,
     updateProfileName,
+    updateUser,
     logout,
     isAuthenticated: !!token && !!user,
   };

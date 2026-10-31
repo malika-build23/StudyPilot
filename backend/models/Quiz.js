@@ -53,7 +53,7 @@ const quizSchema = new mongoose.Schema(
     materialId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'StudyMaterial',
-      required: true,
+      required: false,
     },
     title: {
       type: String,

@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -76,6 +78,7 @@ export const aiAPI = {
 
 // Quiz Generation & Attempt Services (Phase 3 - Part A)
 export const quizAPI = {
+  getAll: () => api.get('/quizzes'),
   generate: (data) => api.post('/quizzes/generate', data),
   getById: (quizId) => api.get(`/quizzes/${quizId}`),
   getBySubject: (subjectId) => api.get(`/quizzes/subject/${subjectId}`),
@@ -133,13 +136,21 @@ export const dateSheetsAPI = {
   confirm: (id, data) => api.post(`/date-sheets/${id}/confirm`, data),
 };
 
-// Study Plan Services (Phase 4 - Part A)
+// Study Plan Services (Phase 4 - Smart Exam Planner & Phase 6 - Automatic Adjustments)
 export const studyPlansAPI = {
   generate: (examId) => api.post('/study-plans/generate', { examId }),
   getByExam: (examId) => api.get(`/study-plans/${examId}`),
   updateTask: (planId, taskId, completed) =>
     api.patch(`/study-plans/${planId}/tasks/${taskId}`, { completed }),
   regenerate: (planId) => api.post(`/study-plans/${planId}/regenerate`),
+
+  // Phase 6 Part B: Automatic Study Plan Adjustment
+  adjust: (planId, data) => api.post(`/study-plans/${planId}/adjust`, data),
+  toggleTaskLock: (planId, taskId, isLocked) =>
+    api.patch(`/study-plans/${planId}/tasks/${taskId}/lock`, { isLocked }),
+  updatePreferences: (planId, data) =>
+    api.patch(`/study-plans/${planId}/preferences`, data),
+  getHistory: (planId) => api.get(`/study-plans/${planId}/history`),
 };
 
 // Dashboard Services
@@ -151,6 +162,10 @@ export const dashboardAPI = {
 export const userAPI = {
   getProfile: () => api.get('/users/profile'),
   updateProfile: (data) => api.put('/users/profile', data),
+  uploadAvatar: (formData) =>
+    api.post('/users/profile/avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
 };
 
 // Phase 5 Part A - AI Mnemonics Generator
@@ -204,7 +219,7 @@ export const cleanNotesAPI = {
   getById: (id) => api.get(`/clean-notes/${id}`),
   update: (id, data) => api.put(`/clean-notes/${id}`, data),
   reprocess: (id) => api.post(`/clean-notes/${id}/process`),
-  exportUrl: (id, format = 'html') => `/api/clean-notes/${id}/export?format=${format}`,
+  exportUrl: (id, format = 'html') => `${API_BASE_URL}/clean-notes/${id}/export?format=${format}`,
   delete: (id) => api.delete(`/clean-notes/${id}`),
 };
 

@@ -19,7 +19,7 @@ const connectDB = async () => {
 
   try {
     const conn = await mongoose.connect(primaryUri, {
-      serverSelectionTimeoutMS: 2500,
+      serverSelectionTimeoutMS: 10000,
     });
     console.log(`[Database] MongoDB Connected: ${conn.connection.host} (DB: ${conn.connection.name})`);
     return conn;
@@ -31,7 +31,7 @@ const connectDB = async () => {
       try {
         await mongoose.disconnect();
         const localConn = await mongoose.connect(localUri, {
-          serverSelectionTimeoutMS: 2500,
+          serverSelectionTimeoutMS: 5000,
         });
         console.log(`[Database Fallback] Connected to local MongoDB: ${localConn.connection.host} (DB: ${localConn.connection.name})`);
         return localConn;

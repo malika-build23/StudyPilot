@@ -638,7 +638,7 @@ const ExamPlannerPage = () => {
             { id: 'practical', label: 'Practical & Internal', icon: Beaker, count: practicalExams.length },
             { id: 'calendar', label: 'Calendar View', icon: Calendar },
             { id: 'completed', label: 'Completed Exams', icon: CheckCheck, count: completedExams.length },
-            { id: 'schedules', label: 'AI Study Schedules', icon: BrainCircuit },
+            { id: 'schedules', label: 'Adaptive Study Plans', icon: BrainCircuit, badge: 'Phase 6' },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -662,6 +662,15 @@ const ExamPlannerPage = () => {
                     }`}
                   >
                     {tab.count}
+                  </span>
+                )}
+                {tab.badge && (
+                  <span
+                    className={`text-[9px] px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider ${
+                      isActive ? 'bg-white/20 text-white' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                    }`}
+                  >
+                    {tab.badge}
                   </span>
                 )}
               </button>
@@ -1086,6 +1095,7 @@ const ExamPlannerPage = () => {
                 onTaskToggle={handleTaskToggle}
                 onRegenerate={handleRegeneratePlan}
                 isRegenerating={isRegeneratingPlan}
+                onPlanUpdate={setActivePlan}
               />
             ) : (
               <div className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 space-y-6">

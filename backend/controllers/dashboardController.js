@@ -1,5 +1,8 @@
 const Subject = require('../models/Subject');
 const StudyMaterial = require('../models/StudyMaterial');
+const Exam = require('../models/Exam');
+const StudyPlan = require('../models/StudyPlan');
+const QuizEvaluation = require('../models/QuizEvaluation');
 
 // @desc    Get dashboard statistics for authenticated student
 // @route   GET /api/dashboard/stats
@@ -7,18 +10,82 @@ const StudyMaterial = require('../models/StudyMaterial');
 exports.getDashboardStats = async (req, res, next) => {
   try {
     const userId = req.user._id;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    // Fetch subjects count, study materials count, and recent records
-    const [totalSubjects, totalStudyMaterials, recentSubjects, recentMaterials] = await Promise.all([
+    // Fetch live counts, exams, study plans, and recent materials
+    const [
+      totalSubjects,
+      totalStudyMaterials,
+      totalQuizzes,
+      totalExams,
+      upcomingExams,
+      studyPlans,
+      recentSubjects,
+      recentMaterials,
+      recentEvaluations,
+    ] = await Promise.all([
       Subject.countDocuments({ userId }),
       StudyMaterial.countDocuments({ userId }),
+      QuizEvaluation.countDocuments({ userId }),
+      Exam.countDocuments({ userId }),
+      Exam.find({
+        userId,
+        status: 'upcoming',
+        examDate: { $gte: today },
+      })
+        .populate('subjectId', 'subjectName')
+        .sort({ examDate: 1 })
+        .limit(5)
+        .lean(),
+      StudyPlan.find({ userId }).lean(),
       Subject.find({ userId }).sort({ updatedAt: -1 }).limit(5).lean(),
       StudyMaterial.find({ userId }).sort({ createdAt: -1 }).limit(5).lean(),
+      QuizEvaluation.find({ userId })
+        .populate('quizId', 'title difficulty')
+        .sort({ createdAt: -1 })
+        .limit(3)
+        .lean(),
     ]);
 
-    // Format recent activities from real actions or welcome event
+    // 1. Calculate Real Preparation Progress from Study Plan Tasks
+    let totalPlanTasks = 0;
+    let completedPlanTasks = 0;
+    studyPlans.forEach((plan) => {
+      (plan.schedule || []).forEach((day) => {
+        (day.tasks || []).forEach((task) => {
+          totalPlanTasks++;
+          if (task.completed) completedPlanTasks++;
+        });
+      });
+    });
+
+    let preparationProgress = 0;
+    if (totalPlanTasks > 0) {
+      preparationProgress = Math.round((completedPlanTasks / totalPlanTasks) * 100);
+    } else if (totalQuizzes > 0) {
+      // If no study plans created yet, estimate initial readiness from quiz accuracy
+      const avgAccuracy = recentEvaluations.reduce((sum, e) => sum + (e.percentage || 0), 0) / recentEvaluations.length;
+      preparationProgress = Math.round(avgAccuracy * 0.5); // Cap at 50% until study plan tasks exist
+    }
+
+    // 2. Format Recent Activities from Real Database Records
     const recentActivity = [];
 
+    // Recent Quiz Evaluations
+    if (recentEvaluations.length > 0) {
+      recentEvaluations.forEach((evaluation) => {
+        recentActivity.push({
+          id: `act-quiz-${evaluation._id}`,
+          type: 'quiz_completed',
+          title: `Quiz evaluated: ${evaluation.quizId?.title || 'Diagnostic Quiz'}`,
+          description: `Score: ${evaluation.percentage}% • Accuracy tier: ${evaluation.percentage >= 60 ? 'Mastery' : 'Needs Review'}`,
+          timestamp: evaluation.createdAt,
+        });
+      });
+    }
+
+    // Recent Study Materials
     if (recentMaterials.length > 0) {
       recentMaterials.forEach((mat) => {
         recentActivity.push({
@@ -31,6 +98,7 @@ exports.getDashboardStats = async (req, res, next) => {
       });
     }
 
+    // Recent Subjects
     if (recentSubjects.length > 0) {
       recentSubjects.forEach((sub) => {
         recentActivity.push({
@@ -43,9 +111,9 @@ exports.getDashboardStats = async (req, res, next) => {
       });
     }
 
-    // Sort combined activities by timestamp desc and take top 5
+    // Sort combined activities by timestamp desc and take top 6
     recentActivity.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    const topActivities = recentActivity.slice(0, 5);
+    const topActivities = recentActivity.slice(0, 6);
 
     // Always append account setup event as baseline activity
     topActivities.push({
@@ -66,10 +134,14 @@ exports.getDashboardStats = async (req, res, next) => {
         },
         metrics: {
           totalSubjects,
-          totalStudyMaterials, // Live database count
-          preparationProgress: 0,
+          totalStudyMaterials,
+          totalQuizzes,
+          totalExams,
+          preparationProgress,
+          totalPlanTasks,
+          completedPlanTasks,
         },
-        upcomingExams: [],
+        upcomingExams,
         recentActivity: topActivities,
       },
     });

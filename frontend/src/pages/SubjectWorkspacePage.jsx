@@ -182,27 +182,43 @@ const SubjectWorkspacePage = () => {
     );
   }
 
-  const futureModules = [
+  const scrollToSection = (sectionId) => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const studyToolsSuite = [
     {
       title: 'Interactive Quizzes & Mock Tests',
-      phase: 'Phase 3',
-      desc: 'Adaptive mock exams generated from your uploaded materials to evaluate concept retention and identify weak zones.',
+      phase: 'Phase 3 Active',
+      desc: 'Adaptive mock exams and topic-wise practice tests synthesized from your course materials to evaluate concept retention and identify weak zones.',
       icon: CheckCircle,
       color: 'bg-emerald-50 text-emerald-600',
+      actionLabel: 'Take Quiz / Mock Test',
+      actionType: 'scroll',
+      target: 'quiz-section',
     },
     {
       title: 'Mistake Analysis & Weak Topics',
-      phase: 'Phase 3',
-      desc: 'Deep diagnostic feedback on test mistakes with tailored concept review recommendations.',
+      phase: 'Phase 3 Active',
+      desc: 'Deterministic mistake grading, multi-attempt score trends, and rule-based weak area detection with tailored revision directives.',
       icon: Brain,
       color: 'bg-amber-50 text-amber-600',
+      actionLabel: 'View Diagnostic Report',
+      actionType: 'scroll',
+      target: 'analytics-section',
     },
     {
       title: 'Study Planner & Readiness Analytics',
-      phase: 'Phase 4',
-      desc: 'Exam countdown timelines, spaced repetition schedules, and overall syllabus mastery metrics.',
+      phase: 'Phase 4 & 6 Active',
+      desc: 'Real-time exam countdowns, automated day-by-day study schedules, syllabus coverage tracking, and dynamic plan adjustment.',
       icon: BarChart2,
       color: 'bg-purple-50 text-purple-600',
+      actionLabel: 'Open Study Planner',
+      actionType: 'link',
+      to: `/exams?subject=${id}&tab=schedules`,
     },
   ];
 
@@ -349,18 +365,19 @@ const SubjectWorkspacePage = () => {
           />
         </div>
       )}
-      {/* PHASE 3: AI QUIZ GENERATION */}
-{selectedMaterial && (
-  <div className="space-y-4 pt-2">
-    <QuizGenerationView
-      subjectId={id}
-      material={selectedMaterial}
-    />
-  </div>
-)}
+      {/* PHASE 3: AI QUIZ & MOCK TEST GENERATION */}
+      <div id="quiz-section" className="space-y-4 pt-4 border-t border-slate-200/80">
+        <QuizGenerationView
+          subjectId={id}
+          material={selectedMaterial}
+          materials={materials}
+          onSelectMaterial={(mat) => setSelectedMaterial(mat)}
+          onUploadRequest={() => setUploadModalOpen(true)}
+        />
+      </div>
 
       {/* PHASE 3 PART B: SUBJECT DIAGNOSTIC ANALYTICS & WEAK TOPICS */}
-      <div className="space-y-4 pt-4 border-t border-slate-200/80">
+      <div id="analytics-section" className="space-y-4 pt-4 border-t border-slate-200/80">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
@@ -518,41 +535,46 @@ const SubjectWorkspacePage = () => {
         </div>
       </div>
 
-      {/* FUTURE ROADMAP MODULES (PHASE 3 & 4) */}
+      {/* ACTIVE STUDY TOOLS ROADMAP & ASSESSMENT SUITE */}
       <div className="space-y-4 pt-4 border-t border-slate-200/80">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h3 className="text-base font-bold text-slate-900">
-              Future Study Tools Roadmap
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-base font-bold text-slate-900">
+                Study Tools & Assessment Suite
+              </h3>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+                Phase 3 & 4 Ready
+              </span>
+            </div>
             <p className="text-xs text-slate-500">
-              Upcoming Phase 3 & Phase 4 modules built on top of your document intelligence
+              Interactive quizzes, mistake diagnostics, and automated exam readiness planning
             </p>
           </div>
-          <span className="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-full">
-            Coming in Phase 3 & 4
+          <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full self-start sm:self-auto">
+            All 3 Tools Active & Functional
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {futureModules.map((mod, index) => {
+          {studyToolsSuite.map((mod, index) => {
             const Icon = mod.icon;
             return (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-all"
+                className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 transition-all group"
               >
                 <div>
                   <div className="flex items-start justify-between mb-3">
                     <div className={`w-9 h-9 rounded-xl ${mod.color} flex items-center justify-center`}>
                       <Icon className="w-4 h-4" />
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
                       {mod.phase}
                     </span>
                   </div>
 
-                  <h4 className="text-sm font-bold text-slate-800">
+                  <h4 className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
                     {mod.title}
                   </h4>
                   <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
@@ -560,11 +582,31 @@ const SubjectWorkspacePage = () => {
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-medium text-slate-400">
-                  <span>Status</span>
-                  <span className="text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded">
-                    Coming Soon
-                  </span>
+                <div className="mt-4 pt-3 border-t border-slate-100 space-y-2">
+                  <div className="flex items-center justify-between text-[11px] font-medium text-slate-400">
+                    <span>Status</span>
+                    <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                      Active & Ready
+                    </span>
+                  </div>
+
+                  {mod.actionType === 'scroll' ? (
+                    <button
+                      onClick={() => scrollToSection(mod.target)}
+                      className="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                    >
+                      <span>{mod.actionLabel}</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  ) : (
+                    <Link
+                      to={mod.to}
+                      className="w-full py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors text-center"
+                    >
+                      <span>{mod.actionLabel}</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
                 </div>
               </div>
             );

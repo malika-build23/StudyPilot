@@ -185,7 +185,7 @@ exports.googleAuth = async (req, res, next) => {
         user.googleId = googleSub;
         modified = true;
       }
-      if (!user.avatar && picture) {
+      if (picture && (!user.avatar || user.avatar.includes('googleusercontent.com') || !user.avatar.startsWith('/uploads'))) {
         user.avatar = picture;
         modified = true;
       }

@@ -352,7 +352,7 @@ INSTRUCTIONS:
 // Generate MCQ quiz questions from uploaded study material
 const generateQuizQuestions = async (
   extractedContent,
-  { fileName, questionCount, difficulty }
+  { fileName, questionCount, difficulty, topic }
 ) => {
   const apiKey = getApiKey();
 
@@ -375,6 +375,7 @@ Generate exactly ${questionCount} multiple-choice questions using ONLY the suppl
 
 Document: ${fileName || 'Academic Material'}
 Difficulty: ${difficulty}
+${topic ? `Focus Topic: ${topic} (ensure questions specifically test this topic/concept)` : ''}
 
 Rules:
 1. Generate exactly ${questionCount} questions.

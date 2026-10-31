@@ -34,7 +34,6 @@ const DashboardPage = () => {
   // Create Subject Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmittingSubject, setIsSubmittingSubject] = useState(false);
-  const [materialModalOpen, setMaterialModalOpen] = useState(false);
 
   const fetchStats = async () => {
     try {
@@ -138,7 +137,7 @@ const DashboardPage = () => {
               <span>Explore Subjects</span>
             </button>
             <button
-              onClick={() => setMaterialModalOpen(true)}
+              onClick={() => navigate('/subjects')}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs sm:text-sm backdrop-blur-xs transition-all"
             >
               <UploadCloud className="w-4 h-4" />
@@ -171,18 +170,18 @@ const DashboardPage = () => {
           </p>
         </div>
 
-        {/* Metric 2: Uploaded Study Materials (0 in Phase 1) */}
+        {/* Metric 2: Uploaded Study Materials */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:border-blue-200 transition-all">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Study Materials
               </span>
-              <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">
-                Phase 2
+              <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">
+                Active
               </span>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
               <FileText className="w-5 h-5" />
             </div>
           </div>
@@ -190,25 +189,25 @@ const DashboardPage = () => {
             <span className="text-3xl font-extrabold text-slate-900">
               {stats?.metrics?.totalStudyMaterials ?? 0}
             </span>
-            <span className="text-xs text-slate-400">documents</span>
+            <span className="text-xs text-slate-500">documents</span>
           </div>
           <p className="mt-2 text-xs text-slate-500">
-            Document upload engine ready in Phase 2
+            Course textbooks & notes analyzed
           </p>
         </div>
 
-        {/* Metric 3: Overall Preparation Progress (0% in Phase 1) */}
+        {/* Metric 3: Overall Preparation Progress */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:border-blue-200 transition-all">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Prep Progress
               </span>
-              <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">
-                Phase 3 & 4
+              <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-100">
+                Live
               </span>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
               <TrendingUp className="w-5 h-5" />
             </div>
           </div>
@@ -216,11 +215,11 @@ const DashboardPage = () => {
             <span className="text-3xl font-extrabold text-slate-900">
               {stats?.metrics?.preparationProgress ?? 0}%
             </span>
-            <span className="text-xs text-slate-400">mastery</span>
+            <span className="text-xs text-slate-500">syllabus mastery</span>
           </div>
           <div className="mt-3 w-full bg-slate-100 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-blue-600 h-2 rounded-full transition-all"
+              className="bg-blue-600 h-2 rounded-full transition-all duration-500"
               style={{ width: `${stats?.metrics?.preparationProgress || 0}%` }}
             />
           </div>
@@ -253,8 +252,8 @@ const DashboardPage = () => {
                   const now = new Date();
                   const examDate = new Date(exam.examDate);
                   const diffDays = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
-                  const subjectName = exam.subjectId?.name || 'Subject';
-                  const subjectCode = exam.subjectId?.code || '';
+                  const subjectName = exam.subjectId?.subjectName || exam.subjectName || exam.examName || 'Subject';
+                  const subjectCode = exam.subjectCode || exam.subjectId?.subjectCode || '';
 
                   let badgeColor = 'bg-blue-50 text-blue-700 border-blue-100';
                   let badgeText = `In ${diffDays}d`;
@@ -402,8 +401,140 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* 5. Phase 3 Part B: Diagnostic Performance & Topic Mastery Analytics */}
+      {/* 4.5. Core Study Tools Suite */}
       <div className="space-y-4 pt-4 border-t border-slate-200/80">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-base font-bold text-slate-900">
+                Core Study Tools & Assessment Suite
+              </h3>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+                Active & Ready
+              </span>
+            </div>
+            <p className="text-xs text-slate-500">
+              Interactive quizzes, mistake diagnostics, and automated exam readiness planning
+            </p>
+          </div>
+          <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full self-start sm:self-auto">
+            All 3 Tools Active & Functional
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Card 1: Quizzes & Mock Tests */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 transition-all group">
+            <div>
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <CheckCircle2 className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                  Phase 3 Active
+                </span>
+              </div>
+              <h4 className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                Interactive Quizzes & Mock Tests
+              </h4>
+              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Adaptive mock exams and topic-wise practice tests synthesized from your course materials with instant scoring.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-slate-100 space-y-2">
+              <div className="flex items-center justify-between text-[11px] font-medium text-slate-400">
+                <span>Evaluated</span>
+                <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                  {stats?.metrics?.totalQuizzes ?? 0} Quizzes
+                </span>
+              </div>
+              <button
+                onClick={() => navigate('/subjects')}
+                className="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <span>Launch Quiz in Workspace</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Card 2: Mistake Analysis & Weak Topics */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 transition-all group">
+            <div>
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                  Phase 3 Active
+                </span>
+              </div>
+              <h4 className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                Mistake Analysis & Weak Topics
+              </h4>
+              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Diagnostic mistake tracking, topic accuracy benchmarks, and rule-based weak area recommendations.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-slate-100 space-y-2">
+              <div className="flex items-center justify-between text-[11px] font-medium text-slate-400">
+                <span>Diagnostic Engine</span>
+                <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                  Active & Tracking
+                </span>
+              </div>
+              <button
+                onClick={() => {
+                  const el = document.getElementById('dashboard-diagnostic');
+                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
+                className="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <span>View Performance Diagnostics</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Card 3: Study Planner & Readiness Analytics */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 transition-all group">
+            <div>
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                  <CalendarDays className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                  Phase 4 & 6 Active
+                </span>
+              </div>
+              <h4 className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                Study Planner & Readiness Analytics
+              </h4>
+              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Live exam countdowns, automated day-by-day study schedules, syllabus coverage tracking, and dynamic plan adjustment.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-slate-100 space-y-2">
+              <div className="flex items-center justify-between text-[11px] font-medium text-slate-400">
+                <span>Upcoming Exams</span>
+                <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                  {stats?.metrics?.totalExams ?? 0} Scheduled
+                </span>
+              </div>
+              <button
+                onClick={() => navigate('/exams?tab=schedules')}
+                className="w-full py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <span>Open Study Planner</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 5. Phase 3 Part B: Diagnostic Performance & Topic Mastery Analytics */}
+      <div id="dashboard-diagnostic" className="space-y-4 pt-4 border-t border-slate-200/80">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
@@ -433,34 +564,6 @@ const DashboardPage = () => {
         onSubmit={handleCreateSubject}
         isSubmitting={isSubmittingSubject}
       />
-
-      {/* Placeholder Modal: Study Material Upload */}
-      {materialModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 animate-in fade-in zoom-in-95">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
-              <UploadCloud className="w-6 h-6" />
-            </div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold uppercase mb-2">
-              Coming in Phase 2
-            </div>
-            <h3 className="text-lg font-bold text-slate-900">
-              Study Material Upload Engine
-            </h3>
-            <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-              In Phase 2, you will be able to upload PDF textbooks, lecture slides, and handwritten notes. The platform will automatically parse, summarize, and convert them into interactive study cards.
-            </p>
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => setMaterialModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors"
-              >
-                Understood
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

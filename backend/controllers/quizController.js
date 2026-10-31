@@ -29,18 +29,18 @@ const formatQuizForStudent = (quiz) => {
   };
 };
 
-// @desc    Generate a quiz from uploaded study material
+// @desc    Generate a quiz from uploaded study material or comprehensive subject mock test
 // @route   POST /api/quizzes/generate
 // @access  Private
 const generateQuiz = async (req, res, next) => {
   try {
-    const { subjectId, materialId, questionCount, difficulty } = req.body;
+    const { subjectId, materialId, questionCount, difficulty, topic } = req.body;
 
     // Validate required fields
-    if (!subjectId || !materialId || questionCount === undefined || !difficulty) {
+    if (!subjectId || questionCount === undefined || !difficulty) {
       return res.status(400).json({
         success: false,
-        message: 'Subject ID, material ID, question count, and difficulty are required.',
+        message: 'Subject ID, question count, and difficulty are required.',
       });
     }
 
@@ -75,34 +75,83 @@ const generateQuiz = async (req, res, next) => {
       });
     }
 
-    // Verify material ownership and subject association
-    const material = await StudyMaterial.findOne({
-      _id: materialId,
-      subjectId: subject._id,
-      userId: getUserId(req),
-    });
+    let sourceContent = null;
+    let sourceFileName = '';
+    let linkedMaterialId = null;
+    let quizTitle = '';
 
-    if (!material) {
-      return res.status(404).json({
-        success: false,
-        message: 'Study material not found or it does not belong to this subject.',
-      });
-    }
+    const isAllOrMock = !materialId || materialId === 'all' || materialId === 'mock';
 
-    if (material.processingStatus !== 'completed') {
-      return res.status(400).json({
-        success: false,
-        message: 'Study material processing must be completed before generating a quiz.',
+    if (!isAllOrMock) {
+      // Verify specific material ownership and subject association
+      const material = await StudyMaterial.findOne({
+        _id: materialId,
+        subjectId: subject._id,
+        userId: getUserId(req),
       });
+
+      if (!material) {
+        return res.status(404).json({
+          success: false,
+          message: 'Study material not found or it does not belong to this subject.',
+        });
+      }
+
+      if (material.processingStatus !== 'completed') {
+        return res.status(400).json({
+          success: false,
+          message: 'Study material processing must be completed before generating a quiz.',
+        });
+      }
+
+      sourceContent = material.extractedContent;
+      sourceFileName = material.fileName;
+      linkedMaterialId = material._id;
+      quizTitle = topic
+        ? `${material.fileName} (${topic}) - ${normalizedDifficulty.charAt(0).toUpperCase() + normalizedDifficulty.slice(1)} Quiz`
+        : `${material.fileName} - ${normalizedDifficulty.charAt(0).toUpperCase() + normalizedDifficulty.slice(1)} Quiz`;
+    } else {
+      // Comprehensive Subject Mock Test: Find all completed materials
+      const materials = await StudyMaterial.find({
+        subjectId: subject._id,
+        userId: getUserId(req),
+        processingStatus: 'completed',
+      }).sort({ createdAt: -1 });
+
+      if (materials.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'Please upload and process at least one study material for this subject before generating a quiz or mock test.',
+        });
+      }
+
+      // Aggregate extracted text across completed materials
+      let combinedPages = [];
+      let combinedText = '';
+      materials.forEach((mat, idx) => {
+        if (mat.extractedContent?.pages?.length > 0) {
+          combinedPages.push(...mat.extractedContent.pages);
+        } else if (typeof mat.extractedContent === 'string') {
+          combinedText += `\n\n--- DOCUMENT ${idx + 1}: ${mat.fileName} ---\n${mat.extractedContent}`;
+        }
+      });
+
+      sourceContent = combinedPages.length > 0 ? { pages: combinedPages } : combinedText;
+      sourceFileName = `${subject.subjectName} Comprehensive Course Materials`;
+      linkedMaterialId = materials[0]._id;
+      quizTitle = topic
+        ? `${subject.subjectName} (${topic}) - ${normalizedDifficulty.charAt(0).toUpperCase() + normalizedDifficulty.slice(1)} Mock Test`
+        : `${subject.subjectName} - ${normalizedDifficulty.charAt(0).toUpperCase() + normalizedDifficulty.slice(1)} Mock Test`;
     }
 
     // Generate questions using the existing Gemini service
     const generatedQuestions = await generateQuizQuestions(
-      material.extractedContent,
+      sourceContent,
       {
-        fileName: material.fileName,
+        fileName: sourceFileName,
         questionCount: count,
         difficulty: normalizedDifficulty,
+        topic: topic ? String(topic).trim() : undefined,
       }
     );
 
@@ -120,8 +169,8 @@ const generateQuiz = async (req, res, next) => {
     const quiz = await Quiz.create({
       userId: getUserId(req),
       subjectId: subject._id,
-      materialId: material._id,
-      title: `${material.fileName} - ${normalizedDifficulty.charAt(0).toUpperCase() + normalizedDifficulty.slice(1)} Quiz`,
+      materialId: linkedMaterialId,
+      title: quizTitle,
       difficulty: normalizedDifficulty,
       questions,
     });
@@ -130,6 +179,27 @@ const generateQuiz = async (req, res, next) => {
       success: true,
       message: 'Quiz generated successfully.',
       data: formatQuizForStudent(quiz),
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get all quizzes belonging to the authenticated student
+// @route   GET /api/quizzes
+// @access  Private
+const getUserQuizzes = async (req, res, next) => {
+  try {
+    const quizzes = await Quiz.find({
+      userId: getUserId(req),
+    })
+      .populate('subjectId', 'subjectName semester')
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: quizzes.length,
+      data: quizzes.map(formatQuizForStudent),
     });
   } catch (error) {
     next(error);
@@ -309,6 +379,7 @@ const submitQuiz = async (req, res, next) => {
 
 module.exports = {
   generateQuiz,
+  getUserQuizzes,
   getQuizById,
   getQuizzesBySubject,
   submitQuiz,

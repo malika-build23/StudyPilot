@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { userAPI } from '../services/api';
 import SemesterSelect from '../components/common/SemesterSelect';
+import { GoogleLogo } from '../components/auth/GoogleSignInButton';
 import {
   Mail,
   Calendar,
@@ -11,11 +12,14 @@ import {
   Loader2,
   Save,
   ShieldCheck,
-  GraduationCap
+  GraduationCap,
+  Camera,
+  Upload,
+  Trash2,
 } from 'lucide-react';
 
 const ProfilePage = () => {
-  const { updateProfile } = useAuth();
+  const { updateProfile, updateUser } = useAuth();
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,8 +27,11 @@ const ProfilePage = () => {
   const [nameInput, setNameInput] = useState('');
   const [semesterInput, setSemesterInput] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const fileInputRef = useRef(null);
 
   const fetchProfile = async () => {
     try {
@@ -46,6 +53,84 @@ const ProfilePage = () => {
   useEffect(() => {
     fetchProfile();
   }, []);
+
+  const handleAvatarFileSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setErrorMessage('Please select a valid image file (JPG, PNG, WebP, GIF).');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMessage('Image file size must be less than 5MB.');
+      return;
+    }
+
+    // Instant local preview
+    const previewUrl = URL.createObjectURL(file);
+    setAvatarPreview(previewUrl);
+
+    setErrorMessage('');
+    setSuccessMessage('');
+    setUploadingAvatar(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      const res = await userAPI.uploadAvatar(formData);
+      if (res.data?.success && res.data?.data) {
+        const newAvatar = res.data.data.avatar;
+        setProfileData((prev) => ({ ...prev, avatar: newAvatar }));
+        updateUser({ avatar: newAvatar });
+        setAvatarPreview(null);
+        setSuccessMessage('Profile picture uploaded and updated successfully!');
+        setTimeout(() => setSuccessMessage(''), 4000);
+      } else {
+        setErrorMessage(res.data?.message || 'Failed to upload profile picture.');
+        setAvatarPreview(null);
+      }
+    } catch (err) {
+      console.error('Error uploading avatar:', err);
+      setErrorMessage(
+        err.response?.data?.message || 'Failed to upload profile picture. Please try again.'
+      );
+      setAvatarPreview(null);
+    } finally {
+      setUploadingAvatar(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleRemoveAvatar = async () => {
+    if (!profileData?.avatar && !avatarPreview) return;
+
+    setErrorMessage('');
+    setSuccessMessage('');
+    setUploadingAvatar(true);
+
+    try {
+      const res = await userAPI.updateProfile({ avatar: '' });
+      if (res.data?.success) {
+        setProfileData((prev) => ({ ...prev, avatar: '' }));
+        setAvatarPreview(null);
+        updateUser({ avatar: '' });
+        setSuccessMessage('Profile picture removed.');
+        setTimeout(() => setSuccessMessage(''), 4000);
+      } else {
+        setErrorMessage('Failed to remove profile picture.');
+      }
+    } catch (err) {
+      console.error('Error removing avatar:', err);
+      setErrorMessage('Failed to remove profile picture.');
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -86,6 +171,11 @@ const ProfilePage = () => {
     );
   }
 
+  const currentAvatar = avatarPreview || profileData?.avatar;
+  const isGoogleAvatar =
+    Boolean(profileData?.avatar) &&
+    (profileData.avatar.includes('googleusercontent.com') || profileData.isGoogleUser);
+
   return (
     <div className="max-w-3xl space-y-6 animate-in fade-in duration-150">
       <div>
@@ -93,36 +183,99 @@ const ProfilePage = () => {
           Student Profile
         </h2>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">
-          Review your account information and update your student display name.
+          Review your account information, profile picture, and academic credentials.
         </p>
       </div>
 
       {/* Profile Overview Card */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-5 pb-6 border-b border-slate-100">
-          <div className="w-18 h-18 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-2xl font-extrabold shadow-sm shadow-blue-500/20 shrink-0">
-            {profileData?.name ? profileData.name.charAt(0).toUpperCase() : 'S'}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-6 pb-6 border-b border-slate-100">
+          {/* Avatar Container with Hover Overlay & Quick Actions */}
+          <div className="relative group shrink-0 self-start sm:self-center">
+            <div className="w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-3xl font-extrabold shadow-md shadow-blue-500/20 border-2 border-white ring-2 ring-slate-100">
+              {currentAvatar ? (
+                <img
+                  src={currentAvatar}
+                  alt={profileData?.name || 'Profile'}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span>{profileData?.name ? profileData.name.charAt(0).toUpperCase() : 'S'}</span>
+              )}
+            </div>
+
+            {/* Hover Camera Overlay */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingAvatar}
+              className="absolute inset-0 rounded-2xl bg-black/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer backdrop-blur-xs disabled:pointer-events-none"
+              title="Click to change profile picture"
+            >
+              {uploadingAvatar ? (
+                <Loader2 className="w-6 h-6 animate-spin text-white" />
+              ) : (
+                <>
+                  <Camera className="w-6 h-6 mb-1 text-white" />
+                  <span className="text-[10px] font-semibold">Change</span>
+                </>
+              )}
+            </button>
+
+            {/* Hidden native file input */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleAvatarFileSelect}
+              accept="image/png,image/jpeg,image/webp,image/gif"
+              className="hidden"
+            />
           </div>
 
-          <div className="space-y-1">
-            <h3 className="text-xl font-bold text-slate-900">
-              {profileData?.name || 'Student'}
-            </h3>
+          <div className="space-y-1.5 flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 truncate">
+                {profileData?.name || 'Student'}
+              </h3>
+              {profileData?.avatar && (
+                <button
+                  type="button"
+                  onClick={handleRemoveAvatar}
+                  disabled={uploadingAvatar}
+                  className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 px-2.5 py-1 rounded-lg border border-red-200 flex items-center gap-1 transition-colors"
+                  title="Remove current profile picture"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  <span>Remove Photo</span>
+                </button>
+              )}
+            </div>
+
             <p className="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-slate-400" />
-              <span>{profileData?.email}</span>
+              <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span className="truncate">{profileData?.email}</span>
             </p>
-            <div className="flex flex-wrap items-center gap-3 pt-1">
+
+            <div className="flex flex-wrap items-center gap-2 pt-1">
               <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 Verified Student
               </span>
+
+              {isGoogleAvatar && (
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                  <GoogleLogo className="w-3 h-3" />
+                  Google Profile Photo
+                </span>
+              )}
+
               {profileData?.semester && (
                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
                   <GraduationCap className="w-3.5 h-3.5" />
                   {profileData.semester}
                 </span>
               )}
+
               <span className="text-[11px] text-slate-400 flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
                 Joined{' '}
@@ -133,6 +286,24 @@ const ProfilePage = () => {
                     })
                   : 'Recently'}
               </span>
+            </div>
+
+            {/* Quick Upload Action Buttons */}
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingAvatar}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs transition-all disabled:opacity-60 cursor-pointer"
+              >
+                {uploadingAvatar ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                ) : (
+                  <Upload className="w-3.5 h-3.5 text-slate-500" />
+                )}
+                <span>{uploadingAvatar ? 'Uploading Photo...' : 'Upload New Photo'}</span>
+              </button>
+              <span className="text-[11px] text-slate-400">JPG, PNG, WebP up to 5MB</span>
             </div>
           </div>
         </div>

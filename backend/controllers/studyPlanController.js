@@ -5,6 +5,7 @@ const StudyPlan = require('../models/StudyPlan');
 const QuizEvaluation = require('../models/QuizEvaluation');
 const { generateStudySchedule } = require('../services/geminiService');
 const { computeMultiAttemptWeakTopics } = require('../services/evaluationService');
+const { adjustStudyPlan } = require('../services/studyPlanAdjustmentService');
 
 const getUserId = (req) => req.user._id;
 
@@ -136,9 +137,27 @@ const getPlanByExam = async (req, res) => {
       });
     }
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let overdueCount = 0;
+    for (const day of plan.schedule || []) {
+      const dayDate = new Date(day.date);
+      dayDate.setHours(0, 0, 0, 0);
+      if (dayDate < today) {
+        for (const t of day.tasks || []) {
+          if (!t.completed && !t.isLocked) overdueCount++;
+        }
+      }
+    }
+
     return res.status(200).json({
       success: true,
       data: plan,
+      meta: {
+        hasOverdueTasks: overdueCount > 0,
+        overdueCount,
+      },
     });
   } catch (error) {
     console.error('[Get Study Plan]', error);
@@ -337,9 +356,248 @@ const regeneratePlan = async (req, res) => {
   }
 };
 
+/**
+ * Phase 6 Part B: Automatic Study Plan Adjustment
+ * Triggers deterministic rescheduling, weak-topic prioritization, and availability balancing.
+ */
+const adjustPlan = async (req, res) => {
+  try {
+    const { planId } = req.params;
+    const { dailyStudyHours, availableDaysOfWeek, reason, dryRun } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(planId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid study plan ID.',
+      });
+    }
+
+    const plan = await StudyPlan.findOne({
+      _id: planId,
+      userId: getUserId(req),
+    }).populate('subjectId', 'subjectName');
+
+    if (!plan) {
+      return res.status(404).json({
+        success: false,
+        message: 'Study plan not found or unauthorized.',
+      });
+    }
+
+    const result = await adjustStudyPlan(plan, {
+      dailyStudyHours,
+      availableDaysOfWeek,
+      reason: reason || 'Manual user-triggered adjustment',
+      dryRun: Boolean(dryRun),
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: result.adjustmentSummary.summary,
+      data: result.plan,
+      summary: result.adjustmentSummary,
+    });
+  } catch (error) {
+    console.error('[Adjust Study Plan]', error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to adjust study plan.',
+    });
+  }
+};
+
+/**
+ * Phase 6 Part B: Lock or Unlock an individual Study Task
+ * Locked tasks are never moved during automatic plan adjustments.
+ */
+const toggleTaskLock = async (req, res) => {
+  try {
+    const { planId, taskId } = req.params;
+    const { isLocked } = req.body;
+
+    if (
+      !mongoose.Types.ObjectId.isValid(planId) ||
+      !mongoose.Types.ObjectId.isValid(taskId)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid plan or task ID.',
+      });
+    }
+
+    const plan = await StudyPlan.findOne({
+      _id: planId,
+      userId: getUserId(req),
+    });
+
+    if (!plan) {
+      return res.status(404).json({
+        success: false,
+        message: 'Study plan not found or unauthorized.',
+      });
+    }
+
+    let targetTask = null;
+    let targetDay = null;
+
+    for (const day of plan.schedule) {
+      const task = day.tasks.id(taskId);
+      if (task) {
+        targetTask = task;
+        targetDay = day;
+        task.isLocked = typeof isLocked === 'boolean' ? isLocked : !task.isLocked;
+        break;
+      }
+    }
+
+    if (!targetTask) {
+      return res.status(404).json({
+        success: false,
+        message: 'Task not found in study plan schedule.',
+      });
+    }
+
+    await plan.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Task "${targetTask.topic}" ${targetTask.isLocked ? 'locked to date' : 'unlocked'}.`,
+      data: plan,
+      task: targetTask,
+      date: targetDay.date,
+    });
+  } catch (error) {
+    console.error('[Toggle Task Lock]', error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to update task lock state.',
+    });
+  }
+};
+
+/**
+ * Phase 6 Part B: Update Student Availability & Auto-Adjustment Preferences
+ */
+const updatePlanPreferences = async (req, res) => {
+  try {
+    const { planId } = req.params;
+    const { autoAdjustEnabled, dailyStudyHours, availableDaysOfWeek, triggerImmediateAdjust } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(planId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid study plan ID.',
+      });
+    }
+
+    const plan = await StudyPlan.findOne({
+      _id: planId,
+      userId: getUserId(req),
+    });
+
+    if (!plan) {
+      return res.status(404).json({
+        success: false,
+        message: 'Study plan not found.',
+      });
+    }
+
+    if (typeof autoAdjustEnabled === 'boolean') {
+      plan.autoAdjustEnabled = autoAdjustEnabled;
+    }
+
+    if (dailyStudyHours !== undefined) {
+      const hours = Number(dailyStudyHours);
+      if (hours >= 0.5 && hours <= 16) {
+        plan.dailyStudyHours = hours;
+      }
+    }
+
+    if (Array.isArray(availableDaysOfWeek) && availableDaysOfWeek.length > 0) {
+      plan.availableDaysOfWeek = availableDaysOfWeek.map(Number);
+    }
+
+    let adjustmentSummary = null;
+    if (triggerImmediateAdjust || plan.autoAdjustEnabled) {
+      const result = await adjustStudyPlan(plan, {
+        dailyStudyHours: plan.dailyStudyHours,
+        availableDaysOfWeek: plan.availableDaysOfWeek,
+        reason: 'Preferences & availability update',
+      });
+      adjustmentSummary = result.adjustmentSummary;
+    } else {
+      await plan.save();
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Plan preferences updated successfully.',
+      data: plan,
+      summary: adjustmentSummary,
+    });
+  } catch (error) {
+    console.error('[Update Plan Preferences]', error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to update plan preferences.',
+    });
+  }
+};
+
+/**
+ * Phase 6 Part B: Retrieve Study Plan Adjustment History
+ */
+const getAdjustmentHistory = async (req, res) => {
+  try {
+    const { planId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(planId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid study plan ID.',
+      });
+    }
+
+    const plan = await StudyPlan.findOne(
+      { _id: planId, userId: getUserId(req) },
+      { adjustmentHistory: 1, lastAdjustedAt: 1, autoAdjustEnabled: 1 }
+    );
+
+    if (!plan) {
+      return res.status(404).json({
+        success: false,
+        message: 'Study plan not found.',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        autoAdjustEnabled: plan.autoAdjustEnabled,
+        lastAdjustedAt: plan.lastAdjustedAt,
+        history: plan.adjustmentHistory || [],
+      },
+    });
+  } catch (error) {
+    console.error('[Get Adjustment History]', error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to fetch adjustment history.',
+    });
+  }
+};
+
 module.exports = {
   generatePlan,
   getPlanByExam,
   updateTaskStatus,
   regeneratePlan,
+  adjustPlan,
+  toggleTaskLock,
+  updatePlanPreferences,
+  getAdjustmentHistory,
 };

@@ -6,6 +6,7 @@ const { protect } = require('../middleware/auth');
 
 const {
   generateQuiz,
+  getUserQuizzes,
   getQuizById,
   getQuizzesBySubject,
   submitQuiz,
@@ -13,6 +14,9 @@ const {
 
 // All quiz routes require authentication
 router.use(protect);
+
+// Get all quizzes for current user
+router.get('/', getUserQuizzes);
 
 // Generate a quiz
 router.post('/generate', generateQuiz);

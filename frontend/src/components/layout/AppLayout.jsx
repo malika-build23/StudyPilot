@@ -64,9 +64,17 @@ const AppLayout = ({ onOpenNewSubject }) => {
             <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block" />
 
             <div className="flex items-center gap-2.5 pl-1">
-              <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 border border-blue-200 flex items-center justify-center font-bold text-xs">
-                {user?.name ? user.name.charAt(0).toUpperCase() : 'S'}
-              </div>
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user?.name || 'User'}
+                  className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-xs"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 border border-blue-200 flex items-center justify-center font-bold text-xs">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : 'S'}
+                </div>
+              )}
               <span className="text-xs font-semibold text-slate-700 hidden md:inline truncate max-w-[120px]">
                 {user?.name || 'Student'}
               </span>

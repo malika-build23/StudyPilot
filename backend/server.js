@@ -47,6 +47,7 @@ app.use(
 
       if (
         allowedOrigins.indexOf(origin) !== -1 ||
+        origin.endsWith('.vercel.app') ||
         process.env.NODE_ENV !== 'production'
       ) {
         return callback(null, true);
@@ -62,6 +63,9 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve uploaded files statically (avatars, materials, etc.)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health Check API
 app.get('/api/health', (req, res) => {

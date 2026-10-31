@@ -57,9 +57,9 @@ const Sidebar = ({ isOpen, onClose }) => {
     },
     {
       to: '/exams',
-      label: 'Exam Planner',
+      label: 'Exam & Study Planner',
       icon: CalendarDays,
-      badge: 'Phase 4',
+      badge: 'Phase 6',
     },
     {
       to: '/profile',
@@ -197,9 +197,17 @@ const Sidebar = ({ isOpen, onClose }) => {
         <div className="p-4 border-t border-slate-100 bg-slate-50/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-                {user?.name ? user.name.charAt(0).toUpperCase() : 'S'}
-              </div>
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user?.name || 'User'}
+                  className="w-9 h-9 rounded-full object-cover shrink-0 shadow-xs border border-slate-200"
+                />
+              ) : (
+                <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : 'S'}
+                </div>
+              )}
               <div className="truncate">
                 <p className="text-xs font-bold text-slate-900 truncate">
                   {user?.name || 'Student'}

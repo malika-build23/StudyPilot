@@ -78,7 +78,7 @@ const GoogleSignInButton = ({
           window.google.accounts.id.renderButton(googleBtnRef.current, {
             theme: 'outline',
             size: 'large',
-            width: '100%',
+            width: 360,
             text: 'continue_with',
             shape: 'rectangular',
           });
@@ -157,23 +157,31 @@ const GoogleSignInButton = ({
         </div>
       )}
 
-      {/* Primary visible button matching StudyPilot UI */}
-      <button
-        type="button"
-        onClick={handleButtonClick}
-        disabled={loading || disabled}
-        className="w-full relative flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm shadow-xs hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed group active:scale-99"
-      >
-        {loading ? (
-          <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
-        ) : (
-          <GoogleLogo className="w-5 h-5 shrink-0 group-hover:scale-105 transition-transform" />
-        )}
-        <span>{loading ? 'Authenticating with Google...' : text}</span>
-      </button>
+      {/* Primary visible button with native Google GIS overlay */}
+      <div className="relative w-full overflow-hidden rounded-xl">
+        <button
+          type="button"
+          onClick={handleButtonClick}
+          disabled={loading || disabled}
+          className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm shadow-xs hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed group active:scale-99"
+        >
+          {loading ? (
+            <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+          ) : (
+            <GoogleLogo className="w-5 h-5 shrink-0 group-hover:scale-105 transition-transform" />
+          )}
+          <span>{loading ? 'Authenticating with Google...' : text}</span>
+        </button>
 
-      {/* Hidden GIS render target for native popup handler */}
-      <div ref={googleBtnRef} className="hidden" />
+        {/* Native GSI button overlay (fully clickable directly to launch OAuth popup) */}
+        {!disabled && !loading && (
+          <div
+            ref={googleBtnRef}
+            className="absolute inset-0 w-full h-full opacity-[0.001] z-10 cursor-pointer overflow-hidden flex items-center justify-center scale-125"
+            title="Sign in with Google"
+          />
+        )}
+      </div>
     </div>
   );
 };
