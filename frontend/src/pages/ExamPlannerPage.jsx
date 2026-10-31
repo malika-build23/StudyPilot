@@ -34,6 +34,7 @@ import {
   CheckCheck,
   Award,
 } from 'lucide-react';
+import calendarClockImg from '../assets/illustrations/element_calendar_clock.png';
 
 const ExamPlannerPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -434,20 +435,27 @@ const ExamPlannerPage = () => {
         <div className="absolute bottom-0 right-28 -mb-16 w-48 h-48 rounded-full bg-[#9E6752]/20 blur-xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="max-w-2xl space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-[#FED7A5] text-xs font-semibold backdrop-blur-xs border border-white/10">
-                <Sparkles className="w-3.5 h-3.5 text-[#FED7A5]" />
-                Smart Exam Planner & Date Sheet Engine
-              </span>
+          <div className="flex items-center gap-5">
+            <img
+              src={calendarClockImg}
+              alt="Calendar and Clock 3D element"
+              className="hidden sm:block w-20 h-20 lg:w-24 lg:h-24 object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.35)] shrink-0 animate-float-gentle"
+            />
+            <div className="max-w-xl space-y-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-[#FED7A5] text-xs font-semibold backdrop-blur-xs border border-white/10">
+                  <Sparkles className="w-3.5 h-3.5 text-[#FED7A5]" />
+                  Smart Exam Planner & Date Sheet Engine
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+                University & Practical Examination Planner
+              </h1>
+              <p className="text-sm text-slate-200 leading-relaxed font-medium">
+                Upload your official university date sheet PDF to automatically extract dates, timings, and live countdowns,
+                or manually schedule laboratory practicals, vivas, and class quizzes.
+              </p>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-              University & Practical Examination Planner
-            </h1>
-            <p className="text-sm text-slate-200 leading-relaxed font-medium">
-              Upload your official university date sheet PDF to automatically extract dates, timings, and live countdowns,
-              or manually schedule laboratory practicals, vivas, and class quizzes.
-            </p>
           </div>
 
           {/* Quick Action CTA Buttons */}

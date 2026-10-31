@@ -28,30 +28,30 @@ const RevisionDashboard = ({ overview, onStartRevision }) => {
   return (
     <div className="space-y-6">
       {/* Hero Action Card */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#2D4354] via-[#534145] to-[#73766A] p-6 sm:p-8 text-white shadow-[0_12px_32px_-6px_rgba(45,67,84,0.22)]">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#2D4354] via-[#534145] to-[#20212B] p-6 sm:p-8 text-white shadow-[0_16px_36px_-6px_rgba(45,67,84,0.3)] border border-white/10 hover:border-white/25 transition-all duration-300 group">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2.5 max-w-xl">
+          <div className="space-y-3 max-w-xl">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full bg-white/15 backdrop-blur-xs text-[#FED7A5] border border-white/20">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-[#FED7A5] border border-white/25 shadow-xs">
                 Spaced Repetition System
               </span>
               {streakDays > 0 && (
-                <span className="text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full bg-gradient-to-r from-[#9E6752] to-[#FED7A5] text-white flex items-center gap-1 shadow-xs">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#9E6752] to-[#FED7A5] text-white flex items-center gap-1.5 shadow-xs">
                   <Flame className="w-3.5 h-3.5 fill-white text-white" />
                   <span>{streakDays} Day Streak!</span>
                 </span>
               )}
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-sm">
               {dueToday > 0 ? (
-                <>You have <span className="underline decoration-[#FED7A5] decoration-4 underline-offset-4">{dueToday} cards</span> due for review today</>
+                <>You have <span className="text-[#FED7A5] font-black underline decoration-[#FED7A5] decoration-4 underline-offset-4">{dueToday} cards</span> due for review today</>
               ) : (
-                <>All caught up for today! 🎉</>
+                <span className="text-white">All caught up for today! 🎉</span>
               )}
             </h2>
 
-            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-white/90 leading-relaxed font-normal">
               Based on the SM-2 spaced repetition algorithm. Review cards at optimal intervals to lock
               formulas, definitions, and concepts into long-term memory.
             </p>
@@ -61,7 +61,7 @@ const RevisionDashboard = ({ overview, onStartRevision }) => {
             <button
               onClick={() => onStartRevision()}
               disabled={dueToday === 0 && totalFlashcards === 0}
-              className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white text-[#2D4354] hover:bg-[#FAF8F5] font-extrabold text-sm shadow-md transition-all hover:scale-102 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white text-[#2D4354] hover:bg-[#FFF7EC] font-extrabold text-sm shadow-md transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-[#9E6752]" />
               <span>{dueToday > 0 ? 'Start Daily Revision' : 'Practice Revision'}</span>
@@ -70,9 +70,9 @@ const RevisionDashboard = ({ overview, onStartRevision }) => {
           </div>
         </div>
 
-        {/* Decorative backdrop blobs */}
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-[#FED7A5]/15 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute right-40 -top-20 w-52 h-52 bg-white/10 rounded-full blur-xl pointer-events-none" />
+        {/* Decorative interactive backdrop glows */}
+        <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-[#FED7A5]/20 rounded-full blur-3xl pointer-events-none group-hover:scale-110 transition-transform duration-500" />
+        <div className="absolute right-40 -top-20 w-60 h-60 bg-[#9E6752]/20 rounded-full blur-2xl pointer-events-none" />
       </div>
 
       {/* KPI Stats Grid */}

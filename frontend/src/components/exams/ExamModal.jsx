@@ -123,16 +123,16 @@ const ExamModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs overflow-y-auto">
       <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-150 my-8">
         {/* Header */}
-        <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+        <div className="px-6 py-5 border-b border-[#F1F0ED] flex items-center justify-between bg-gradient-to-r from-[#FFF7EC] via-[#FAF8F5] to-white">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-2xl bg-[#2D4354] text-[#FED7A5] flex items-center justify-center font-bold shadow-xs">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+              <h3 className="text-base sm:text-lg font-black text-[#20212B]">
                 {initialData ? 'Edit Exam Details' : 'Schedule New Exam'}
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#77756F] font-medium">
                 {initialData
                   ? 'Update syllabus topics or exam date'
                   : 'Define exam goals to generate an AI study schedule'}
@@ -311,9 +311,9 @@ const ExamModal = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-xs shadow-indigo-500/30 transition-all disabled:opacity-70"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white text-sm font-bold shadow-md transition-all disabled:opacity-70 cursor-pointer"
             >
-              {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+              {isSubmitting && <Loader2 className="w-4 h-4 animate-spin text-[#FED7A5]" />}
               <span>{initialData ? 'Save Changes' : 'Schedule Exam'}</span>
             </button>
           </div>

@@ -17,6 +17,7 @@ import {
   CheckCircle2,
   AlertCircle
 } from 'lucide-react';
+import notebookImg from '../assets/illustrations/element_open_notebook.png';
 
 const CleanNotesPage = () => {
   const [searchParams] = useSearchParams();
@@ -142,18 +143,25 @@ const CleanNotesPage = () => {
     <div className="space-y-8 animate-in fade-in duration-150">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#20212B] tracking-tight">
-              Clean Notes AI
-            </h1>
-            <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]">
-              OCR & AI
-            </span>
+        <div className="flex items-center gap-4">
+          <img
+            src={notebookImg}
+            alt="Study Notebook"
+            className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-[0_12px_24px_rgba(45,67,84,0.16)] shrink-0 animate-float-gentle"
+          />
+          <div>
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#20212B] tracking-tight">
+                Clean Notes AI
+              </h1>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]">
+                OCR & AI
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-[#77756F] mt-1 font-medium">
+              Convert messy handwritten class notes into structured, searchable digital notes with formulas
+            </p>
           </div>
-          <p className="text-xs sm:text-sm text-[#77756F] mt-1 font-medium">
-            Convert messy handwritten class notes into structured, searchable digital notes with formulas
-          </p>
         </div>
 
         <button
@@ -295,9 +303,9 @@ const CleanNotesPage = () => {
                   <div className="flex items-center gap-1.5">
                     <button
                       onClick={() => handleSelectNote(noteItem._id)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#4169E1] to-[#3557C7] hover:from-[#3557C7] hover:to-[#2B47A8] text-white font-semibold text-xs shadow-xs transition-all hover:scale-102"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white font-semibold text-xs shadow-xs transition-all hover:scale-102 cursor-pointer"
                     >
-                      <Edit3 className="w-3 h-3" />
+                      <Edit3 className="w-3 h-3 text-[#FED7A5]" />
                       <span>Open</span>
                     </button>
                     <a

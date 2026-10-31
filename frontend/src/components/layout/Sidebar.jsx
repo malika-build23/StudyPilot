@@ -88,9 +88,11 @@ const Sidebar = ({ isOpen, onClose }) => {
         {/* Brand Header */}
         <div className="h-18 px-5 flex items-center justify-between border-b border-[#73766A]/10">
           <NavLink to="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl overflow-hidden p-1 bg-gradient-to-tr from-[#2D4354]/15 via-[#FED7A5]/30 to-[#9E6752]/20 border border-[#2D4354]/20 shadow-xs flex items-center justify-center group-hover:scale-105 group-hover:border-[#2D4354]/50 transition-all shrink-0">
-              <img src="/logo.png" alt="StudyPilot Logo" className="w-full h-full object-contain" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="StudyPilot Logo"
+              className="w-10 h-10 object-contain drop-shadow-sm group-hover:scale-105 transition-transform shrink-0"
+            />
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-extrabold text-[#20212B] text-lg tracking-tight group-hover:text-[#2D4354] transition-colors">

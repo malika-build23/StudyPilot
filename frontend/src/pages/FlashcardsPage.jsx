@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { flashcardsAPI, subjectsAPI } from '../services/api';
 import DeckDetailView from '../components/flashcards/DeckDetailView';
 import FlashcardGeneratorModal from '../components/flashcards/FlashcardGeneratorModal';
+import flashcardsImg from '../assets/illustrations/element_flashcards.png';
 import {
   Sparkles,
   Plus,
@@ -226,7 +227,12 @@ const FlashcardsPage = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3">
+          {/* Floating 3D Flashcards Element – NO BOX */}
+          <div className="hidden sm:block w-14 h-14 pointer-events-none drop-shadow-md animate-float-delayed">
+            <img src={flashcardsImg} alt="Flashcards Element" className="w-full h-full object-contain" />
+          </div>
+
           <button
             onClick={() => setCreateDeckModalOpen(true)}
             className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#FAF8F5] text-[#20212B] font-semibold text-xs transition-all shadow-xs hover:border-[#2D4354]/40 cursor-pointer"
@@ -396,12 +402,12 @@ const FlashcardsPage = () => {
       {/* Create Deck Modal */}
       {createDeckModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl w-full max-w-md border border-slate-100 shadow-xl overflow-hidden">
-            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-[#F5F7FC] to-white">
-              <h3 className="font-extrabold text-[#202B42] text-base">Create Flashcard Deck</h3>
+          <div className="bg-white rounded-3xl w-full max-w-md border border-[#F1F0ED] shadow-xl overflow-hidden">
+            <div className="px-6 py-5 border-b border-[#F1F0ED] flex items-center justify-between bg-gradient-to-r from-[#FFF7EC] to-white">
+              <h3 className="font-extrabold text-[#20212B] text-base">Create Flashcard Deck</h3>
               <button
                 onClick={() => setCreateDeckModalOpen(false)}
-                className="p-1.5 rounded-xl text-[#77839A] hover:text-[#202B42] hover:bg-slate-100 transition-colors"
+                className="p-1.5 rounded-xl text-[#77756F] hover:text-[#20212B] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -457,18 +463,18 @@ const FlashcardsPage = () => {
                 />
               </div>
 
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+              <div className="pt-4 border-t border-[#F1F0ED] flex items-center justify-end gap-2.5">
                 <button
                   type="button"
                   onClick={() => setCreateDeckModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-[#77839A] hover:bg-[#F5F7FC] transition-colors"
+                  className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-[#77756F] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isCreatingDeck || !newDeckTitle.trim()}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#4169E1] to-[#3557C7] text-white font-semibold text-xs disabled:opacity-50 shadow-xs hover:opacity-95 transition-all"
+                  className="px-5 py-2.5 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white font-semibold text-xs disabled:opacity-50 shadow-sm transition-all hover:scale-102 cursor-pointer"
                 >
                   {isCreatingDeck ? 'Creating...' : 'Create Deck'}
                 </button>

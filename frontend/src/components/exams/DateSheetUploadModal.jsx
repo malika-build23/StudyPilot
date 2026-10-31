@@ -160,19 +160,19 @@ const DateSheetUploadModal = ({ isOpen, onClose, onComplete }) => {
         <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-blue-600" />
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#9E6752] bg-[#FFF7EC] px-3 py-1 rounded-full border border-[#FED7A5] flex items-center gap-1.5">
+                <Sparkles className="w-3 h-3 text-[#9E6752]" />
                 Smart Exam Planner
               </span>
             </div>
-            <h2 className="text-lg sm:text-xl font-extrabold text-slate-900">
+            <h2 className="text-lg sm:text-xl font-black text-[#20212B] tracking-tight">
               Upload University Examination Date Sheet
             </h2>
           </div>
 
           <button
             onClick={handleClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-xl text-[#77756F] hover:text-[#20212B] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -194,10 +194,10 @@ const DateSheetUploadModal = ({ isOpen, onClose, onComplete }) => {
                 key={item.step}
                 className={`flex items-center gap-2 p-2.5 rounded-2xl border text-xs font-bold transition-all ${
                   isActive
-                    ? 'bg-blue-50 text-blue-700 border-blue-300 shadow-2xs'
+                    ? 'bg-[#2D4354] text-white border-[#2D4354] shadow-xs'
                     : isCompleted
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                    : 'bg-slate-50 text-slate-400 border-slate-200'
+                    ? 'bg-[#FFF7EC] text-[#9E6752] border-[#FED7A5]'
+                    : 'bg-[#FAF8F5] text-[#77756F] border-[#F1F0ED]'
                 }`}
               >
                 <div

@@ -121,14 +121,14 @@ const CleanNotesUploadModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl w-full max-w-lg border border-slate-200 shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-blue-50/50 to-indigo-50/50">
+        <div className="px-6 py-5 border-b border-[#F1F0ED] flex items-center justify-between bg-gradient-to-r from-[#FFF7EC] via-[#FAF8F5] to-white">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-[#2D4354] text-[#FED7A5] flex items-center justify-center shadow-xs">
               <UploadCloud className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-extrabold text-slate-900 text-base">Convert Handwritten Notes</h3>
-              <p className="text-xs text-slate-500">
+              <h3 className="font-black text-[#20212B] text-base">Convert Handwritten Notes</h3>
+              <p className="text-xs text-[#77756F] font-medium">
                 OCR transcription & structured digital notes
               </p>
             </div>
@@ -292,16 +292,16 @@ const CleanNotesUploadModal = ({
             <button
               type="submit"
               disabled={isUploading || selectedFiles.length === 0}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-semibold text-xs shadow-xs transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#2D4354] hover:bg-[#20212B] disabled:opacity-50 text-white font-semibold text-xs shadow-md transition-all cursor-pointer"
             >
               {isUploading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin text-[#FED7A5]" />
                   <span>Processing with OCR...</span>
                 </>
               ) : (
                 <>
-                  <UploadCloud className="w-4 h-4" />
+                  <UploadCloud className="w-4 h-4 text-[#FED7A5]" />
                   <span>Convert & Structure</span>
                 </>
               )}

@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { subjectsAPI } from '../services/api';
 import SubjectModal from '../components/subjects/SubjectModal';
 import DeleteConfirmModal from '../components/subjects/DeleteConfirmModal';
+import stackedBooksImg from '../assets/illustrations/element_stacked_books.png';
 import {
   BookOpen,
   Plus,
@@ -209,9 +210,9 @@ const SubjectsPage = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-150">
-      {/* Top action header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
-        <div>
+      {/* Top action header with floating 3D element */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 relative">
+        <div className="relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF7EC] border border-[#FED7A5] text-[#9E6752] text-[11px] font-bold tracking-wider uppercase mb-1">
             <Sparkles className="w-3.5 h-3.5 text-[#9E6752]" />
             <span>Academic Workspaces</span>
@@ -224,13 +225,20 @@ const SubjectsPage = () => {
           </p>
         </div>
 
-        <button
-          onClick={handleOpenCreate}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-[#2D4354] hover:bg-[#20212B] text-white font-bold text-xs sm:text-sm shadow-[0_4px_16px_rgba(45,67,84,0.25)] transition-all transform hover:scale-[1.02] active:scale-[0.98] self-start sm:self-auto cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Create Subject</span>
-        </button>
+        <div className="flex items-center gap-4 self-start sm:self-auto">
+          {/* Floating 3D Stacked Books Element – NO BOX */}
+          <div className="hidden md:block w-16 h-16 pointer-events-none drop-shadow-md animate-float-gentle">
+            <img src={stackedBooksImg} alt="Subject Books" className="w-full h-full object-contain" />
+          </div>
+
+          <button
+            onClick={handleOpenCreate}
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-[#2D4354] hover:bg-[#20212B] text-white font-bold text-xs sm:text-sm shadow-[0_4px_16px_rgba(45,67,84,0.25)] transition-all transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Create Subject</span>
+          </button>
+        </div>
       </div>
 
       {/* Search & Filter Controls */}

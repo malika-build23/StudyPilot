@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import WorkflowBanner from '../components/common/WorkflowBanner';
 import ParticleNetwork from '../components/common/ParticleNetwork';
-import studentHeroImg from '../assets/illustrations/student_study_hero.jpg';
+import heroStudentImg from '../assets/illustrations/hero_student.png';
+import gradCapImg from '../assets/illustrations/element_graduation_cap.png';
+import stackedBooksImg from '../assets/illustrations/element_stacked_books.png';
+import calendarClockImg from '../assets/illustrations/element_calendar_clock.png';
+import flashcardsImg from '../assets/illustrations/element_flashcards.png';
+import notebookImg from '../assets/illustrations/element_open_notebook.png';
+import backpackImg from '../assets/illustrations/element_student_backpack.png';
 
 import {
   ArrowRight,
@@ -38,6 +44,7 @@ const pillars = [
       'Keep each course strictly isolated. Sync entire semester Google Drive folders or upload local PDFs and PPTs. Automatically categorize materials into Textbooks, Notes, PYQs, and Lab Manuals.',
     tags: ['OAuth Drive Sync', 'Regex Classifier', 'Supabase Cloud'],
     icon: BookOpen,
+    elementImg: stackedBooksImg,
     colorScheme: {
       number: 'text-[#2D4354]/10',
       iconBg: 'bg-[#2D4354]/10 text-[#2D4354] border-[#2D4354]/25',
@@ -56,6 +63,7 @@ const pillars = [
       'Extract high-yield chapter summaries, strict LaTeX formula sheets, and architecture diagrams directly from course materials. Convert messy handwritten class notes into clean, printable study guides.',
     tags: ['LaTeX Formula Extraction', 'Mermaid Diagrams', 'Handwritten OCR'],
     icon: BrainCircuit,
+    elementImg: notebookImg,
     colorScheme: {
       number: 'text-[#9E6752]/10',
       iconBg: 'bg-[#FED7A5]/35 text-[#9E6752] border-[#9E6752]/30',
@@ -74,6 +82,7 @@ const pillars = [
       'Transform textbook concepts into active recall flashcard decks with one click. Leverage the proven SM-2 spaced repetition algorithm to review cards right when memory decay begins.',
     tags: ['SM-2 Spaced Repetition', '3D Interactive Flip', 'AI Mnemonics'],
     icon: Layers,
+    elementImg: flashcardsImg,
     colorScheme: {
       number: 'text-[#73766A]/10',
       iconBg: 'bg-[#73766A]/15 text-[#73766A] border-[#73766A]/30',
@@ -92,6 +101,7 @@ const pillars = [
       'Maintain your complete university and practical exam datesheet with real-time day countdowns. Generate automated daily study routines that adjust dynamically when topics require more attention.',
     tags: ['DateSheet Countdown', 'Dynamic Schedule', 'Readiness Score'],
     icon: CalendarDays,
+    elementImg: calendarClockImg,
     colorScheme: {
       number: 'text-[#534145]/10',
       iconBg: 'bg-[#534145]/10 text-[#534145] border-[#534145]/25',
@@ -219,43 +229,55 @@ const LandingPage = () => {
             </div>
           </div>
 
-          {/* Large Academic 3D Cartoon Student Illustration with Floating Badges */}
-          <div className="mt-12 mb-6 max-w-4xl mx-auto relative flex justify-center">
-            {/* Soft Peach & Slate Blue Organic Glow Behind Illustration */}
-            <div className="absolute -inset-4 bg-gradient-to-tr from-[#FED7A5]/40 via-[#FFF7EC]/70 to-[#2D4354]/15 rounded-[40px] blur-xl pointer-events-none" />
+          {/* Free-Standing 3D Student Character & Floating Elements – NO BOX, NO BORDER */}
+          <div className="mt-8 mb-4 max-w-4xl mx-auto relative flex justify-center items-center min-h-[380px] sm:min-h-[440px]">
+            {/* Soft Ambient Radial Glow Behind Character */}
+            <div className="absolute w-[460px] h-[340px] bg-gradient-to-tr from-[#FED7A5]/45 via-[#FFF7EC]/70 to-[#2D4354]/15 rounded-full blur-3xl pointer-events-none" />
+
+            {/* Floating 3D Standalone Elements Around Character */}
+            <div className="hidden sm:block absolute -top-4 -right-2 md:right-8 w-24 h-24 md:w-28 md:h-28 z-20 animate-float-delayed pointer-events-none drop-shadow-[0_15px_25px_rgba(45,67,84,0.18)]">
+              <img src={gradCapImg} alt="Graduation Cap" className="w-full h-full object-contain" />
+            </div>
+
+            <div className="hidden sm:block absolute -left-4 md:left-6 bottom-4 w-24 h-24 md:w-28 md:h-28 z-20 animate-float-gentle pointer-events-none drop-shadow-[0_15px_25px_rgba(45,67,84,0.18)]">
+              <img src={stackedBooksImg} alt="Stacked Books" className="w-full h-full object-contain" />
+            </div>
+
+            <div className="hidden md:block absolute -left-8 top-12 w-20 h-20 md:w-24 md:h-24 z-20 animate-float-delayed pointer-events-none drop-shadow-[0_15px_25px_rgba(45,67,84,0.18)]">
+              <img src={flashcardsImg} alt="Flashcards" className="w-full h-full object-contain" />
+            </div>
+
+            <div className="hidden md:block absolute -right-6 bottom-2 w-22 h-22 md:w-26 md:h-26 z-20 animate-float-gentle pointer-events-none drop-shadow-[0_15px_25px_rgba(45,67,84,0.18)]">
+              <img src={backpackImg} alt="Student Backpack" className="w-full h-full object-contain" />
+            </div>
 
             {/* Floating Academic Badges */}
-            <div className="hidden md:flex absolute -left-6 top-10 items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/95 border border-[#73766A]/20 shadow-lg animate-float-gentle z-20">
+            <div className="hidden lg:flex absolute -left-8 top-1/2 -translate-y-1/2 items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/95 border border-[#73766A]/20 shadow-lg animate-float-gentle z-20">
               <div className="w-8 h-8 rounded-xl bg-[#FED7A5] text-[#2D4354] flex items-center justify-center font-bold text-xs">
                 <BookOpen className="w-4 h-4" />
               </div>
               <div className="text-left">
-                <div className="text-xs font-bold text-[#20212B]">300+ Syllabus Materials</div>
+                <div className="text-xs font-bold text-[#20212B]">300+ Materials</div>
                 <div className="text-[10px] text-[#77756F]">Structured Automatically</div>
               </div>
             </div>
 
-            <div className="hidden md:flex absolute -right-6 top-16 items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/95 border border-[#73766A]/20 shadow-lg animate-float-delayed z-20">
+            <div className="hidden lg:flex absolute -right-8 top-1/2 -translate-y-1/2 items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/95 border border-[#73766A]/20 shadow-lg animate-float-delayed z-20">
               <div className="w-8 h-8 rounded-xl bg-[#2D4354] text-[#FED7A5] flex items-center justify-center font-bold text-xs">
                 <Target className="w-4 h-4" />
               </div>
               <div className="text-left">
-                <div className="text-xs font-bold text-[#20212B]">94.2% Retention</div>
+                <div className="text-xs font-bold text-[#20212B]">94.2% Mastery</div>
                 <div className="text-[10px] text-[#77756F]">Active Recall & SM-2</div>
               </div>
             </div>
 
-            <div className="hidden sm:flex absolute right-12 -bottom-4 items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#FED7A5] text-[#9E6752] text-xs font-bold shadow-md z-20 animate-twinkle">
-              <Star className="w-3.5 h-3.5 fill-[#FED7A5] text-[#9E6752]" />
-              <span>Exam Ready</span>
-            </div>
-
-            {/* Main 3D Artwork Image Frame */}
-            <div className="relative z-10 w-full max-w-2xl rounded-3xl overflow-hidden border-2 border-white shadow-[0_20px_50px_rgba(45,67,84,0.12)] bg-[#FAF8F5]">
+            {/* Free-Standing 3D Character (NO BOX, NO BORDER) */}
+            <div className="relative z-10 w-full max-w-xl flex justify-center py-2">
               <img
-                src={studentHeroImg}
+                src={heroStudentImg}
                 alt="Student studying with laptop, books, and stationery"
-                className="w-full h-auto max-h-[380px] object-cover object-center transform hover:scale-[1.02] transition-transform duration-500"
+                className="w-full h-auto max-h-[440px] object-contain drop-shadow-[0_25px_45px_rgba(45,67,84,0.16)] animate-float-gentle transform hover:scale-[1.02] transition-transform duration-500"
               />
             </div>
           </div>
@@ -563,12 +585,19 @@ const LandingPage = () => {
                     </span>
 
                     <div className="relative">
+                      {/* Floating Standalone 3D Element Inside Pillar */}
+                      {pillar.elementImg && (
+                        <div className="absolute -top-3 right-0 w-16 h-16 sm:w-20 sm:h-20 pointer-events-none drop-shadow-md animate-float-delayed group-hover:scale-110 transition-transform">
+                          <img src={pillar.elementImg} alt={pillar.eyebrow} className="w-full h-full object-contain" />
+                        </div>
+                      )}
+
                       <div className="mb-7 flex items-center justify-between">
                         <div className={`sp-card-icon flex h-14 w-14 items-center justify-center rounded-2xl border ${colorScheme.iconBg} shadow-xs`}>
                           <Icon size={26} strokeWidth={1.8} />
                         </div>
 
-                        <span className={`rounded-full border px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.16em] ${colorScheme.badge}`}>
+                        <span className={`rounded-full border px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.16em] ${colorScheme.badge} mr-14 sm:mr-16`}>
                           {pillar.eyebrow}
                         </span>
                       </div>
@@ -614,8 +643,8 @@ const LandingPage = () => {
               <div className="pointer-events-none absolute -bottom-40 -left-20 -z-10 h-96 w-96 rounded-full bg-[#9E6752]/25 blur-[90px] sp-blob sp-blob-delay" />
 
               <div className="relative mx-auto max-w-3xl">
-                <div className="mx-auto mb-7 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-[#FED7A5] shadow-xl backdrop-blur-md sp-float">
-                  <GraduationCap size={34} strokeWidth={1.6} />
+                <div className="mx-auto mb-6 w-24 h-24 drop-shadow-2xl animate-float-gentle">
+                  <img src={gradCapImg} alt="Graduation Cap" className="w-full h-full object-contain" />
                 </div>
 
                 <span className="inline-flex items-center gap-2 rounded-full border border-[#FED7A5]/30 bg-white/10 px-4 py-2 text-xs font-bold text-[#FED7A5] backdrop-blur-md">
@@ -655,13 +684,11 @@ const LandingPage = () => {
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#2D4354]/20 bg-[#2D4354]/10 p-1 shadow-2xs">
-                <img
-                  src="/logo.png"
-                  alt="StudyPilot Logo"
-                  className="h-full w-full object-contain"
-                />
-              </div>
+              <img
+                src="/logo.png"
+                alt="StudyPilot Logo"
+                className="h-10 w-10 shrink-0 object-contain drop-shadow-sm"
+              />
 
               <div>
                 <span className="block text-sm font-extrabold tracking-tight text-[#20212B]">

@@ -87,43 +87,43 @@ const DailyRevisionSession = ({
 
   if (sessionCompleted) {
     return (
-      <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 text-center max-w-lg mx-auto shadow-sm space-y-5 animate-in zoom-in-95 duration-200">
-        <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto shadow-xs">
+      <div className="bg-white rounded-3xl p-8 sm:p-12 border border-[#F1F0ED] text-center max-w-lg mx-auto shadow-md space-y-5 animate-in zoom-in-95 duration-200">
+        <div className="w-16 h-16 rounded-2xl bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5] flex items-center justify-center mx-auto shadow-xs">
           <PartyPopper className="w-9 h-9" />
         </div>
 
         <div>
-          <span className="text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+          <span className="text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]">
             Revision Session Done
           </span>
-          <h3 className="text-2xl font-extrabold text-slate-900 mt-2">
+          <h3 className="text-2xl font-black text-[#20212B] mt-2 tracking-tight">
             Fantastic Effort! 🎉
           </h3>
-          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+          <p className="text-xs text-[#77756F] mt-1 max-w-sm mx-auto font-medium">
             You successfully completed your revision session of {total} flashcards.
           </p>
         </div>
 
         {/* Breakdown pills */}
-        <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+        <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-[#FAF8F5] border border-[#F1F0ED]">
           <div className="text-center">
-            <span className="text-xl font-extrabold text-emerald-600">{sessionResults.easy}</span>
-            <p className="text-[10px] font-bold text-slate-400 uppercase mt-0.5">Easy (Correct)</p>
+            <span className="text-xl font-extrabold text-[#2D4354]">{sessionResults.easy}</span>
+            <p className="text-[10px] font-bold text-[#77756F] uppercase mt-0.5">Easy (Correct)</p>
           </div>
-          <div className="text-center border-x border-slate-200/80">
-            <span className="text-xl font-extrabold text-blue-600">{sessionResults.hard}</span>
-            <p className="text-[10px] font-bold text-slate-400 uppercase mt-0.5">Hard</p>
+          <div className="text-center border-x border-[#73766A]/20">
+            <span className="text-xl font-extrabold text-[#73766A]">{sessionResults.hard}</span>
+            <p className="text-[10px] font-bold text-[#77756F] uppercase mt-0.5">Hard</p>
           </div>
           <div className="text-center">
-            <span className="text-xl font-extrabold text-amber-600">{sessionResults.again}</span>
-            <p className="text-[10px] font-bold text-slate-400 uppercase mt-0.5">Again</p>
+            <span className="text-xl font-extrabold text-[#9E6752]">{sessionResults.again}</span>
+            <p className="text-[10px] font-bold text-[#77756F] uppercase mt-0.5">Again</p>
           </div>
         </div>
 
         <div className="flex items-center justify-center gap-3 pt-2">
           <button
             onClick={onExitSession}
-            className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-all"
+            className="px-6 py-3 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white font-bold text-xs shadow-md transition-all hover:scale-102 cursor-pointer"
           >
             Back to Revision Overview
           </button>

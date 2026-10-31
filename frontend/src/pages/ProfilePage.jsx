@@ -19,7 +19,7 @@ import {
   Trash2,
   Sparkles,
 } from 'lucide-react';
-import studentDeskImg from '../assets/illustrations/student_desk_dashboard.jpg';
+import gradCapImg from '../assets/illustrations/element_graduation_cap.png';
 
 const ProfilePage = () => {
   const { updateProfile, updateUser } = useAuth();
@@ -182,33 +182,33 @@ const ProfilePage = () => {
   return (
     <div className="max-w-3xl space-y-6 animate-in fade-in duration-150">
       {/* Academic Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#2D4354] via-[#534145] to-[#73766A] text-white p-6 sm:p-8 shadow-sm">
-        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-[#FED7A5]/15 blur-2xl pointer-events-none" />
-        <div className="absolute -bottom-10 right-28 w-36 h-36 rounded-full bg-[#9E6752]/20 blur-xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#2D4354] via-[#534145] to-[#20212B] text-white p-6 sm:p-8 shadow-[0_16px_36px_-6px_rgba(45,67,84,0.25)] border border-white/10 hover:border-white/20 transition-all duration-300 group">
+        <div className="absolute -top-10 -right-10 w-56 h-56 rounded-full bg-[#FED7A5]/20 blur-3xl pointer-events-none group-hover:scale-110 transition-transform duration-500" />
+        <div className="absolute -bottom-10 right-28 w-44 h-44 rounded-full bg-[#9E6752]/25 blur-2xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="max-w-md">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FED7A5]/20 text-[#FED7A5] border border-[#FED7A5]/30 mb-3">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/15 text-[#FED7A5] border border-white/20 backdrop-blur-md mb-3 shadow-xs">
               <Sparkles className="w-3.5 h-3.5" />
               Academic Identity
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-sm">
               Student Profile
             </h2>
-            <p className="text-xs sm:text-sm text-[#F1F0ED]/90 mt-1.5 leading-relaxed">
+            <p className="text-xs sm:text-sm text-white/90 mt-1.5 leading-relaxed font-normal">
               Review your account information, profile picture, and academic credentials across StudyPilot AI.
             </p>
           </div>
 
           <div className="hidden sm:block shrink-0 relative">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-white/20 shadow-md transform hover:scale-105 transition-transform animate-float-gentle">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 drop-shadow-xl animate-float-gentle">
               <img
-                src={studentDeskImg}
-                alt="Student Desk"
-                className="w-full h-full object-cover"
+                src={gradCapImg}
+                alt="Graduation Cap"
+                className="w-full h-full object-contain"
               />
             </div>
-            <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-[#FED7A5] text-[#20212B] flex items-center justify-center text-[10px] shadow-sm animate-twinkle">
+            <div className="absolute -top-1 -left-1 w-6 h-6 rounded-full bg-[#FED7A5] text-[#20212B] flex items-center justify-center text-[10px] shadow-sm animate-twinkle">
               ★
             </div>
           </div>

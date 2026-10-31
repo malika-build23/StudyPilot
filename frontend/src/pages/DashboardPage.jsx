@@ -6,7 +6,9 @@ import WorkflowBanner from '../components/common/WorkflowBanner';
 import SubjectModal from '../components/subjects/SubjectModal';
 import PerformanceAnalyticsView from '../components/analytics/PerformanceAnalyticsView';
 import SmartResourceFinder from '../components/resources/SmartResourceFinder';
-import deskDashboardImg from '../assets/illustrations/student_desk_dashboard.jpg';
+import heroStudentImg from '../assets/illustrations/hero_student.png';
+import gradCapImg from '../assets/illustrations/element_graduation_cap.png';
+import stackedBooksImg from '../assets/illustrations/element_stacked_books.png';
 import {
   BookOpen,
   FileText,
@@ -181,13 +183,16 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          {/* Academic Desk 3D Illustration Graphic */}
-          <div className="hidden lg:flex lg:col-span-4 justify-end">
-            <div className="relative rounded-2xl overflow-hidden border-2 border-white/40 shadow-xl bg-white/10 animate-float-gentle max-w-[260px]">
+          {/* Free-Standing 3D Character & Graduation Cap Graphic – NO BOX, NO BORDER */}
+          <div className="hidden lg:flex lg:col-span-4 justify-end items-center relative">
+            <div className="absolute -top-3 right-2 w-16 h-16 pointer-events-none drop-shadow-md animate-float-delayed z-20">
+              <img src={gradCapImg} alt="Graduation Cap" className="w-full h-full object-contain" />
+            </div>
+            <div className="relative w-full max-w-[240px] flex justify-end">
               <img
-                src={deskDashboardImg}
-                alt="Student academic desk with laptop and books"
-                className="w-full h-auto object-cover max-h-[190px]"
+                src={heroStudentImg}
+                alt="Student studying with laptop and books"
+                className="w-full h-auto object-contain max-h-[190px] drop-shadow-[0_16px_30px_rgba(0,0,0,0.25)] animate-float-gentle"
               />
             </div>
           </div>

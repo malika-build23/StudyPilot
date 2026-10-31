@@ -30,6 +30,7 @@ import {
   FileEdit,
   Play
 } from 'lucide-react';
+import backpackImg from '../assets/illustrations/element_student_backpack.png';
 
 const SubjectWorkspacePage = () => {
   const { id } = useParams();
@@ -259,6 +260,15 @@ const SubjectWorkspacePage = () => {
             <p className="text-sm text-[#77756F] max-w-2xl leading-relaxed">
               {subject.description || 'No subject description provided yet. Click "Edit Subject" to add course details, textbooks, or syllabus topics.'}
             </p>
+          </div>
+
+          {/* Free-Standing 3D Backpack Element – NO BOX, NO BORDER */}
+          <div className="hidden md:flex items-center justify-center shrink-0">
+            <img
+              src={backpackImg}
+              alt="Student Study Backpack"
+              className="w-16 h-16 lg:w-20 lg:h-20 object-contain drop-shadow-[0_12px_24px_rgba(45,67,84,0.16)] animate-float-gentle"
+            />
           </div>
 
           {/* Action buttons */}
@@ -606,10 +616,10 @@ const SubjectWorkspacePage = () => {
                   ) : (
                     <Link
                       to={mod.to}
-                      className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#4169E1] to-[#3557C7] hover:from-[#3557C7] hover:to-[#2B47A8] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all text-center shadow-xs"
+                      className="w-full py-2.5 px-3 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all text-center shadow-sm hover:scale-[1.01]"
                     >
                       <span>{mod.actionLabel}</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
+                      <ChevronRight className="w-3.5 h-3.5 text-[#FED7A5]" />
                     </Link>
                   )}
                 </div>

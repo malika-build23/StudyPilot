@@ -71,25 +71,26 @@ const QuizResultView = ({ evaluation, onRetake }) => {
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* 1. Score Summary Banner */}
-      <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden border border-slate-800">
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-56 h-56 rounded-full bg-blue-500/10 blur-2xl pointer-events-none" />
+      <div className="bg-gradient-to-r from-[#2D4354] via-[#534145] to-[#20212B] rounded-3xl p-6 sm:p-8 text-white shadow-[0_16px_36px_-6px_rgba(45,67,84,0.25)] relative overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300 group">
+        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-[#FED7A5]/20 blur-3xl pointer-events-none group-hover:scale-110 transition-transform duration-500" />
+        <div className="absolute bottom-0 right-32 -mb-16 w-52 h-52 rounded-full bg-[#9E6752]/25 blur-2xl pointer-events-none" />
         
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${tierColor}`}>
+              <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold border ${tierColor} backdrop-blur-md shadow-xs`}>
                 <Award className="w-3.5 h-3.5" />
                 {tierBadge}
               </span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-white/75 font-medium">
                 Evaluation Complete • Deterministic Answer Key
               </span>
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-sm">
               Quiz Evaluation Results
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-white/90 max-w-xl leading-relaxed font-normal">
               Review your question breakdown, analyze mistake rationales, and check topic retention below.
             </p>
           </div>

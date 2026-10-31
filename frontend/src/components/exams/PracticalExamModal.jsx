@@ -93,16 +93,16 @@ const PracticalExamModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in">
       <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-5 max-h-[92vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-3 border-b border-[#F1F0ED]">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[#2D4354] text-[#FED7A5] flex items-center justify-center shadow-xs">
               <Beaker className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-base font-black text-[#20212B] tracking-tight">
                 {initialData ? 'Edit Practical Examination' : 'Schedule Practical / Internal Exam'}
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#77756F] font-medium">
                 Independent laboratory, viva, internal quiz, and assessment scheduler.
               </p>
             </div>
@@ -292,9 +292,9 @@ const PracticalExamModal = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 disabled:opacity-50"
+              className="px-5 py-2 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white text-xs font-bold shadow-md transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
             >
-              {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+              {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin text-[#FED7A5]" />}
               <span>{initialData ? 'Update Exam' : 'Schedule Practical Exam'}</span>
             </button>
           </div>

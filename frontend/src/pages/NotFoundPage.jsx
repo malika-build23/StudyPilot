@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Home, Sparkles, BookOpen } from 'lucide-react';
-import student404Img from '../assets/illustrations/student_404.jpg';
+import student404Img from '../assets/illustrations/element_student_404.png';
 
 const NotFoundPage = () => {
   return (
@@ -28,17 +28,15 @@ const NotFoundPage = () => {
       </div>
 
       <div className="relative z-10 max-w-md w-full bg-white/90 backdrop-blur-sm rounded-3xl border border-[#F1F0ED] p-8 sm:p-10 shadow-xl shadow-[#2D4354]/5 flex flex-col items-center">
-        {/* Floating 3D Academic Illustration */}
-        <div className="relative mb-6">
-          <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-3xl overflow-hidden border-4 border-white shadow-lg shadow-[#2D4354]/10 animate-float-gentle">
-            <img
-              src={student404Img}
-              alt="404 Academic Resource Not Found"
-              className="w-full h-full object-cover"
-            />
-          </div>
+        {/* Free-Standing 3D Academic Illustration – NO BOX, NO BORDER */}
+        <div className="relative mb-6 flex justify-center">
+          <img
+            src={student404Img}
+            alt="404 Academic Resource Not Found"
+            className="w-48 h-48 sm:w-56 sm:h-56 object-contain drop-shadow-[0_20px_35px_rgba(45,67,84,0.18)] animate-float-gentle"
+          />
           {/* Small Floating Graduation Cap / Book Pill */}
-          <div className="absolute -bottom-2 -right-2 px-3 py-1 rounded-full bg-[#FED7A5] text-[#20212B] text-[11px] font-bold shadow-md flex items-center gap-1.5 animate-float-delayed">
+          <div className="absolute -bottom-1 right-2 px-3.5 py-1.5 rounded-full bg-[#FED7A5] text-[#20212B] text-[11px] font-bold shadow-md flex items-center gap-1.5 animate-float-delayed border border-[#9E6752]/20">
             <BookOpen className="w-3.5 h-3.5 text-[#9E6752]" />
             Lost Shelf
           </div>

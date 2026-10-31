@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { analyticsAPI } from '../../services/api';
 import MathRenderer from '../common/MathRenderer';
-import academicAnalyticsImg from '../../assets/illustrations/academic_analytics.jpg';
+import academicAnalyticsImg from '../../assets/illustrations/element_academic_analytics.png';
 import {
   TrendingUp,
   Award,
@@ -145,26 +145,27 @@ const PerformanceAnalyticsView = ({ subjectId = null }) => {
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Visual Analytics Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#2D4354] via-[#534145] to-[#2D4354] p-6 sm:p-8 text-white shadow-[0_12px_32px_-6px_rgba(45,67,84,0.22)]">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#FED7A5]/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#2D4354] via-[#534145] to-[#20212B] p-6 sm:p-8 text-white shadow-[0_16px_36px_-6px_rgba(45,67,84,0.25)] border border-white/10 hover:border-white/20 transition-all duration-300 group">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#FED7A5]/20 rounded-full blur-3xl pointer-events-none group-hover:scale-110 transition-transform duration-500" />
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-[#FED7A5] text-[11px] font-bold tracking-wider uppercase backdrop-blur-xs border border-white/10">
+          <div className="space-y-2.5 max-w-xl">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/15 text-[#FED7A5] text-[11px] font-bold tracking-wider uppercase backdrop-blur-md border border-white/20 shadow-xs">
               <Sparkles className="w-3.5 h-3.5 text-[#FED7A5]" />
               <span>Real-Time Diagnostic Mastery</span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight drop-shadow-sm">
               Academic Performance & Weak Zones
             </h3>
-            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-white/90 leading-relaxed font-normal">
               Deterministic scoring, syllabus recall progression curves, and rule-based weak area detection powered by actual quiz evaluations.
             </p>
           </div>
-          <div className="relative shrink-0 w-32 h-32 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border-2 border-white/20 shadow-xl bg-white/5 animate-float-gentle">
+          {/* Free-Standing 3D Analytic Sphere & Charts – NO BOX, NO BORDER */}
+          <div className="relative shrink-0 flex items-center justify-center">
             <img
               src={academicAnalyticsImg}
               alt="Academic Analytics 3D Illustration"
-              className="w-full h-full object-cover"
+              className="w-28 h-28 sm:w-36 sm:h-36 object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.35)] animate-float-gentle"
             />
           </div>
         </div>

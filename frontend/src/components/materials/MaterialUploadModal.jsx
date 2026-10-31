@@ -131,16 +131,16 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#202B42]/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200/80 overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Modal Header */}
-        <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-blue-50/50 via-indigo-50/30 to-white">
+        <div className="px-6 py-5 border-b border-[#F1F0ED] flex items-center justify-between bg-gradient-to-r from-[#FFF7EC] via-[#FAF8F5] to-white">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#4169E1] to-[#9270DB] text-white flex items-center justify-center font-bold shadow-xs">
+            <div className="w-10 h-10 rounded-2xl bg-[#2D4354] text-[#FED7A5] flex items-center justify-center font-bold shadow-xs">
               <UploadCloud className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#202B42]">
+              <h3 className="text-lg font-black text-[#20212B]">
                 Upload Study Material
               </h3>
-              <p className="text-xs text-[#77839A] font-medium">
+              <p className="text-xs text-[#77756F] font-medium">
                 Add PDFs or PPTXs for automated concept extraction
               </p>
             </div>
@@ -269,7 +269,7 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
               type="button"
               onClick={handleUpload}
               disabled={!file || isUploading}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#4169E1] to-[#3557C7] hover:from-[#3557C7] hover:to-[#2B47AC] text-white text-xs font-bold shadow-[0_4px_14px_rgba(65,105,225,0.3)] transition-all disabled:opacity-50 hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white text-xs font-bold shadow-md transition-all disabled:opacity-50 hover:scale-[1.02] cursor-pointer"
             >
               {isUploading ? (
                 <>
@@ -278,7 +278,7 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
                 </>
               ) : (
                 <>
-                  <UploadCloud className="w-4 h-4" />
+                  <UploadCloud className="w-4 h-4 text-[#FED7A5]" />
                   <span>Upload & Extract</span>
                 </>
               )}

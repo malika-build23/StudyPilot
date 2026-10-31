@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import GoogleSignInButton from '../components/auth/GoogleSignInButton';
-import studentHeroImg from '../assets/illustrations/student_study_hero.jpg';
+import heroStudentImg from '../assets/illustrations/hero_student.png';
+import gradCapImg from '../assets/illustrations/element_graduation_cap.png';
 import { Mail, Lock, ArrowRight, Loader2, AlertCircle, Sparkles, BookOpen, Star, Target } from 'lucide-react';
 
 const LoginPage = () => {
@@ -73,12 +74,17 @@ const LoginPage = () => {
               <span>Exam Ready</span>
             </div>
 
-            {/* Illustration Frame */}
-            <div className="relative z-10 w-full rounded-3xl overflow-hidden border-2 border-white shadow-[0_16px_40px_rgba(45,67,84,0.12)] bg-white animate-float-delayed">
+            {/* Floating 3D Graduation Cap */}
+            <div className="absolute -top-6 -right-2 w-20 h-20 sm:w-24 sm:h-24 z-20 animate-float-delayed pointer-events-none drop-shadow-[0_12px_24px_rgba(45,67,84,0.18)]">
+              <img src={gradCapImg} alt="Graduation Cap" className="w-full h-full object-contain" />
+            </div>
+
+            {/* Free-Standing 3D Character Element – NO BOX, NO BORDER */}
+            <div className="relative z-10 w-full flex justify-center py-2">
               <img
-                src={studentHeroImg}
+                src={heroStudentImg}
                 alt="Student studying with laptop and books"
-                className="w-full h-auto object-cover max-h-[380px]"
+                className="w-full h-auto object-contain max-h-[380px] drop-shadow-[0_20px_45px_rgba(45,67,84,0.16)] animate-float-delayed transform hover:scale-[1.02] transition-transform"
               />
             </div>
 
@@ -97,9 +103,11 @@ const LoginPage = () => {
             {/* Brand Header */}
             <div className="text-center mb-6">
               <Link to="/" className="inline-flex items-center justify-center group mb-2">
-                <div className="w-12 h-12 rounded-2xl overflow-hidden p-1 bg-gradient-to-tr from-[#2D4354]/15 via-[#FED7A5]/30 to-[#9E6752]/20 border border-[#2D4354]/25 shadow-xs flex items-center justify-center group-hover:scale-105 transition-all">
-                  <img src="/logo.png" alt="StudyPilot Logo" className="w-full h-full object-contain" />
-                </div>
+                <img
+                  src="/logo.png"
+                  alt="StudyPilot Logo"
+                  className="w-14 h-14 object-contain drop-shadow-md group-hover:scale-105 transition-transform"
+                />
               </Link>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FED7A5]/30 border border-[#FED7A5] text-[#2D4354] text-[11px] font-bold tracking-wider uppercase mb-1.5">
                 <Sparkles className="w-3 h-3 text-[#9E6752]" />
