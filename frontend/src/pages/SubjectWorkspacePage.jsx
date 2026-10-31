@@ -8,6 +8,8 @@ import MaterialsList from '../components/materials/MaterialsList';
 import DocumentIntelligenceView from '../components/ai/DocumentIntelligenceView';
 import QuizGenerationView from '../components/quiz/QuizGenerationView';
 import PerformanceAnalyticsView from '../components/analytics/PerformanceAnalyticsView';
+import MnemonicGenerator from '../components/ai/MnemonicGenerator';
+import DiagramGenerator from '../components/ai/DiagramGenerator';
 import {
   ArrowLeft,
   Calendar,
@@ -367,6 +369,16 @@ const SubjectWorkspacePage = () => {
             Phase 3 Part B Active
           </span>
         </div>
+        {/* Phase 5 - AI Mnemonics Generator */}
+<MnemonicGenerator
+  subjectId={id}
+  selectedMaterial={selectedMaterial}
+/>
+{/* Phase 5 - AI Diagram Generator */}
+<DiagramGenerator
+  subjectId={id}
+  selectedMaterial={selectedMaterial}
+/>
 
         <PerformanceAnalyticsView subjectId={id} />
       </div>

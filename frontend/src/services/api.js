@@ -153,4 +153,24 @@ export const userAPI = {
   updateProfile: (data) => api.put('/users/profile', data),
 };
 
+// Phase 5 - AI Mnemonics Generator
+export const mnemonicsAPI = {
+  generate: (data) => api.post('/mnemonics/generate', data),
+  save: (data) => api.post('/mnemonics', data),
+  getAll: (params) => api.get('/mnemonics', { params }),
+  getById: (id) => api.get(`/mnemonics/${id}`),
+  update: (id, data) => api.put(`/mnemonics/${id}`, data),
+  delete: (id) => api.delete(`/mnemonics/${id}`),
+};
+
+// Phase 5 - AI Diagram Generator
+export const diagramsAPI = {
+  generate: (data) => api.post('/diagrams/generate', data),
+  save: (data) => api.post('/diagrams', data),
+  getAll: (params) => api.get('/diagrams', { params }),
+  getById: (id) => api.get(`/diagrams/${id}`),
+  delete: (id) => api.delete(`/diagrams/${id}`),
+};
+
+
 export default api;
