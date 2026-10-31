@@ -152,14 +152,14 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
   ];
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden animate-in fade-in duration-200">
+    <div className="bg-white rounded-3xl border border-[#73766A]/20 shadow-xs overflow-hidden animate-in fade-in duration-200">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#4169E1] via-[#5A45D1] to-[#9270DB] p-6 sm:p-7 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-[#2D4354] via-[#534145] to-[#9E6752] p-6 sm:p-7 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-white text-[11px] font-semibold backdrop-blur-xs border border-white/25">
-              <Sparkles className="w-3.5 h-3.5 text-blue-200" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-[#FED7A5] text-[11px] font-bold backdrop-blur-xs border border-white/20">
+              <Sparkles className="w-3.5 h-3.5 text-[#FED7A5]" />
               <span>Gemini 2.5 Flash Document Intelligence</span>
             </div>
             <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight truncate max-w-xl text-white">
@@ -175,7 +175,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
               <button
                 onClick={handleGenerateAnalysis}
                 disabled={analyzing}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white font-medium text-xs backdrop-blur-xs transition-all disabled:opacity-50 border border-white/20"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs backdrop-blur-xs transition-all disabled:opacity-50 border border-white/20 cursor-pointer"
                 title="Regenerate with fresh Gemini analysis"
               >
                 <RotateCcw className={`w-3.5 h-3.5 ${analyzing ? 'animate-spin' : ''}`} />
@@ -185,7 +185,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
             {onClose && (
               <button
                 onClick={onClose}
-                className="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold border border-white/20 transition-colors"
+                className="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold border border-white/20 transition-colors cursor-pointer"
               >
                 Close View
               </button>
@@ -208,61 +208,61 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
       {/* Main Content: Loading, Empty (Not Analyzed Yet), or Analyzed Tabs */}
       {loading ? (
         <div className="py-20 flex flex-col items-center justify-center gap-3">
-          <Loader2 className="w-8 h-8 animate-spin text-[#4169E1]" />
-          <p className="text-xs text-[#77839A] font-medium">Checking document intelligence...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-[#2D4354]" />
+          <p className="text-xs text-[#73766A] font-medium">Checking document intelligence...</p>
         </div>
       ) : analyzing ? (
         <div className="py-20 px-6 text-center max-w-md mx-auto space-y-4">
-          <div className="w-16 h-16 rounded-3xl bg-[#4169E1]/10 text-[#4169E1] flex items-center justify-center mx-auto shadow-inner">
-            <Sparkles className="w-8 h-8 animate-spin text-[#4169E1]" />
+          <div className="w-16 h-16 rounded-3xl bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]/60 flex items-center justify-center mx-auto shadow-inner">
+            <Sparkles className="w-8 h-8 animate-spin text-[#9E6752]" />
           </div>
           <div>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-[#4169E1]/10 text-[#4169E1] border border-[#4169E1]/20 mb-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#4169E1] animate-ping" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#FFF7EC] text-[#2D4354] border border-[#FED7A5] mb-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#9E6752] animate-ping" />
               Step {analysisStage + 1} of {stages.length}
             </span>
-            <h4 className="text-base font-bold text-[#202B42] transition-all duration-300">
+            <h4 className="text-base font-bold text-[#20212B] transition-all duration-300">
               {stages[analysisStage]}
             </h4>
-            <p className="text-xs text-[#77839A] mt-1 leading-relaxed">
+            <p className="text-xs text-[#73766A] mt-1 leading-relaxed">
               Transforming raw slides & pages into structured chapters, formulas, and revision questions.
             </p>
           </div>
           <div className="w-64 mx-auto space-y-1.5">
-            <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-[#FAF8F5] border border-[#73766A]/10 rounded-full h-2 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-[#4169E1] to-[#9270DB] h-2 rounded-full transition-all duration-500 ease-out"
+                className="bg-gradient-to-r from-[#2D4354] via-[#534145] to-[#9E6752] h-2 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${Math.round(((analysisStage + 1) / stages.length) * 100)}%` }}
               />
             </div>
-            <p className="text-[10px] text-[#77839A] font-medium">
+            <p className="text-[10px] text-[#73766A] font-medium">
               Takes ~10–25s depending on document length
             </p>
           </div>
         </div>
       ) : !analysis ? (
         <div className="py-16 px-6 text-center max-w-lg mx-auto">
-          <div className="w-16 h-16 rounded-3xl bg-[#4169E1]/10 text-[#4169E1] flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-3xl bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]/60 flex items-center justify-center mx-auto mb-4">
             <Brain className="w-8 h-8" />
           </div>
-          <h4 className="text-lg font-bold text-[#202B42]">
+          <h4 className="text-lg font-bold text-[#20212B]">
             Generate AI Document Intelligence
           </h4>
-          <p className="text-xs sm:text-sm text-[#77839A] mt-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#73766A] mt-2 leading-relaxed">
             Transform "{material.fileName}" into structured chapter breakdowns, definitions, formulas, and practice test prompts powered by Google Gemini.
           </p>
           <button
             onClick={handleGenerateAnalysis}
-            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#4169E1] to-[#9270DB] hover:opacity-95 text-white font-semibold text-xs sm:text-sm shadow-sm transition-all hover:scale-102"
+            className="mt-6 inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-[#2D4354] hover:bg-[#20212B] text-white font-extrabold text-xs sm:text-sm shadow-md shadow-[#2D4354]/20 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-4 h-4 text-[#FED7A5]" />
             <span>Generate Comprehensive Analysis</span>
           </button>
         </div>
       ) : (
         <div>
           {/* Navigation Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto border-b border-slate-100 px-6 pt-3 bg-[#F5F7FC]/60">
+          <div className="flex items-center gap-1.5 overflow-x-auto border-b border-[#73766A]/15 px-6 pt-3 bg-[#FAF8F5]/80">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -270,10 +270,10 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-3 border-b-2 text-xs font-bold transition-all shrink-0 ${
+                  className={`flex items-center gap-2 px-4 py-3 border-b-2 text-xs font-bold transition-all shrink-0 cursor-pointer ${
                     isActive
-                      ? 'border-[#4169E1] text-[#4169E1] bg-white rounded-t-xl shadow-xs'
-                      : 'border-transparent text-[#77839A] hover:text-[#202B42] hover:bg-slate-100/50'
+                      ? 'border-[#2D4354] text-[#2D4354] bg-[#FFF7EC]/70 rounded-t-xl shadow-xs'
+                      : 'border-transparent text-[#73766A] hover:text-[#20212B] hover:bg-white/60'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -281,7 +281,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                   {tab.count !== undefined && (
                     <span
                       className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        isActive ? 'bg-[#4169E1]/10 text-[#4169E1]' : 'bg-slate-200/80 text-[#77839A]'
+                        isActive ? 'bg-[#FED7A5]/50 text-[#2D4354]' : 'bg-[#73766A]/10 text-[#73766A]'
                       }`}
                     >
                       {tab.count}
@@ -298,57 +298,57 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
             {activeTab === 'summary' && (
               <div className="space-y-6">
                 {/* Executive Summary Card */}
-                <div className="p-5 rounded-2xl bg-blue-50/60 border border-blue-100">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 mb-2 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                <div className="p-5 rounded-2xl bg-[#FFF7EC] border border-[#FED7A5]">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#2D4354] mb-2 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-[#9E6752]" />
                     <span>Executive Document Overview</span>
                   </h4>
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-                    {analysis.summary}
-                  </p>
+                  <div className="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                    <MathRenderer text={analysis.summary} />
+                  </div>
                 </div>
 
                 {/* Chapter-wise Breakdown */}
                 <div className="space-y-5">
-                  <h4 className="text-sm font-bold text-slate-900">
+                  <h4 className="text-sm font-bold text-[#20212B]">
                     Chapter & Module Breakdowns ({analysis.chapters?.length || 0})
                   </h4>
 
                   {analysis.chapters?.map((ch, idx) => (
                     <div
                       key={idx}
-                      className="p-5 sm:p-6 rounded-2xl border border-slate-200/90 bg-white shadow-xs space-y-4"
+                      className="p-5 sm:p-6 rounded-2xl border border-[#73766A]/20 bg-white shadow-xs space-y-4"
                     >
                       <div className="border-b border-slate-100 pb-3">
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-100 text-blue-700">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]">
                           Module {idx + 1}
                         </span>
-                        <h5 className="text-base font-bold text-slate-900 mt-1">
-                          {ch.chapterTitle}
+                        <h5 className="text-base font-bold text-[#20212B] mt-2">
+                          <MathRenderer text={ch.chapterTitle} />
                         </h5>
-                        <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                          {ch.chapterSummary}
-                        </p>
+                        <div className="text-xs text-[#73766A] mt-1.5 leading-relaxed">
+                          <MathRenderer text={ch.chapterSummary} />
+                        </div>
                       </div>
 
                       {/* Subtopic Explanations */}
                       {ch.simpleExplanations && ch.simpleExplanations.length > 0 && (
                         <div className="space-y-2.5">
-                          <h6 className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                          <h6 className="text-[11px] font-bold uppercase tracking-wider text-[#73766A]">
                             Key Explanations & Concepts
                           </h6>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             {ch.simpleExplanations.map((exp, eIdx) => (
                               <div
                                 key={eIdx}
-                                className="p-3.5 rounded-xl bg-slate-50 border border-slate-100"
+                                className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#73766A]/15"
                               >
-                                <p className="text-xs font-bold text-slate-900">
-                                  {exp.subtopic}
-                                </p>
-                                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                                  {exp.explanation}
-                                </p>
+                                <div className="text-xs font-bold text-[#20212B]">
+                                  <MathRenderer text={exp.subtopic} />
+                                </div>
+                                <div className="text-xs text-[#73766A] mt-1 leading-relaxed">
+                                  <MathRenderer text={exp.explanation} />
+                                </div>
                               </div>
                             ))}
                           </div>
@@ -358,17 +358,19 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                       {/* Key Takeaways */}
                       {ch.keyTakeaways && ch.keyTakeaways.length > 0 && (
                         <div className="pt-2">
-                          <h6 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+                          <h6 className="text-[11px] font-bold uppercase tracking-wider text-[#73766A] mb-2">
                             Key Takeaways
                           </h6>
                           <ul className="space-y-1.5">
                             {ch.keyTakeaways.map((point, pIdx) => (
                               <li
                                 key={pIdx}
-                                className="flex items-start gap-2 text-xs text-slate-700"
+                                className="flex items-start gap-2 text-xs text-[#20212B]"
                               >
-                                <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
-                                <span>{point}</span>
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[#9E6752] shrink-0 mt-0.5" />
+                                <span className="leading-relaxed">
+                                  <MathRenderer text={point} />
+                                </span>
                               </li>
                             ))}
                           </ul>
@@ -398,27 +400,27 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                   {analysis.importantConcepts?.map((concept, idx) => (
                     <div
                       key={idx}
-                      className="p-5 rounded-2xl border border-slate-200/90 bg-white shadow-xs hover:border-blue-300 transition-all space-y-2.5"
+                      className="p-5 rounded-2xl border border-[#73766A]/20 bg-white shadow-xs hover:border-[#2D4354]/40 transition-all space-y-2.5"
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-100">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFF7EC] text-[#2D4354] border border-[#FED7A5]">
                           {concept.relevantChapter || 'Concept'}
                         </span>
-                        <span className="text-[10px] text-slate-400 font-medium">
+                        <span className="text-[10px] text-[#73766A] font-medium">
                           {concept.relatedTopic}
                         </span>
                       </div>
 
-                      <h5 className="text-sm font-bold text-slate-900">
-                        {concept.conceptName}
+                      <h5 className="text-sm font-bold text-[#20212B]">
+                        <MathRenderer text={concept.conceptName} />
                       </h5>
 
-                      <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700 leading-relaxed">
-                        <span className="font-semibold text-slate-900 font-sans">Def: </span>
+                      <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#73766A]/15 text-xs text-[#20212B] leading-relaxed">
+                        <span className="font-bold text-[#2D4354] font-sans">Def: </span>
                         <MathRenderer text={concept.definition} />
                       </div>
 
-                      <div className="text-xs text-slate-600 leading-relaxed pt-1">
+                      <div className="text-xs text-[#73766A] leading-relaxed pt-1">
                         <MathRenderer text={concept.explanation} />
                       </div>
                     </div>
@@ -431,10 +433,10 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
             {activeTab === 'formulas' && (
               <div className="space-y-4">
                 <div>
-                  <h4 className="text-base font-bold text-slate-900">
+                  <h4 className="text-base font-bold text-[#20212B]">
                     Extracted Formulas & Equations
                   </h4>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-[#73766A]">
                     Mathematical relationships and scientific expressions explicitly identified in source material
                   </p>
                 </div>
@@ -444,20 +446,20 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                     {analysis.formulas.map((form, idx) => (
                       <div
                         key={idx}
-                        className="p-5 sm:p-6 rounded-2xl border border-slate-200/90 bg-white shadow-xs hover:border-blue-300 hover:shadow-sm transition-all space-y-3.5 flex flex-col justify-between"
+                        className="p-5 sm:p-6 rounded-2xl border border-[#73766A]/20 bg-white shadow-xs hover:border-[#2D4354]/40 hover:shadow-sm transition-all space-y-3.5 flex flex-col justify-between"
                       >
                         <div className="space-y-1.5">
                           <div className="flex items-start justify-between gap-2">
-                            <h5 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                              {form.formulaName}
+                            <h5 className="text-sm sm:text-base font-bold text-[#20212B] leading-snug">
+                              <MathRenderer text={form.formulaName} />
                             </h5>
-                            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 shrink-0">
+                            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFF7EC] text-[#2D4354] border border-[#FED7A5] shrink-0">
                               {form.relevantChapter || 'Formula'}
                             </span>
                           </div>
                           {form.relatedTopic && (
                             <p className="text-[11px] text-slate-400 font-medium">
-                              Topic: {form.relatedTopic}
+                              Topic: <MathRenderer text={form.relatedTopic} />
                             </p>
                           )}
                         </div>
@@ -524,7 +526,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                         <div className="flex items-start justify-between gap-3">
                           <div className="space-y-1 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
-                              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700">
+                              <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFF7EC] text-[#2D4354] border border-[#FED7A5]">
                                 {q.questionType}
                               </span>
                               <span
@@ -553,7 +555,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
 
                           <button
                             onClick={() => toggleQuestionAnswer(idx)}
-                            className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 shrink-0 pt-1"
+                            className="inline-flex items-center gap-1 text-xs font-bold text-[#2D4354] hover:text-[#9E6752] shrink-0 pt-1 cursor-pointer"
                           >
                             <span>{isExpanded ? 'Hide Answer' : 'Show Answer'}</span>
                             {isExpanded ? (
@@ -604,7 +606,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                       className="p-5 rounded-2xl border border-slate-200/90 bg-white shadow-xs space-y-3"
                     >
                       <h5 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2">
-                        {top.chapterName}
+                        <MathRenderer text={top.chapterName} />
                       </h5>
 
                       <div className="space-y-2">
@@ -615,9 +617,9 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                           {top.topics?.map((t, tIdx) => (
                             <span
                               key={tIdx}
-                              className="text-xs px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 font-medium"
+                              className="text-xs px-2.5 py-1 rounded-lg bg-[#FFF7EC] text-[#2D4354] border border-[#FED7A5] font-semibold"
                             >
-                              {t}
+                              <MathRenderer text={t} />
                             </span>
                           ))}
                         </div>
@@ -634,7 +636,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                                 key={stIdx}
                                 className="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-normal"
                               >
-                                {st}
+                                <MathRenderer text={st} />
                               </span>
                             ))}
                           </div>
@@ -665,7 +667,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                 )}
 
                 {/* Chat History Container */}
-                <div className="min-h-[220px] max-h-[420px] overflow-y-auto space-y-3 p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80">
+                <div className="min-h-[220px] max-h-[420px] overflow-y-auto space-y-3 p-4 rounded-2xl bg-[#FAF8F5] border border-[#73766A]/15">
                   {chatMessages.length === 0 ? (
                     <div className="py-12 text-center text-xs text-slate-400">
                       <MessageSquareText className="w-8 h-8 text-slate-300 mx-auto mb-2" />
@@ -685,8 +687,8 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                         <div
                           className={`max-w-[85%] p-4 rounded-2xl text-xs sm:text-sm leading-relaxed ${
                             msg.sender === 'student'
-                              ? 'bg-blue-600 text-white rounded-tr-xs'
-                              : 'bg-white border border-slate-200/90 text-slate-800 rounded-tl-xs shadow-xs'
+                              ? 'bg-[#2D4354] text-white rounded-tr-xs'
+                              : 'bg-white border border-[#73766A]/20 text-[#20212B] rounded-tl-xs shadow-xs'
                           }`}
                         >
                           <div className="whitespace-pre-line">
@@ -699,7 +701,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                               {msg.sources.map((src, sIdx) => (
                                 <span
                                   key={sIdx}
-                                  className="text-[10px] font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-100"
+                                  className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FFF7EC] text-[#2D4354] border border-[#FED7A5]"
                                 >
                                   Ref: {src.type} {src.number}
                                 </span>
@@ -716,7 +718,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
 
                   {asking && (
                     <div className="flex items-center gap-2 p-3 bg-white rounded-xl border border-slate-200 w-fit text-xs text-slate-500">
-                      <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-[#9E6752]" />
                       <span>Gemini is reviewing document context...</span>
                     </div>
                   )}
@@ -730,14 +732,14 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                     onChange={(e) => setQuestionInput(e.target.value)}
                     placeholder={`Ask any doubt about ${material.fileName}...`}
                     disabled={asking}
-                    className="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs sm:text-sm outline-none transition-all disabled:opacity-50"
+                    className="flex-1 px-4 py-3 rounded-2xl border border-[#73766A]/20 bg-white focus:border-[#2D4354] focus:ring-4 focus:ring-[#2D4354]/10 text-xs sm:text-sm outline-none transition-all disabled:opacity-50 text-[#20212B]"
                   />
                   <button
                     type="submit"
                     disabled={!questionInput.trim() || asking}
-                    className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xs transition-all disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 px-6 py-3 rounded-2xl bg-[#2D4354] hover:bg-[#20212B] text-white font-extrabold text-xs sm:text-sm shadow-md shadow-[#2D4354]/20 transition-all disabled:opacity-50 cursor-pointer"
                   >
-                    <Send className="w-4 h-4" />
+                    <Send className="w-4 h-4 text-[#FED7A5]" />
                     <span className="hidden sm:inline">Ask</span>
                   </button>
                 </form>

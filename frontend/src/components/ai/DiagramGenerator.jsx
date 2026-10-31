@@ -288,22 +288,22 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
   );
 
   return (
-    <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-6">
+    <section className="mt-8 rounded-3xl border border-[#73766A]/20 bg-white p-6 sm:p-8 shadow-xs text-[#20212B]">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-indigo-100 p-3 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-300">
-            <Network size={23} />
+          <div className="w-12 h-12 rounded-2xl bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]/60 flex items-center justify-center shrink-0">
+            <Network size={22} />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-extrabold text-[#20212B]">
               AI Diagram & Flowchart Generator
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Turn difficult concepts into visual diagrams.
+            <p className="text-xs sm:text-sm text-[#73766A] mt-0.5">
+              Turn difficult concepts into clear, structured visual diagrams.
             </p>
           </div>
         </div>
-        <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
+        <span className="rounded-full bg-[#FFF7EC] border border-[#FED7A5] px-3.5 py-1 text-xs font-bold text-[#9E6752]">
           AI Powered
         </span>
       </div>
@@ -311,25 +311,25 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-xs font-bold text-[#20212B] uppercase tracking-wider">
               Topic
             </label>
             <input
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="e.g. Working of a Microprocessor"
-              className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              className="w-full rounded-2xl border border-[#73766A]/20 bg-white px-4 py-3 text-sm text-[#20212B] placeholder-[#73766A]/60 outline-none transition focus:border-[#2D4354] focus:ring-4 focus:ring-[#2D4354]/10"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-xs font-bold text-[#20212B] uppercase tracking-wider">
               Diagram Type
             </label>
             <select
               value={diagramType}
               onChange={(e) => setDiagramType(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              className="w-full rounded-2xl border border-[#73766A]/20 bg-white px-4 py-3 text-sm text-[#20212B] outline-none transition focus:border-[#2D4354] focus:ring-4 focus:ring-[#2D4354]/10 cursor-pointer"
             >
               {diagramTypes.map((type) => (
                 <option key={type.value} value={type.value}>
@@ -340,15 +340,15 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
           </div>
 
           {selectedMaterial ? (
-            <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 dark:border-indigo-900 dark:bg-indigo-950/30">
-              <div className="flex items-center gap-2 text-sm font-semibold text-indigo-700 dark:text-indigo-300">
+            <div className="rounded-2xl border border-[#FED7A5] bg-[#FFF7EC] p-4 text-[#20212B]">
+              <div className="flex items-center gap-2 text-sm font-bold text-[#9E6752]">
                 <FileCode size={17} />
                 Selected study material
               </div>
-              <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">
-                {selectedMaterial.title || selectedMaterial.originalName || 'Selected material'}
+              <p className="mt-1 text-sm font-semibold text-[#20212B]">
+                {selectedMaterial.title || selectedMaterial.originalName || selectedMaterial.fileName || 'Selected material'}
               </p>
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-[#73766A]">
                 {materialReady
                   ? 'Processed content will be used as context.'
                   : 'This material is still being processed.'}
@@ -356,7 +356,7 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
             </div>
           ) : (
             <div>
-              <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <label className="mb-2 block text-xs font-bold text-[#20212B] uppercase tracking-wider">
                 Study Content
               </label>
               <textarea
@@ -364,13 +364,13 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
                 onChange={(e) => setSourceText(e.target.value)}
                 rows={6}
                 placeholder="Paste your notes, textbook content, or concept explanation here..."
-                className="w-full resize-y rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="w-full resize-y rounded-2xl border border-[#73766A]/20 bg-white px-4 py-3 text-sm text-[#20212B] placeholder-[#73766A]/60 outline-none transition focus:border-[#2D4354] focus:ring-4 focus:ring-[#2D4354]/10"
               />
             </div>
           )}
 
           <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-xs font-bold text-[#20212B] uppercase tracking-wider">
               Additional Instructions (Optional)
             </label>
             <textarea
@@ -378,23 +378,23 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
               onChange={(e) => setAdditionalInstructions(e.target.value)}
               rows={2}
               placeholder="e.g. Keep it simple and suitable for exam revision."
-              className="w-full resize-y rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              className="w-full resize-y rounded-2xl border border-[#73766A]/20 bg-white px-4 py-3 text-sm text-[#20212B] placeholder-[#73766A]/60 outline-none transition focus:border-[#2D4354] focus:ring-4 focus:ring-[#2D4354]/10"
             />
           </div>
 
           <button
             onClick={handleGenerate}
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#2D4354] hover:bg-[#20212B] px-5 py-3.5 font-extrabold text-white transition-all shadow-md shadow-[#2D4354]/20 hover:scale-[1.01] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
           >
-            {loading ? <Loader2 className="animate-spin" size={19} /> : <Sparkles size={19} />}
+            {loading ? <Loader2 className="animate-spin" size={19} /> : <Sparkles size={19} className="text-[#FED7A5]" />}
             {loading ? 'Generating Diagram...' : 'Generate Diagram'}
           </button>
         </div>
 
-        <div className="min-w-0 rounded-2xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/50">
+        <div className="min-w-0 rounded-2xl border border-[#73766A]/15 bg-[#FAF8F5] p-5">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <h3 className="font-bold text-gray-900 dark:text-white">
+            <h3 className="font-bold text-[#20212B]">
               Diagram Preview
             </h3>
 
@@ -403,25 +403,25 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
                 <button
                   onClick={handleExportSource}
                   title="Export Mermaid source"
-                  className="rounded-lg border border-gray-300 p-2 text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="rounded-xl border border-[#73766A]/20 bg-white p-2 text-[#2D4354] hover:bg-[#FFF7EC] hover:border-[#FED7A5] transition-colors"
                 >
                   <FileCode size={17} />
                 </button>
                 <button
                   onClick={handleExportSvg}
                   title="Export SVG"
-                  className="rounded-lg border border-gray-300 p-2 text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="rounded-xl border border-[#73766A]/20 bg-white p-2 text-[#2D4354] hover:bg-[#FFF7EC] hover:border-[#FED7A5] transition-colors flex items-center"
                 >
                   <Download size={17} />
-                  <span className="ml-1 text-xs">SVG</span>
+                  <span className="ml-1 text-xs font-semibold">SVG</span>
                 </button>
                 <button
                   onClick={handleExportPng}
                   title="Export PNG"
-                  className="rounded-lg border border-gray-300 p-2 text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="rounded-xl border border-[#73766A]/20 bg-white p-2 text-[#2D4354] hover:bg-[#FFF7EC] hover:border-[#FED7A5] transition-colors flex items-center"
                 >
                   <Download size={17} />
-                  <span className="ml-1 text-xs">PNG</span>
+                  <span className="ml-1 text-xs font-semibold">PNG</span>
                 </button>
               </div>
             )}
@@ -429,13 +429,13 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
 
           {!activeDiagram && (
             <div className="flex min-h-72 flex-col items-center justify-center text-center">
-              <div className="mb-4 rounded-2xl bg-indigo-100 p-5 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-300">
+              <div className="mb-4 rounded-2xl bg-[#FFF7EC] p-5 text-[#9E6752] border border-[#FED7A5]">
                 <GitBranch size={35} />
               </div>
-              <p className="font-semibold text-gray-700 dark:text-gray-200">
+              <p className="font-bold text-[#20212B]">
                 Your diagram will appear here
               </p>
-              <p className="mt-2 max-w-xs text-sm text-gray-500">
+              <p className="mt-2 max-w-xs text-xs text-[#73766A]">
                 Enter a topic and study content to create your first visual explanation.
               </p>
             </div>
@@ -443,25 +443,25 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
 
           {activeDiagram && (
             <>
-              <h4 className="mb-1 font-semibold text-gray-900 dark:text-white">
+              <h4 className="mb-1 font-bold text-[#20212B]">
                 {activeDiagram.title}
               </h4>
-              <p className="mb-4 text-xs text-gray-500">
+              <p className="mb-4 text-xs text-[#73766A]">
                 {activeDiagram.topic} · {activeDiagram.diagramType}
               </p>
 
               {renderError ? (
-                <div className="rounded-xl bg-red-50 p-4 text-sm text-red-700 dark:bg-red-950/30 dark:text-red-300">
+                <div className="rounded-xl bg-red-50 p-4 text-sm text-red-700 border border-red-200">
                   {renderError}
                 </div>
               ) : (
                 <div
                   ref={diagramRef}
-                  className="min-h-48 overflow-auto rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700"
+                  className="min-h-48 overflow-auto rounded-xl border border-[#73766A]/20 bg-white p-4"
                 />
               )}
 
-              <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-gray-600 dark:text-gray-300">
+              <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-[#20212B]">
                 {activeDiagram.explanation}
               </p>
 
@@ -469,9 +469,9 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-60"
+                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#2D4354] hover:bg-[#20212B] px-4 py-3 font-bold text-white shadow-md shadow-[#2D4354]/20 transition-all cursor-pointer disabled:opacity-60"
                 >
-                  {saving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+                  {saving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} className="text-[#FED7A5]" />}
                   {saving ? 'Saving...' : 'Save Diagram'}
                 </button>
               )}
@@ -479,7 +479,7 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
               {selectedSaved && (
                 <button
                   onClick={() => setSelectedSaved(null)}
-                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-300 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
+                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl border border-[#73766A]/30 bg-white px-4 py-3 text-sm font-bold text-[#20212B] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
                 >
                   <X size={17} />
                   Close Saved Diagram
@@ -491,31 +491,31 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
       </div>
 
       {error && (
-        <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300">
+        <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-300">
+        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
           {success}
         </div>
       )}
 
-      <div className="mt-8 border-t border-gray-200 pt-6 dark:border-gray-700">
+      <div className="mt-8 border-t border-[#73766A]/15 pt-6">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h3 className="font-bold text-gray-900 dark:text-white">
+            <h3 className="font-bold text-[#20212B]">
               Saved Diagrams
             </h3>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[#73766A]">
               Your diagrams for this subject.
             </p>
           </div>
 
           <button
             onClick={fetchSavedDiagrams}
-            className="rounded-lg border border-gray-300 p-2 text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="rounded-xl border border-[#73766A]/20 bg-white p-2 text-[#2D4354] hover:bg-[#FFF7EC] transition-colors"
             title="Refresh saved diagrams"
           >
             <RefreshCw size={17} />
@@ -523,17 +523,17 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
         </div>
 
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={17} />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#73766A]" size={17} />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search saved diagrams..."
-            className="w-full rounded-xl border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm outline-none focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-2xl border border-[#73766A]/20 bg-white py-2.5 pl-10 pr-4 text-sm text-[#20212B] placeholder-[#73766A]/60 outline-none focus:border-[#2D4354] focus:ring-4 focus:ring-[#2D4354]/10 transition"
           />
         </div>
 
         {filteredDiagrams.length === 0 ? (
-          <p className="rounded-xl bg-gray-50 p-5 text-center text-sm text-gray-500 dark:bg-gray-800">
+          <p className="rounded-2xl bg-[#FAF8F5] p-5 text-center text-xs font-medium text-[#73766A] border border-[#73766A]/10">
             No saved diagrams found.
           </p>
         ) : (
@@ -541,13 +541,13 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
             {filteredDiagrams.map((diagram) => (
               <div
                 key={diagram._id}
-                className="flex items-center justify-between gap-3 rounded-xl border border-gray-200 p-4 transition hover:border-indigo-300 hover:shadow-sm dark:border-gray-700 dark:hover:border-indigo-700"
+                className="flex items-center justify-between gap-3 rounded-2xl border border-[#73766A]/15 bg-white p-4 transition hover:border-[#2D4354] hover:shadow-sm"
               >
                 <div className="min-w-0">
-                  <p className="truncate font-semibold text-gray-900 dark:text-white">
+                  <p className="truncate font-bold text-[#20212B]">
                     {diagram.title}
                   </p>
-                  <p className="mt-1 truncate text-xs text-gray-500">
+                  <p className="mt-0.5 truncate text-xs text-[#73766A]">
                     {diagram.topic} · {diagram.diagramType}
                   </p>
                 </div>
@@ -556,14 +556,14 @@ const DiagramGenerator = ({ subjectId, selectedMaterial }) => {
                   <button
                     onClick={() => handleViewSaved(diagram)}
                     title="View diagram"
-                    className="rounded-lg p-2 text-indigo-600 hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
+                    className="rounded-xl p-2 text-[#2D4354] hover:bg-[#FFF7EC] hover:text-[#9E6752] transition-colors"
                   >
                     <Eye size={17} />
                   </button>
                   <button
                     onClick={() => handleDelete(diagram._id)}
                     title="Delete diagram"
-                    className="rounded-lg p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
+                    className="rounded-xl p-2 text-red-500 hover:bg-red-50 transition-colors"
                   >
                     <Trash2 size={17} />
                   </button>

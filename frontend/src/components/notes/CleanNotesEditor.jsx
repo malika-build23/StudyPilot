@@ -448,7 +448,9 @@ const CleanNotesEditor = ({ note, onBack, onSaveSuccess }) => {
                       </div>
                     ) : (
                       <>
-                        <div className="font-bold text-xs text-blue-900">{def.term}</div>
+                        <div className="font-bold text-xs text-blue-900">
+                          <MathRenderer content={def.term} />
+                        </div>
                         <div className="text-xs text-slate-600 leading-relaxed">
                           <MathRenderer content={def.definition} />
                         </div>
@@ -522,14 +524,16 @@ const CleanNotesEditor = ({ note, onBack, onSaveSuccess }) => {
                       </div>
                     ) : (
                       <>
-                        <div className="font-bold text-xs text-indigo-950">{form.name}</div>
+                        <div className="font-bold text-xs text-indigo-950">
+                          <MathRenderer content={form.name} />
+                        </div>
                         <div className="py-1">
                           <MathRenderer content={form.expression} />
                         </div>
                         {form.explanation && (
-                          <p className="text-[11px] text-slate-500 leading-relaxed">
-                            {form.explanation}
-                          </p>
+                          <div className="text-[11px] text-slate-500 leading-relaxed">
+                            <MathRenderer content={form.explanation} />
+                          </div>
                         )}
                       </>
                     )}

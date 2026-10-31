@@ -2,6 +2,40 @@ import React, { useMemo } from 'react';
 import katex from 'katex';
 
 /**
+ * Pre-processes text to fix common AI formatting issues:
+ * 1. Trailing punctuation inside math delimiters: "$x = 5.$" -> "$x = 5$."
+ * 2. Unclosed dollar signs at the end of definitions
+ * 3. Unwrapped LaTeX environments like \begin{cases}...\end{cases}
+ */
+export function preProcessMathText(input) {
+  if (!input || typeof input !== 'string') return '';
+  let str = input;
+
+  // Move trailing punctuation outside dollar signs: "$x = 5.$" -> "$x = 5$."
+  str = str.replace(/\$([^$\n]+?)([\.,;])\$/g, '$$$1$$$2');
+
+  // If text has an odd number of $, and ends with an equation-like tail, close it!
+  const dollarCount = (str.match(/\$/g) || []).length;
+  if (dollarCount % 2 !== 0) {
+    const lastDollarIdx = str.lastIndexOf('$');
+    const tail = str.slice(lastDollarIdx + 1);
+    if (tail.endsWith('.')) {
+      str = str.slice(0, -1) + '$.';
+    } else {
+      str = str + '$';
+    }
+  }
+
+  // Wrap unwrapped LaTeX environments like \begin{cases}...\end{cases}
+  str = str.replace(
+    /(?<!\$)\\begin\{([a-zA-Z*]+)\}([\s\S]*?)\\end\{\1\}(?!\$)/g,
+    '$$\\begin{$1}$2\\end{$1}$$'
+  );
+
+  return str;
+}
+
+/**
  * Normalizes common unicode symbols, plain math notations,
  * derivatives, and piecewise cases into clean LaTeX for KaTeX.
  */
@@ -19,6 +53,15 @@ export function normalizeMathExpression(rawExpr) {
     str = str.slice(2, -2).trim();
   } else if (str.startsWith('\\(') && str.endsWith('\\)')) {
     str = str.slice(2, -2).trim();
+  }
+
+  // Strip trailing punctuation inside math token (e.g. "x = 5." -> "x = 5")
+  if (/[a-zA-Z0-9\}\)\]]\.$/.test(str)) {
+    str = str.slice(0, -1).trim();
+  } else if (/[a-zA-Z0-9\}\)\]],$/.test(str)) {
+    str = str.slice(0, -1).trim();
+  } else if (/[a-zA-Z0-9\}\)\]];$/.test(str)) {
+    str = str.slice(0, -1).trim();
   }
 
   // Handle piecewise expressions
@@ -99,6 +142,9 @@ function normalizeMathTokens(input) {
   text = text.replace(/×/g, ' \\times ');
   text = text.replace(/·/g, ' \\cdot ');
 
+  // Fix * used as multiplication or convolution in LaTeX mode
+  text = text.replace(/(\w|\))\s*\*\s*(\w|\()/g, '$1 \\ast $2');
+
   // Unicode subscripts
   const subMap = {
     '₀': '_0',
@@ -146,47 +192,55 @@ function normalizeMathTokens(input) {
 }
 
 /**
- * Checks if a string looks like a standalone mathematical equation.
+ * Checks if a string looks like a standalone mathematical equation (no prose words).
  */
-function isMathFormula(str) {
+export function isPureMath(str) {
   if (!str || typeof str !== 'string') return false;
 
   const s = str.trim();
 
-  if (
-    s.startsWith('$') ||
-    s.startsWith('\\[') ||
-    s.startsWith('\\(')
-  ) {
-    return true;
-  }
+  // Explicit wrapping delimiters
+  if (s.startsWith('$$') && s.endsWith('$$')) return true;
+  if (s.startsWith('\\[') && s.endsWith('\\]')) return true;
 
-  if (
-    /\\(frac|int|sum|delta|alpha|beta|to|ge|le|partial|cases|sqrt|infty)/.test(s)
-  ) {
-    return true;
-  }
+  // If it has multiple normal words with spaces, it is English prose, NOT pure math!
+  const stripped = s.replace(/\\[a-zA-Z]+/g, ' ').replace(/[{}]/g, ' ');
+  const words = stripped.match(/[a-zA-Z]{3,}/g) || [];
+  const mathKeywords = new Set([
+    'sin', 'cos', 'tan', 'cot', 'sec', 'csc', 'arcsin', 'arccos', 'arctan',
+    'sinh', 'cosh', 'tanh', 'log', 'ln', 'exp', 'lim', 'det', 'max', 'min',
+    'mod', 'gcd', 'deg', 'dim', 'ker', 'hom', 'sup', 'inf', 'arg'
+  ]);
+  const proseWords = words.filter(w => !mathKeywords.has(w.toLowerCase()));
+  if (proseWords.length >= 2) return false;
 
-  if (
-    /[a-zA-Z]\([a-zA-Z]\)\s*=|x\^2|\bdt\b|\bdy\b|\bdx\b|\b\d+[a-zA-Z]\b|∫|δ|λ|ω/.test(s)
-  ) {
-    return true;
-  }
-
-  return false;
+  return /\\(frac|int|sum|delta|alpha|beta|to|ge|le|partial|cases|sqrt|infty)|[a-zA-Z]\([a-zA-Z]\)\s*=|[x-z]\^[0-9]|=/.test(
+    s
+  );
 }
 
 /**
  * Safely renders LaTeX using KaTeX.
+ * NEVER outputs raw `#cc0000` KaTeX parse error HTML.
  */
 export function safeRenderKaTeX(latex, isBlock = false) {
+  if (!latex || typeof latex !== 'string') return null;
+
   try {
-    return katex.renderToString(latex, {
+    const html = katex.renderToString(latex, {
       displayMode: isBlock,
       throwOnError: false,
       output: 'htmlAndMathml',
       strict: false,
     });
+
+    // Check if KaTeX generated an error span
+    if (html && html.includes('class="katex-error"')) {
+      console.warn('KaTeX reported parse error for expression:', latex);
+      return null; // Return null so clean fallback renders, NOT red error text!
+    }
+
+    return html;
   } catch (err) {
     console.warn('KaTeX render fallback:', err);
     return null;
@@ -200,16 +254,14 @@ export function safeRenderKaTeX(latex, isBlock = false) {
 export function parseMixedMath(content) {
   if (!content || typeof content !== 'string') return [];
 
-  // Entire string is a standalone formula
-  if (
-    isMathFormula(content) &&
-    !content.includes('\n\n') &&
-    !/\b(the|is|are|which|when|where|because|following)\b/i.test(content)
-  ) {
+  const preprocessed = preProcessMathText(content);
+
+  // Standalone pure formula only if no prose sentences
+  if (isPureMath(preprocessed) && !preprocessed.includes('\n\n')) {
     return [
       {
         type: 'block-math',
-        raw: normalizeMathExpression(content),
+        raw: normalizeMathExpression(preprocessed),
       },
     ];
   }
@@ -217,16 +269,16 @@ export function parseMixedMath(content) {
   const fragments = [];
 
   const regex =
-    /(\$\$[\s\S]+?\$\$|\$[\s\S]+?\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|`[^`\n]+`)/g;
+    /(\$\$[\s\S]+?\$\$|\$[^\$\n]+?\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|`[^`\n]+`)/g;
 
   let lastIndex = 0;
   let match;
 
-  while ((match = regex.exec(content)) !== null) {
+  while ((match = regex.exec(preprocessed)) !== null) {
     if (match.index > lastIndex) {
       fragments.push({
         type: 'text',
-        raw: content.slice(lastIndex, match.index),
+        raw: preprocessed.slice(lastIndex, match.index),
       });
     }
 
@@ -255,7 +307,7 @@ export function parseMixedMath(content) {
     } else if (token.startsWith('`') && token.endsWith('`')) {
       const codeContent = token.slice(1, -1).trim();
 
-      if (isMathFormula(codeContent)) {
+      if (isPureMath(codeContent)) {
         fragments.push({
           type: 'inline-math',
           raw: normalizeMathExpression(codeContent),
@@ -271,10 +323,10 @@ export function parseMixedMath(content) {
     lastIndex = regex.lastIndex;
   }
 
-  if (lastIndex < content.length) {
+  if (lastIndex < preprocessed.length) {
     fragments.push({
       type: 'text',
-      raw: content.slice(lastIndex),
+      raw: preprocessed.slice(lastIndex),
     });
   }
 
@@ -322,9 +374,11 @@ const MathRenderer = ({
       }
 
       return (
-        <span className={`font-mono ${className}`}>
+        <div
+          className={`studypilot-math-block overflow-x-auto py-1 text-center select-text font-mono text-xs sm:text-sm text-slate-800 ${className}`}
+        >
           {input}
-        </span>
+        </div>
       );
     }
 
@@ -348,9 +402,12 @@ const MathRenderer = ({
             }
 
             return (
-              <span key={idx} className="font-mono text-xs">
+              <div
+                key={idx}
+                className="my-2 p-2 rounded-xl bg-slate-100/90 text-center font-mono text-xs text-slate-800"
+              >
                 {frag.raw}
-              </span>
+              </div>
             );
           }
 
@@ -361,14 +418,18 @@ const MathRenderer = ({
               return (
                 <span
                   key={idx}
-                  className="inline-block mx-0.5 align-baseline"
+                  className="inline-block mx-0.5 align-baseline text-slate-900"
                   dangerouslySetInnerHTML={{ __html: html }}
                 />
               );
             }
 
+            // Fallback for unparseable math: clean monospace badge, NEVER bright red!
             return (
-              <span key={idx} className="font-mono text-xs">
+              <span
+                key={idx}
+                className="inline-block mx-0.5 px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-800 font-mono text-[11px] font-medium"
+              >
                 {frag.raw}
               </span>
             );
