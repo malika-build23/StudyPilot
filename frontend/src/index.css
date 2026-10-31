@@ -54,3 +54,152 @@ h1, h2, h3, h4, h5, h6 {
 .rotate-y-180 {
   transform: rotateY(180deg);
 }
+
+
+/* =========================================
+   STUDYPILOT — DYNAMIC LANDING PAGE EFFECTS
+========================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes sp-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -18px, 0); }
+}
+
+@keyframes sp-float-reverse {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(14px, 16px, 0); }
+}
+
+@keyframes sp-glow {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.12); }
+}
+
+@keyframes sp-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes sp-shimmer {
+  0% { transform: translateX(-120%) skewX(-15deg); }
+  100% { transform: translateX(220%) skewX(-15deg); }
+}
+
+@keyframes sp-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sp-float {
+  animation: sp-float 6s ease-in-out infinite;
+}
+
+.sp-float-reverse {
+  animation: sp-float-reverse 8s ease-in-out infinite;
+}
+
+.sp-glow {
+  animation: sp-glow 6s ease-in-out infinite;
+}
+
+.sp-gradient {
+  background-size: 200% 200%;
+  animation: sp-gradient 9s ease infinite;
+}
+
+.sp-reveal {
+  animation: sp-reveal 0.8s cubic-bezier(.2,.7,.2,1) both;
+}
+
+/* Platform card interaction */
+.sp-card {
+  transition:
+    transform 450ms cubic-bezier(.2,.7,.2,1),
+    box-shadow 450ms ease,
+    border-color 450ms ease;
+}
+
+.sp-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 28px 65px rgba(79, 70, 229, 0.14);
+}
+
+.sp-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 25%,
+    rgba(255,255,255,.55) 48%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: opacity 300ms ease;
+}
+
+.sp-card:hover::after {
+  opacity: 1;
+  animation: sp-shimmer 1s ease;
+}
+
+/* Workflow container */
+.sp-workflow {
+  transition: box-shadow 400ms ease, transform 400ms ease;
+}
+
+.sp-workflow:hover {
+  box-shadow: 0 30px 85px rgba(79, 70, 229, 0.15);
+}
+
+/* CTA */
+.sp-cta {
+  background-size: 200% 200%;
+  animation: sp-gradient 12s ease infinite;
+}
+
+.sp-cta-button {
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+
+.sp-cta-button:hover {
+  transform: translateY(-5px) scale(1.025);
+  box-shadow: 0 18px 40px rgba(255,255,255,.2);
+}
+
+/* Icon movement */
+.sp-icon {
+  transition: transform 400ms cubic-bezier(.2,.7,.2,1);
+}
+
+.group:hover .sp-icon {
+  transform: rotate(-8deg) scale(1.12);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
