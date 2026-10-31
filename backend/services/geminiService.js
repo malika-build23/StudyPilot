@@ -1015,6 +1015,277 @@ const analyzeDateSheet = async (extractedContent, pdfBuffer = null, academicFilt
   }
 };
 
+// Generate an AI mnemonic from study material or manually entered content
+const generateMnemonic = async ({
+  extractedContent = null,
+  topic,
+  technique = 'acronym',
+  additionalInstructions = '',
+}) => {
+  const apiKey = getApiKey();
+
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is missing from environment variables.');
+  }
+
+  const allowedTechniques = [
+    'acronym',
+    'acrostic',
+    'rhyme',
+    'first-letter-association',
+    'word-association',
+    'memory-story',
+    'formula-trick',
+    'step-by-step',
+  ];
+
+  if (!allowedTechniques.includes(technique)) {
+    throw new Error('Invalid mnemonic technique selected.');
+  }
+
+  const documentContext = formatDocumentContext(extractedContent);
+
+  if (!documentContext || documentContext.length < 10) {
+    throw new Error('Please provide sufficient study content to generate a mnemonic.');
+  }
+
+  if (!topic || !topic.trim()) {
+    throw new Error('Please provide a topic for mnemonic generation.');
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const prompt = `
+You are StudyPilot AI, an academic memory-assistance system.
+
+Create an accurate and memorable mnemonic to help a college student remember the supplied academic concept.
+
+TOPIC:
+${topic.trim()}
+
+REQUESTED TECHNIQUE:
+${technique}
+
+ADDITIONAL INSTRUCTIONS:
+${additionalInstructions || 'None'}
+
+SOURCE MATERIAL:
+"""
+${documentContext}
+"""
+
+RULES:
+1. Use the supplied source material as the primary source of truth.
+2. Do not invent facts, formulas, definitions, or relationships.
+3. If the source does not contain enough information to create an accurate mnemonic, return isSufficient as false.
+4. Make the mnemonic easy to remember and relevant to the actual concept.
+5. Explain how each part of the mnemonic maps to the original concept.
+6. For formula tricks, preserve the original formula exactly.
+7. Keep the explanation student-friendly and concise.
+8. Do not generate a generic mnemonic unrelated to the supplied topic.
+
+Return ONLY valid JSON:
+
+{
+  "isSufficient": true,
+  "title": "Mnemonic title",
+  "topic": "${topic.trim()}",
+  "technique": "${technique}",
+  "mnemonic": "The actual mnemonic",
+  "explanation": "How to remember and use it",
+  "letterMapping": {
+    "A": "Meaning represented by A",
+    "B": "Meaning represented by B"
+  },
+  "originalConcept": "The accurate original academic concept",
+  "example": "A short example of applying or recalling the concept"
+}
+`;
+
+  try {
+    const response = await callGeminiWithRetry(ai, {
+      model: DEFAULT_MODEL,
+      contents: prompt,
+      config: {
+        responseMimeType: 'application/json',
+        temperature: 0.4,
+      },
+    });
+
+    const parsed = parseAiJsonResponse(response.text);
+
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      throw new Error('Gemini returned an invalid mnemonic response.');
+    }
+
+    if (parsed.isSufficient === false) {
+      throw new Error('The supplied material does not contain enough information to generate an accurate mnemonic.');
+    }
+
+    if (
+      !parsed.title ||
+      !parsed.mnemonic ||
+      !parsed.explanation ||
+      !parsed.originalConcept
+    ) {
+      throw new Error('Gemini returned incomplete mnemonic content.');
+    }
+
+    return {
+      title: String(parsed.title).trim(),
+      topic: String(parsed.topic || topic).trim(),
+      technique,
+      mnemonic: String(parsed.mnemonic).trim(),
+      explanation: String(parsed.explanation).trim(),
+      letterMapping:
+        parsed.letterMapping &&
+        typeof parsed.letterMapping === 'object' &&
+        !Array.isArray(parsed.letterMapping)
+          ? parsed.letterMapping
+          : null,
+      originalConcept: String(parsed.originalConcept).trim(),
+      example: String(parsed.example || '').trim(),
+    };
+  } catch (error) {
+    console.error('[Gemini Mnemonic Generation Error]:', error);
+    throw new Error(`Mnemonic generation failed: ${error.message}`);
+  }
+};
+
+// Generate an academic Mermaid diagram from study material or manual content
+const generateDiagram = async ({
+  extractedContent = null,
+  topic,
+  diagramType = 'flowchart',
+  additionalInstructions = '',
+}) => {
+  const apiKey = getApiKey();
+
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is missing from environment variables.');
+  }
+
+  const allowedDiagramTypes = [
+    'flowchart',
+    'concept-map',
+    'process',
+    'hierarchical',
+    'block-diagram',
+    'step-by-step',
+  ];
+
+  if (!allowedDiagramTypes.includes(diagramType)) {
+    throw new Error('Invalid diagram type selected.');
+  }
+
+  const documentContext = formatDocumentContext(extractedContent);
+
+  if (!documentContext || documentContext.length < 10) {
+    throw new Error('Please provide sufficient study content to generate a diagram.');
+  }
+
+  if (!topic || !topic.trim()) {
+    throw new Error('Please provide a topic for diagram generation.');
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const prompt = `
+You are StudyPilot AI, an academic diagram and visualization assistant.
+
+Create a clear, accurate Mermaid diagram to help a college student understand the supplied academic topic.
+
+TOPIC:
+${topic.trim()}
+
+REQUESTED DIAGRAM TYPE:
+${diagramType}
+
+ADDITIONAL INSTRUCTIONS:
+${additionalInstructions || 'None'}
+
+SOURCE MATERIAL:
+"""
+${documentContext}
+"""
+
+RULES:
+1. Use the supplied source material as the primary source of truth.
+2. Do not invent concepts, facts, steps, formulas, or relationships.
+3. If the source does not contain enough information, return isSufficient as false.
+4. Use Mermaid flowchart syntax beginning with "flowchart TD" or "graph TD".
+5. Make the diagram logically structured and easy to read.
+6. Use meaningful node labels and arrows to show relationships.
+7. Keep labels concise and use quoted labels when they contain special characters.
+8. Do not include Markdown code fences around the Mermaid source.
+9. Do not use HTML, scripts, click handlers, external links, or Mermaid initialization directives.
+10. Include the important steps and relationships without overcrowding the diagram.
+
+Return ONLY valid JSON:
+
+{
+  "isSufficient": true,
+  "title": "Diagram title",
+  "topic": "${topic.trim()}",
+  "diagramType": "${diagramType}",
+  "diagramSource": "flowchart TD\\n    A[Start] --> B[Concept]",
+  "explanation": "A clear explanation of the diagram and its relationships"
+}
+`;
+
+  try {
+    const response = await callGeminiWithRetry(ai, {
+      model: DEFAULT_MODEL,
+      contents: prompt,
+      config: {
+        responseMimeType: 'application/json',
+        temperature: 0.2,
+      },
+    });
+
+    const parsed = parseAiJsonResponse(response.text);
+
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      throw new Error('Gemini returned an invalid diagram response.');
+    }
+
+    if (parsed.isSufficient === false) {
+      throw new Error('The supplied material does not contain enough information to generate an accurate diagram.');
+    }
+
+    if (
+      !parsed.title ||
+      !parsed.diagramSource ||
+      !parsed.explanation
+    ) {
+      throw new Error('Gemini returned incomplete diagram content.');
+    }
+
+    const diagramSource = String(parsed.diagramSource).trim();
+
+    if (
+      !/^(flowchart|graph)\s+(TB|TD|BT|RL|LR)\b/.test(diagramSource) ||
+      diagramSource.length > 20000 ||
+      /<script|<\/script|javascript:|%%\s*\{|\bclick\s+[A-Za-z0-9_]+/i.test(diagramSource)
+    ) {
+      throw new Error('Gemini returned invalid or unsupported Mermaid diagram syntax.');
+    }
+
+    return {
+      title: String(parsed.title).trim(),
+      topic: String(parsed.topic || topic).trim(),
+      diagramType,
+      diagramSource,
+      explanation: String(parsed.explanation).trim(),
+    };
+  } catch (error) {
+    console.error('[Gemini Diagram Generation Error]:', error);
+    throw new Error(`Diagram generation failed: ${error.message}`);
+  }
+};
+
+
+
 module.exports = {
   generateDocumentAnalysis,
   answerDocumentQuestion,
@@ -1022,4 +1293,7 @@ module.exports = {
   generateQuizQuestions,
   generateStudySchedule,
   analyzeDateSheet,
+  generateMnemonic,
+  generateDiagram,
 };
+

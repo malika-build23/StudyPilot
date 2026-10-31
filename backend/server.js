@@ -22,6 +22,8 @@ const analyticsRoutes = require('./routes/analyticsRoutes');
 const examRoutes = require('./routes/examRoutes');
 const studyPlanRoutes = require('./routes/studyPlanRoutes');
 const dateSheetRoutes = require('./routes/dateSheetRoutes');
+const mnemonicRoutes = require('./routes/mnemonicRoutes');
+const diagramRoutes = require('./routes/diagramRoutes');
 // Express Application
 const app = express();
 
@@ -73,7 +75,8 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/exams', examRoutes);
 app.use('/api/study-plans', studyPlanRoutes);
 app.use('/api/date-sheets', dateSheetRoutes);
-
+app.use('/api/mnemonics', mnemonicRoutes);
+app.use('/api/diagrams', diagramRoutes);
 // 404 Handler
 app.use((req, res, next) => {
   res.status(404).json({
