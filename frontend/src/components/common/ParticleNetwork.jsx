@@ -36,14 +36,23 @@ const ParticleNetwork = () => {
 
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+      const brandColors = [
+        { r: 45, g: 67, b: 84 },   // Slate Blue
+        { r: 115, g: 118, b: 106 }, // Muted Olive
+        { r: 254, g: 215, b: 165 }, // Soft Peach
+        { r: 158, g: 103, b: 82 },  // Terracotta
+        { r: 83, g: 65, b: 69 },    // Dusty Mauve
+      ];
+
       particles = Array.from({ length: particleCount }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.55,
-        vy: (Math.random() - 0.5) * 0.55,
-        radius: Math.random() * 1.7 + 1.2,
+        vx: (Math.random() - 0.5) * 0.45,
+        vy: (Math.random() - 0.5) * 0.45,
+        radius: Math.random() * 1.8 + 1.2,
         alpha: Math.random() * 0.35 + 0.55,
         pulse: Math.random() * Math.PI * 2,
+        color: brandColors[Math.floor(Math.random() * brandColors.length)],
       }));
 
       draw();
@@ -64,20 +73,20 @@ const ParticleNetwork = () => {
 
           if (distance < connectionDistance) {
             const strength = 1 - distance / connectionDistance;
-            const opacity = strength * 0.34;
+            const opacity = strength * 0.28;
 
             context.beginPath();
             context.moveTo(particle.x, particle.y);
             context.lineTo(other.x, other.y);
 
-            context.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
-            context.lineWidth = 0.8 + strength * 0.65;
+            context.strokeStyle = `rgba(115, 118, 106, ${opacity})`;
+            context.lineWidth = 0.7 + strength * 0.5;
             context.stroke();
           }
         }
       }
 
-      // Draw glowing particles.
+      // Draw glowing particles in brand colors.
       particles.forEach((particle) => {
         if (!reducedMotion) {
           particle.x += particle.vx;
@@ -95,21 +104,19 @@ const ParticleNetwork = () => {
 
         const pulse = 0.85 + Math.sin(particle.pulse) * 0.15;
         const radius = particle.radius * pulse;
+        const { r, g, b } = particle.color;
 
         // Outer glow
         context.beginPath();
         context.arc(
           particle.x,
           particle.y,
-          radius * 3.5,
+          radius * 3.2,
           0,
           Math.PI * 2
         );
 
-        context.fillStyle = `rgba(99, 102, 241, ${
-          particle.alpha * 0.12
-        })`;
-
+        context.fillStyle = `rgba(${r}, ${g}, ${b}, ${particle.alpha * 0.18})`;
         context.fill();
 
         // Main particle
@@ -122,26 +129,20 @@ const ParticleNetwork = () => {
           Math.PI * 2
         );
 
-        context.fillStyle = `rgba(99, 102, 241, ${
-          particle.alpha
-        })`;
-
-        context.shadowBlur = 12;
-        context.shadowColor = 'rgba(99, 102, 241, 0.8)';
+        context.fillStyle = `rgba(${r}, ${g}, ${b}, ${particle.alpha})`;
         context.fill();
-        context.shadowBlur = 0;
 
         // Bright center
         context.beginPath();
         context.arc(
           particle.x,
           particle.y,
-          radius * 0.4,
+          radius * 0.35,
           0,
           Math.PI * 2
         );
 
-        context.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        context.fillStyle = 'rgba(255, 255, 255, 0.85)';
         context.fill();
       });
     };

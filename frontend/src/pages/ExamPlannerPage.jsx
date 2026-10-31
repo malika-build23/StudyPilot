@@ -429,22 +429,22 @@ const ExamPlannerPage = () => {
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       {/* 1. HERO COMMAND CENTER & STATS */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-sm relative overflow-hidden">
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white/10 blur-2xl pointer-events-none" />
-        <div className="absolute bottom-0 right-28 -mb-16 w-48 h-48 rounded-full bg-blue-500/20 blur-xl pointer-events-none" />
+      <div className="bg-gradient-to-r from-[#2D4354] via-[#534145] to-[#20212B] rounded-3xl p-6 sm:p-8 text-white shadow-[0_12px_32px_-6px_rgba(45,67,84,0.22)] relative overflow-hidden">
+        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-[#FED7A5]/15 blur-2xl pointer-events-none" />
+        <div className="absolute bottom-0 right-28 -mb-16 w-48 h-48 rounded-full bg-[#9E6752]/20 blur-xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="max-w-2xl space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-blue-100 text-xs font-semibold backdrop-blur-xs">
-                <Sparkles className="w-3.5 h-3.5 text-blue-200" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-[#FED7A5] text-xs font-semibold backdrop-blur-xs border border-white/10">
+                <Sparkles className="w-3.5 h-3.5 text-[#FED7A5]" />
                 Smart Exam Planner & Date Sheet Engine
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
               University & Practical Examination Planner
             </h1>
-            <p className="text-sm text-blue-100/90 leading-relaxed">
+            <p className="text-sm text-slate-200 leading-relaxed font-medium">
               Upload your official university date sheet PDF to automatically extract dates, timings, and live countdowns,
               or manually schedule laboratory practicals, vivas, and class quizzes.
             </p>
@@ -454,9 +454,9 @@ const ExamPlannerPage = () => {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setIsDateSheetModalOpen(true)}
-              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 text-xs sm:text-sm font-extrabold shadow-lg shadow-amber-500/20 flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              className="px-5 py-3 rounded-2xl bg-[#FED7A5] hover:bg-[#ffe3be] text-[#20212B] text-xs sm:text-sm font-extrabold shadow-md flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer border border-[#FED7A5]"
             >
-              <UploadCloud className="w-4 h-4 text-slate-950 stroke-[2.5]" />
+              <UploadCloud className="w-4 h-4 text-[#9E6752] stroke-[2.5]" />
               <span>Upload University Date Sheet</span>
             </button>
 
@@ -465,9 +465,9 @@ const ExamPlannerPage = () => {
                 setEditingExam(null);
                 setIsPracticalModalOpen(true);
               }}
-              className="px-4 py-3 rounded-2xl bg-white/15 hover:bg-white/25 text-white text-xs sm:text-sm font-bold backdrop-blur-xs flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="px-4 py-3 rounded-2xl bg-white/15 hover:bg-white/25 text-white text-xs sm:text-sm font-bold backdrop-blur-xs flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer border border-white/15"
             >
-              <Beaker className="w-4 h-4 text-purple-200" />
+              <Beaker className="w-4 h-4 text-[#FED7A5]" />
               <span>+ Practical / Internal</span>
             </button>
           </div>
@@ -476,7 +476,7 @@ const ExamPlannerPage = () => {
         {/* Hero 5-Stats Metric Bar */}
         <div className="relative z-10 grid grid-cols-2 sm:grid-cols-5 gap-3 mt-6 pt-6 border-t border-white/15">
           <div className="bg-white/10 backdrop-blur-xs rounded-2xl p-3 border border-white/10">
-            <p className="text-[10px] text-blue-200 font-semibold uppercase tracking-wider">
+            <p className="text-[10px] text-slate-200 font-semibold uppercase tracking-wider">
               Total Upcoming
             </p>
             <p className="text-xl sm:text-2xl font-black text-white mt-0.5">
@@ -485,7 +485,7 @@ const ExamPlannerPage = () => {
           </div>
 
           <div className="bg-white/10 backdrop-blur-xs rounded-2xl p-3 border border-white/10">
-            <p className="text-[10px] text-blue-200 font-semibold uppercase tracking-wider">
+            <p className="text-[10px] text-slate-200 font-semibold uppercase tracking-wider">
               University Theory
             </p>
             <p className="text-xl sm:text-2xl font-black text-white mt-0.5">
@@ -494,7 +494,7 @@ const ExamPlannerPage = () => {
           </div>
 
           <div className="bg-white/10 backdrop-blur-xs rounded-2xl p-3 border border-white/10">
-            <p className="text-[10px] text-blue-200 font-semibold uppercase tracking-wider">
+            <p className="text-[10px] text-slate-200 font-semibold uppercase tracking-wider">
               Practical & Lab
             </p>
             <p className="text-xl sm:text-2xl font-black text-white mt-0.5">
@@ -503,10 +503,10 @@ const ExamPlannerPage = () => {
           </div>
 
           <div className="bg-white/10 backdrop-blur-xs rounded-2xl p-3 border border-white/10">
-            <p className="text-[10px] text-blue-200 font-semibold uppercase tracking-wider">
+            <p className="text-[10px] text-slate-200 font-semibold uppercase tracking-wider">
               Nearest Exam
             </p>
-            <p className="text-xl sm:text-2xl font-black text-amber-300 mt-0.5">
+            <p className="text-xl sm:text-2xl font-black text-[#FED7A5] mt-0.5">
               {overviewStats?.nearestDays !== null && overviewStats?.nearestDays !== undefined
                 ? `${overviewStats.nearestDays}d`
                 : upcomingExams.length > 0
@@ -516,10 +516,10 @@ const ExamPlannerPage = () => {
           </div>
 
           <div className="bg-white/10 backdrop-blur-xs rounded-2xl p-3 border border-white/10 col-span-2 sm:col-span-1">
-            <p className="text-[10px] text-blue-200 font-semibold uppercase tracking-wider">
+            <p className="text-[10px] text-slate-200 font-semibold uppercase tracking-wider">
               Completed
             </p>
-            <p className="text-xl sm:text-2xl font-black text-emerald-300 mt-0.5">
+            <p className="text-xl sm:text-2xl font-black text-[#FED7A5] mt-0.5">
               {completedExams.length}
             </p>
           </div>
@@ -535,7 +535,7 @@ const ExamPlannerPage = () => {
           </div>
           <button
             onClick={() => setError('')}
-            className="text-rose-500 hover:text-rose-700 text-xs font-semibold"
+            className="text-rose-500 hover:text-rose-700 text-xs font-semibold cursor-pointer"
           >
             Dismiss
           </button>
@@ -543,14 +543,14 @@ const ExamPlannerPage = () => {
       )}
 
       {successMsg && (
-        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center justify-between gap-3 animate-in fade-in">
+        <div className="p-4 rounded-2xl bg-[#FFF7EC] border border-[#FED7A5] text-[#2D4354] text-xs font-medium flex items-center justify-between gap-3 animate-in fade-in">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 shrink-0 text-[#9E6752]" />
             <span>{successMsg}</span>
           </div>
           <button
             onClick={() => setSuccessMsg('')}
-            className="text-emerald-500 hover:text-emerald-700 text-xs font-semibold"
+            className="text-[#9E6752] hover:text-[#534145] text-xs font-semibold cursor-pointer"
           >
             Dismiss
           </button>
@@ -559,29 +559,29 @@ const ExamPlannerPage = () => {
 
       {/* NEXT UPCOMING EXAMINATION SPOTLIGHT (If available) */}
       {nextExam && (
-        <div className="bg-white rounded-3xl p-5 sm:p-6 border border-blue-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-white rounded-3xl p-5 sm:p-6 border border-[#F1F0ED] shadow-[0_4px_24px_-2px_rgba(45,67,84,0.04)] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-500/20">
+            <div className="w-12 h-12 rounded-2xl bg-[#2D4354] text-[#FED7A5] flex items-center justify-center shrink-0 shadow-md shadow-[#2D4354]/20">
               <CalendarDays className="w-6 h-6" />
             </div>
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-100 text-blue-800">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]">
                   Next Upcoming Examination
                 </span>
-                <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+                <span className="text-[10px] font-bold text-[#77756F] bg-[#FAF8F5] px-2 py-0.5 rounded-md border border-slate-200">
                   {nextExam.examCategory === 'UNIVERSITY_THEORY' ? 'University Theory' : nextExam.examType}
                 </span>
                 {nextExam.subjectCode && (
-                  <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded uppercase">
+                  <span className="text-[10px] font-bold text-[#77756F] bg-[#FAF8F5] px-1.5 py-0.5 rounded uppercase border border-slate-200">
                     {nextExam.subjectCode}
                   </span>
                 )}
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+              <h3 className="text-base sm:text-lg font-bold text-[#20212B]">
                 {nextExam.examName}
               </h3>
-              <p className="text-xs text-slate-500 flex items-center gap-3">
+              <p className="text-xs text-[#77756F] flex items-center gap-3">
                 <span>
                   {new Date(nextExam.examDate).toLocaleDateString(undefined, {
                     weekday: 'short',
@@ -591,14 +591,14 @@ const ExamPlannerPage = () => {
                   })}
                 </span>
                 {nextExam.startTime && (
-                  <span className="flex items-center gap-1 font-semibold text-slate-700">
-                    <Clock className="w-3.5 h-3.5 text-slate-400" />
+                  <span className="flex items-center gap-1 font-semibold text-[#20212B]">
+                    <Clock className="w-3.5 h-3.5 text-[#73766A]" />
                     {nextExam.startTime} {nextExam.endTime ? `- ${nextExam.endTime}` : ''}
                   </span>
                 )}
                 {nextExam.location && (
                   <span className="flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-slate-400" />
+                    <MapPin className="w-3 h-3 text-[#73766A]" />
                     {nextExam.location}
                   </span>
                 )}
@@ -607,8 +607,8 @@ const ExamPlannerPage = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 shrink-0">
-            <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-              <p className="text-[10px] uppercase font-bold text-slate-400 mb-1 text-center">
+            <div className="bg-[#FAF8F5] p-3 rounded-2xl border border-slate-200">
+              <p className="text-[10px] uppercase font-bold text-[#77756F] mb-1 text-center">
                 Live Countdown
               </p>
               <ExamCountdown
@@ -620,17 +620,17 @@ const ExamPlannerPage = () => {
 
             <button
               onClick={() => handleOpenStudySchedule(nextExam)}
-              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition-all"
+              className="px-4 py-2.5 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
             >
               <span>Prepare Study Plan</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#FED7A5]" />
             </button>
           </div>
         </div>
       )}
 
       {/* 2. NAVIGATION TABS */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-1">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#F1F0ED] pb-1">
         <div className="flex flex-wrap items-center gap-1.5">
           {[
             { id: 'overview', label: 'Overview', icon: Target, count: upcomingExams.length },
@@ -647,18 +647,18 @@ const ExamPlannerPage = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-2.5 px-4 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+                className={`py-2.5 px-4 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    ? 'bg-[#2D4354] text-white shadow-xs'
+                    : 'text-[#77756F] hover:text-[#20212B] hover:bg-[#FAF8F5]'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#FED7A5]' : 'text-[#73766A]'}`} />
                 <span>{tab.label}</span>
                 {tab.count !== undefined && (
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                      isActive ? 'bg-white/20 text-white' : 'bg-slate-200/80 text-slate-600'
+                      isActive ? 'bg-white/20 text-[#FED7A5]' : 'bg-slate-100 text-[#77756F]'
                     }`}
                   >
                     {tab.count}
@@ -666,8 +666,10 @@ const ExamPlannerPage = () => {
                 )}
                 {tab.badge && (
                   <span
-                    className={`text-[9px] px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider ${
-                      isActive ? 'bg-white/20 text-white' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                    className={`text-[9px] uppercase tracking-wider font-extrabold px-1.5 py-0.2 rounded-full ${
+                      isActive
+                        ? 'bg-[#FED7A5] text-[#20212B]'
+                        : 'bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]'
                     }`}
                   >
                     {tab.badge}

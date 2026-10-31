@@ -195,7 +195,7 @@ const SubjectWorkspacePage = () => {
       badge: 'Assessments',
       desc: 'Adaptive mock exams and topic-wise practice tests synthesized from your course materials to evaluate concept retention and identify weak zones.',
       icon: CheckCircle,
-      color: 'bg-emerald-50 text-emerald-600',
+      color: 'bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]/60',
       actionLabel: 'Take Quiz / Mock Test',
       actionType: 'scroll',
       target: 'quiz-section',
@@ -205,7 +205,7 @@ const SubjectWorkspacePage = () => {
       badge: 'Diagnostics',
       desc: 'Deterministic mistake grading, multi-attempt score trends, and rule-based weak area detection with tailored revision directives.',
       icon: Brain,
-      color: 'bg-amber-50 text-amber-600',
+      color: 'bg-[#FAF8F5] text-[#2D4354] border border-[#2D4354]/20',
       actionLabel: 'View Diagnostic Report',
       actionType: 'scroll',
       target: 'analytics-section',
@@ -215,7 +215,7 @@ const SubjectWorkspacePage = () => {
       badge: 'Adaptive Routine',
       desc: 'Real-time exam countdowns, automated day-by-day study schedules, syllabus coverage tracking, and dynamic plan adjustment.',
       icon: BarChart2,
-      color: 'bg-purple-50 text-purple-600',
+      color: 'bg-[#F1F0ED] text-[#73766A] border border-slate-300',
       actionLabel: 'Open Study Planner',
       actionType: 'link',
       to: `/exams?subject=${id}&tab=schedules`,
@@ -225,53 +225,54 @@ const SubjectWorkspacePage = () => {
   return (
     <div className="space-y-8 animate-in fade-in duration-150">
       {/* Breadcrumb Navigation */}
-      <nav className="flex items-center gap-2 text-xs font-medium text-slate-400">
-        <Link to="/dashboard" className="hover:text-slate-700 transition-colors">
+      <nav className="flex items-center gap-2 text-xs font-semibold text-[#77756F]">
+        <Link to="/dashboard" className="hover:text-[#2D4354] transition-colors">
           Dashboard
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
-        <Link to="/subjects" className="hover:text-slate-700 transition-colors">
+        <Link to="/subjects" className="hover:text-[#2D4354] transition-colors">
           My Subjects
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
-        <span className="text-slate-800 font-semibold truncate max-w-[200px]">
+        <span className="text-[#20212B] font-bold truncate max-w-[200px]">
           {subject.subjectName}
         </span>
       </nav>
 
       {/* Subject Header Card */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-          <div className="space-y-2">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#F1F0ED] shadow-[0_4px_24px_-2px_rgba(45,67,84,0.04)] hover:shadow-md transition-all duration-300 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#2D4354]/5 via-[#FED7A5]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+          <div className="space-y-2.5">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+              <span className="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]">
                 {subject.semester || 'Academic Workspace'}
               </span>
-              <span className="text-xs text-slate-400 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5" />
+              <span className="text-xs text-[#77756F] flex items-center gap-1.5 font-medium">
+                <Calendar className="w-3.5 h-3.5 text-[#73766A]" />
                 Created {new Date(subject.createdAt).toLocaleDateString()}
               </span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#20212B] tracking-tight">
               {subject.subjectName}
             </h2>
-            <p className="text-sm text-slate-600 max-w-2xl leading-relaxed pt-1">
+            <p className="text-sm text-[#77756F] max-w-2xl leading-relaxed">
               {subject.description || 'No subject description provided yet. Click "Edit Subject" to add course details, textbooks, or syllabus topics.'}
             </p>
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2.5 shrink-0">
             <button
               onClick={() => setEditModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-[#20212B] hover:bg-[#FAF8F5] hover:border-[#2D4354]/40 transition-all shadow-xs cursor-pointer"
             >
-              <Edit2 className="w-3.5 h-3.5" />
+              <Edit2 className="w-3.5 h-3.5 text-[#2D4354]" />
               <span>Edit Subject</span>
             </button>
             <button
               onClick={() => setDeleteModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-red-200 text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-red-200 bg-red-50/50 text-xs font-semibold text-red-600 hover:bg-red-100/60 transition-all shadow-xs cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Delete</span>
@@ -285,43 +286,43 @@ const SubjectWorkspacePage = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+              <h3 className="text-base sm:text-lg font-bold text-[#20212B]">
                 Course Study Materials
               </h3>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]">
                 Course Library
               </span>
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#77756F] mt-0.5">
               Upload PDF textbooks or PowerPoint slides (.pptx). Text is automatically extracted for Gemini AI processing.
             </p>
           </div>
 
           <button
             onClick={() => setUploadModalOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xs shadow-blue-500/25 transition-all self-start sm:self-auto hover:scale-102"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white font-semibold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all self-start sm:self-auto hover:-translate-y-0.5 cursor-pointer"
           >
-            <UploadCloud className="w-4 h-4" />
+            <UploadCloud className="w-4 h-4 text-[#FED7A5]" />
             <span>Upload Document</span>
           </button>
         </div>
 
         {materials.length === 0 && !materialsLoading ? (
-          <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/80 text-center shadow-xs">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-3">
+          <div className="bg-white rounded-3xl p-8 sm:p-12 border border-dashed border-[#2D4354]/30 text-center shadow-[0_4px_24px_-2px_rgba(45,67,84,0.04)] relative overflow-hidden group hover:border-[#2D4354]/60 transition-all">
+            <div className="w-14 h-14 rounded-2xl bg-[#FFF7EC] text-[#9E6752] flex items-center justify-center mx-auto mb-3 shadow-inner border border-[#FED7A5]">
               <UploadCloud className="w-7 h-7" />
             </div>
-            <h4 className="text-sm font-bold text-slate-900">
+            <h4 className="text-sm font-bold text-[#20212B]">
               No study materials uploaded yet
             </h4>
-            <p className="text-xs text-slate-500 mt-1.5 max-w-md mx-auto leading-relaxed">
+            <p className="text-xs text-[#77756F] mt-1.5 max-w-md mx-auto leading-relaxed">
               Upload course syllabi, lecture slides, or textbook chapters (PDF or PPTX). Gemini AI will generate chapter summaries, formula sheets, and practice question banks.
             </p>
             <button
               onClick={() => setUploadModalOpen(true)}
-              className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all"
+              className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white font-semibold text-xs shadow-sm transition-all hover:-translate-y-0.5 cursor-pointer"
             >
-              <UploadCloud className="w-4 h-4" />
+              <UploadCloud className="w-4 h-4 text-[#FED7A5]" />
               <span>Upload First Document</span>
             </button>
           </div>
@@ -340,21 +341,21 @@ const SubjectWorkspacePage = () => {
       {selectedMaterial && (
         <div className="space-y-4 pt-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#2D4354] to-[#534145] text-[#FED7A5] flex items-center justify-center font-bold shadow-xs">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                <h3 className="text-base sm:text-lg font-bold text-[#20212B]">
                   Gemini AI Document Intelligence
                 </h3>
-                <p className="text-xs text-slate-500">
-                  Active Document: <span className="font-semibold text-slate-800">{selectedMaterial.fileName}</span>
+                <p className="text-xs text-[#77756F]">
+                  Active Document: <span className="font-semibold text-[#20212B]">{selectedMaterial.fileName}</span>
                 </p>
               </div>
             </div>
 
-            <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">
+            <span className="text-xs font-bold text-[#2D4354] bg-[#FAF8F5] px-3 py-1 rounded-full border border-slate-200">
               AI Analysis
             </span>
           </div>
@@ -365,8 +366,9 @@ const SubjectWorkspacePage = () => {
           />
         </div>
       )}
+
       {/* PHASE 3: AI QUIZ & MOCK TEST GENERATION */}
-      <div id="quiz-section" className="space-y-4 pt-4 border-t border-slate-200/80">
+      <div id="quiz-section" className="space-y-4 pt-6 border-t border-[#F1F0ED]">
         <QuizGenerationView
           subjectId={id}
           material={selectedMaterial}
@@ -377,30 +379,32 @@ const SubjectWorkspacePage = () => {
       </div>
 
       {/* PHASE 3 PART B: SUBJECT DIAGNOSTIC ANALYTICS & WEAK TOPICS */}
-      <div id="analytics-section" className="space-y-4 pt-4 border-t border-slate-200/80">
+      <div id="analytics-section" className="space-y-5 pt-6 border-t border-[#F1F0ED]">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
-              <BarChart2 className="w-4 h-4" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#2D4354] to-[#73766A] text-white flex items-center justify-center font-bold shadow-xs">
+              <BarChart2 className="w-4 h-4 text-[#FED7A5]" />
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+              <h3 className="text-base sm:text-lg font-bold text-[#20212B]">
                 Course Diagnostic Analytics & Weak-Topic Detection
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#77756F]">
                 Live performance metrics, mistake analysis patterns, and revision directives
               </p>
             </div>
           </div>
-          <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">
+          <span className="text-xs font-bold text-[#2D4354] bg-[#FFF7EC] px-3 py-1 rounded-full border border-[#FED7A5]">
             Diagnostic Engine
           </span>
         </div>
+
         {/* AI Mnemonics Generator */}
         <MnemonicGenerator
           subjectId={id}
           selectedMaterial={selectedMaterial}
         />
+
         {/* AI Diagram Generator */}
         <DiagramGenerator
           subjectId={id}
@@ -409,58 +413,59 @@ const SubjectWorkspacePage = () => {
 
         <PerformanceAnalyticsView subjectId={id} />
       </div>
+
       {/* FLASHCARDS, SPACED REPETITION & CLEAN NOTES */}
-      <div className="space-y-4 pt-4 border-t border-slate-200/80">
+      <div className="space-y-4 pt-6 border-t border-[#F1F0ED]">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#534145] to-[#9E6752] text-[#FED7A5] flex items-center justify-center font-bold shadow-xs">
               <Layers className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+              <h3 className="text-base sm:text-lg font-bold text-[#20212B]">
                 Active Recall, Spaced Revision & Clean Notes
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#77756F]">
                 Active recall question decks, intelligent SM-2 memory retention, and handwritten OCR conversion
               </p>
             </div>
           </div>
-          <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
+          <span className="text-xs font-bold text-[#9E6752] bg-[#FFF7EC] px-3 py-1 rounded-full border border-[#FED7A5]">
             Spaced Learning Suite
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Card 1: AI Flashcards */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-all">
+          <div className="bg-white rounded-3xl p-5 border border-[#F1F0ED] shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
             <div>
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                  <Layers className="w-4 h-4" />
+              <div className="flex items-start justify-between mb-3.5">
+                <div className="w-10 h-10 rounded-2xl bg-[#FFF7EC] text-[#2D4354] flex items-center justify-center group-hover:scale-105 transition-transform border border-[#FED7A5]">
+                  <Layers className="w-5 h-5" />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FAF8F5] text-[#2D4354] border border-slate-200">
                   AI Generator
                 </span>
               </div>
-              <h4 className="text-sm font-bold text-slate-900">
+              <h4 className="text-sm font-bold text-[#20212B] group-hover:text-[#2D4354] transition-colors">
                 AI Flashcards Generator
               </h4>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              <p className="text-xs text-[#77756F] mt-1.5 leading-relaxed">
                 Generate interactive active-recall question cards from this subject's uploaded slides or textbook chapters.
               </p>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+            <div className="mt-5 pt-3.5 border-t border-[#F1F0ED] flex items-center gap-2">
               <button
                 onClick={() => setFlashcardModalOpen(true)}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white font-semibold text-xs shadow-xs transition-all hover:scale-102 cursor-pointer"
               >
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-3.5 h-3.5 text-[#FED7A5]" />
                 <span>Generate Cards</span>
               </button>
               <Link
                 to={`/flashcards?subject=${id}`}
-                className="px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors"
+                className="px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-[#FAF8F5] text-[#20212B] font-semibold text-xs transition-colors"
               >
                 View Decks
               </Link>
@@ -468,65 +473,65 @@ const SubjectWorkspacePage = () => {
           </div>
 
           {/* Card 2: Spaced Repetition */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-all">
+          <div className="bg-white rounded-3xl p-5 border border-[#F1F0ED] shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
             <div>
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                  <RotateCcw className="w-4 h-4" />
+              <div className="flex items-start justify-between mb-3.5">
+                <div className="w-10 h-10 rounded-2xl bg-[#F1F0ED] text-[#73766A] flex items-center justify-center group-hover:scale-105 transition-transform border border-slate-200">
+                  <RotateCcw className="w-5 h-5" />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#F1F0ED] text-[#73766A] border border-slate-200">
                   SM-2 Algorithm
                 </span>
               </div>
-              <h4 className="text-sm font-bold text-slate-900">
+              <h4 className="text-sm font-bold text-[#20212B] group-hover:text-[#73766A] transition-colors">
                 Spaced Repetition System
               </h4>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              <p className="text-xs text-[#77756F] mt-1.5 leading-relaxed">
                 Schedule smart revision intervals (Again, Hard, Easy) to permanently retain high-yield subject concepts.
               </p>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-100">
+            <div className="mt-5 pt-3.5 border-t border-[#F1F0ED]">
               <Link
                 to={`/revision?subject=${id}`}
-                className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition-colors"
+                className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#73766A] hover:bg-[#534145] text-white font-semibold text-xs shadow-xs transition-all hover:scale-102"
               >
-                <Play className="w-3.5 h-3.5" />
+                <Play className="w-3.5 h-3.5 text-[#FED7A5]" />
                 <span>Start Subject Revision</span>
               </Link>
             </div>
           </div>
 
           {/* Card 3: Clean Notes Converter */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-all">
+          <div className="bg-white rounded-3xl p-5 border border-[#F1F0ED] shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
             <div>
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                  <FileEdit className="w-4 h-4" />
+              <div className="flex items-start justify-between mb-3.5">
+                <div className="w-10 h-10 rounded-2xl bg-[#FFF7EC] text-[#9E6752] flex items-center justify-center group-hover:scale-105 transition-transform border border-[#FED7A5]">
+                  <FileEdit className="w-5 h-5" />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]">
                   OCR & Formatter
                 </span>
               </div>
-              <h4 className="text-sm font-bold text-slate-900">
+              <h4 className="text-sm font-bold text-[#20212B] group-hover:text-[#9E6752] transition-colors">
                 Clean Notes Converter
               </h4>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              <p className="text-xs text-[#77756F] mt-1.5 leading-relaxed">
                 Upload handwritten notebook photos or scanned notes to transcribe, clean, and structure with formulas.
               </p>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+            <div className="mt-5 pt-3.5 border-t border-[#F1F0ED] flex items-center gap-2">
               <button
                 onClick={() => setCleanNotesModalOpen(true)}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#9E6752] hover:bg-[#534145] text-white font-semibold text-xs shadow-xs transition-all hover:scale-102 cursor-pointer"
               >
-                <UploadCloud className="w-3.5 h-3.5" />
+                <UploadCloud className="w-3.5 h-3.5 text-[#FED7A5]" />
                 <span>Upload Notes</span>
               </button>
               <Link
                 to={`/clean-notes?subject=${id}`}
-                className="px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors"
+                className="px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-[#FAF8F5] text-[#20212B] font-semibold text-xs transition-colors"
               >
                 View Notes
               </Link>
@@ -536,22 +541,22 @@ const SubjectWorkspacePage = () => {
       </div>
 
       {/* ACTIVE STUDY TOOLS ROADMAP & ASSESSMENT SUITE */}
-      <div className="space-y-4 pt-4 border-t border-slate-200/80">
+      <div className="space-y-4 pt-6 border-t border-slate-100">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-base font-bold text-[#202B42]">
                 Study Tools & Assessment Suite
               </h3>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#55BFA5]/15 text-[#55BFA5] border border-[#55BFA5]/25">
                 Assessment & Planning Suite
               </span>
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#77839A] mt-0.5">
               Interactive quizzes, mistake diagnostics, and automated exam readiness planning
             </p>
           </div>
-          <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full self-start sm:self-auto">
+          <span className="text-[11px] font-semibold text-[#55BFA5] bg-[#55BFA5]/10 border border-[#55BFA5]/25 px-3 py-1 rounded-full self-start sm:self-auto">
             Integrated Learning Loop
           </span>
         </div>
@@ -562,30 +567,30 @@ const SubjectWorkspacePage = () => {
             return (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 transition-all group"
+                className="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
-                  <div className="flex items-start justify-between mb-3">
-                    <div className={`w-9 h-9 rounded-xl ${mod.color} flex items-center justify-center`}>
-                      <Icon className="w-4 h-4" />
+                  <div className="flex items-start justify-between mb-3.5">
+                    <div className={`w-10 h-10 rounded-2xl ${mod.color} flex items-center justify-center group-hover:scale-105 transition-transform`}>
+                      <Icon className="w-5 h-5" />
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-[#77839A]">
                       {mod.badge}
                     </span>
                   </div>
 
-                  <h4 className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                  <h4 className="text-sm font-bold text-[#202B42] group-hover:text-[#4169E1] transition-colors">
                     {mod.title}
                   </h4>
-                  <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                  <p className="text-xs text-[#77839A] mt-1.5 leading-relaxed">
                     {mod.desc}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 space-y-2">
-                  <div className="flex items-center justify-between text-[11px] font-medium text-slate-400">
+                <div className="mt-5 pt-3.5 border-t border-slate-100 space-y-2.5">
+                  <div className="flex items-center justify-between text-[11px] font-medium text-[#77839A]">
                     <span>Status</span>
-                    <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                    <span className="text-[#55BFA5] font-semibold bg-[#55BFA5]/10 px-2 py-0.5 rounded-md border border-[#55BFA5]/20">
                       Active & Ready
                     </span>
                   </div>
@@ -593,7 +598,7 @@ const SubjectWorkspacePage = () => {
                   {mod.actionType === 'scroll' ? (
                     <button
                       onClick={() => scrollToSection(mod.target)}
-                      className="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                      className="w-full py-2.5 px-3 rounded-xl bg-[#202B42] hover:bg-[#4169E1] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs"
                     >
                       <span>{mod.actionLabel}</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -601,7 +606,7 @@ const SubjectWorkspacePage = () => {
                   ) : (
                     <Link
                       to={mod.to}
-                      className="w-full py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors text-center"
+                      className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#4169E1] to-[#3557C7] hover:from-[#3557C7] hover:to-[#2B47A8] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all text-center shadow-xs"
                     >
                       <span>{mod.actionLabel}</span>
                       <ChevronRight className="w-3.5 h-3.5" />

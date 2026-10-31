@@ -37,8 +37,8 @@ const MaterialsList = ({
   if (loading) {
     return (
       <div className="py-12 flex flex-col items-center justify-center gap-2">
-        <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-        <p className="text-xs text-slate-500">Loading study materials...</p>
+        <Loader2 className="w-6 h-6 animate-spin text-[#4169E1]" />
+        <p className="text-xs text-[#77839A] font-semibold">Loading study materials...</p>
       </div>
     );
   }
@@ -60,19 +60,19 @@ const MaterialsList = ({
         return (
           <div
             key={mat._id}
-            className={`p-4 rounded-2xl border transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+            className={`p-4.5 rounded-2xl border transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
               isSelected
-                ? 'bg-blue-50/70 border-blue-400 shadow-xs'
-                : 'bg-white border-slate-200/80 hover:border-blue-200 shadow-xs'
+                ? 'bg-blue-50/70 border-[#4169E1] shadow-[0_4px_18px_rgba(65,105,225,0.12)]'
+                : 'bg-white border-slate-200/70 hover:border-[#4169E1]/30 hover:shadow-xs'
             }`}
           >
             {/* Left: Icon & File Info */}
-            <div className="flex items-start gap-3 min-w-0">
+            <div className="flex items-start gap-3.5 min-w-0">
               <div
-                className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 font-bold ${
+                className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 font-bold shadow-2xs ${
                   mat.fileType === 'pdf'
-                    ? 'bg-red-50 text-red-600 border border-red-100'
-                    : 'bg-amber-50 text-amber-600 border border-amber-100'
+                    ? 'bg-rose-50 text-rose-500 border border-rose-200/60'
+                    : 'bg-amber-50 text-amber-600 border border-amber-200/60'
                 }`}
               >
                 <FileText className="w-5 h-5" />
@@ -80,10 +80,10 @@ const MaterialsList = ({
 
               <div className="min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h4 className="text-sm font-bold text-slate-900 truncate">
+                  <h4 className="text-sm font-extrabold text-[#202B42] truncate">
                     {mat.fileName}
                   </h4>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                  <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-[#77839A] border border-slate-200">
                     {mat.fileType?.toUpperCase()}
                   </span>
                   {mat.ocrRequired && (
@@ -93,7 +93,7 @@ const MaterialsList = ({
                   )}
                 </div>
 
-                <div className="flex items-center gap-3 text-[11px] text-slate-400 mt-1 flex-wrap">
+                <div className="flex items-center gap-3 text-[11px] text-[#77839A] mt-1 flex-wrap font-medium">
                   <span>{formatFileSize(mat.fileSize)}</span>
                   <span>•</span>
                   <span>
@@ -114,10 +114,10 @@ const MaterialsList = ({
               <button
                 type="button"
                 onClick={() => onSelectForAnalysis(mat)}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition-all ${
+                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-blue-600 text-white shadow-blue-500/20'
-                    : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:opacity-95 shadow-blue-500/20'
+                    ? 'bg-[#4169E1] text-white shadow-[0_4px_14px_rgba(65,105,225,0.3)]'
+                    : 'bg-gradient-to-r from-[#4169E1] to-[#9270DB] text-white hover:opacity-95 shadow-[0_4px_14px_rgba(65,105,225,0.25)] hover:scale-[1.02]'
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5" />
@@ -130,7 +130,7 @@ const MaterialsList = ({
                   href={mat.fileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                  className="p-2 rounded-xl text-[#77839A] hover:text-[#202B42] hover:bg-slate-100 transition-colors"
                   title="View / Download Document"
                 >
                   <ExternalLink className="w-4 h-4" />
@@ -142,11 +142,11 @@ const MaterialsList = ({
                 type="button"
                 onClick={() => handleDelete(mat._id, mat.fileName)}
                 disabled={deletingId === mat._id}
-                className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                className="p-2 rounded-xl text-[#77839A] hover:text-rose-600 hover:bg-rose-50 transition-colors disabled:opacity-50 cursor-pointer"
                 title="Delete Material"
               >
                 {deletingId === mat._id ? (
-                  <Loader2 className="w-4 h-4 animate-spin text-red-600" />
+                  <Loader2 className="w-4 h-4 animate-spin text-rose-600" />
                 ) : (
                   <Trash2 className="w-4 h-4" />
                 )}

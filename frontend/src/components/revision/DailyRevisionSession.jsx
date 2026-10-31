@@ -138,29 +138,29 @@ const DailyRevisionSession = ({
   return (
     <div className="max-w-2xl mx-auto space-y-5">
       {/* Session Header */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-3">
+      <div className="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-3.5">
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
-            <span className="font-extrabold text-slate-800">Spaced Revision</span>
+            <span className="font-extrabold text-[#202B42] text-sm">Spaced Revision</span>
             {currentItem.isOverdue && (
-              <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-red-100 text-red-700 border border-red-200">
+              <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-[#FF927E]/15 text-[#FF927E] border border-[#FF927E]/30">
                 Overdue
               </span>
             )}
             {currentItem.isDifficult && (
-              <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+              <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
                 Weak Concept
               </span>
             )}
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold text-slate-500">
-              Card <span className="font-bold text-blue-600">{currentIndex + 1}</span> of {total}
+            <span className="text-xs font-semibold text-[#77839A]">
+              Card <span className="font-bold text-[#4169E1]">{currentIndex + 1}</span> of {total}
             </span>
             <button
               onClick={onExitSession}
-              className="text-xs font-semibold text-slate-400 hover:text-slate-700"
+              className="text-xs font-semibold text-[#77839A] hover:text-[#202B42] transition-colors"
             >
               Exit
             </button>
@@ -168,26 +168,26 @@ const DailyRevisionSession = ({
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+        <div className="w-full bg-[#F5F7FC] h-2.5 rounded-full overflow-hidden p-0.5 border border-slate-100">
           <div
-            className="bg-indigo-600 h-full rounded-full transition-all duration-300"
+            className="bg-gradient-to-r from-[#4169E1] via-[#9270DB] to-[#55BFA5] h-full rounded-full transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
       </div>
 
       {/* Main Flashcard Card */}
-      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 space-y-6">
+      <div className="bg-white rounded-3xl border border-slate-100 shadow-md p-6 sm:p-9 space-y-6">
         {/* Card Metadata */}
-        <div className="flex items-center justify-between text-xs text-slate-400 border-b border-slate-100 pb-3">
+        <div className="flex items-center justify-between text-xs text-[#77839A] border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-700">{card.subjectId?.subjectName || 'Course'}</span>
+            <span className="font-bold text-[#202B42]">{card.subjectId?.subjectName || 'Course'}</span>
             <span>&bull;</span>
             <span>{card.chapter || 'Chapter Concept'}</span>
           </div>
           {card.topic && (
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded">
-              <Tag className="w-3 h-3 text-slate-400" />
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#77839A] bg-[#F5F7FC] px-2.5 py-0.5 rounded-full border border-slate-100">
+              <Tag className="w-3 h-3 text-[#9270DB]" />
               <span>{card.topic}</span>
             </span>
           )}
@@ -195,53 +195,53 @@ const DailyRevisionSession = ({
 
         {/* Question Area */}
         <div className="space-y-2">
-          <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-600">
+          <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[#4169E1]">
             <HelpCircle className="w-4 h-4" />
             <span>Question</span>
           </div>
-          <div className="text-lg sm:text-xl font-bold text-slate-900 leading-relaxed pt-1">
+          <div className="text-lg sm:text-xl font-extrabold text-[#202B42] leading-relaxed pt-1">
             <MathRenderer content={card.question} />
           </div>
         </div>
 
         {/* Answer Area (Revealed or Hidden) */}
         {!isAnswerRevealed ? (
-          <div className="pt-6 border-t border-slate-100 flex flex-col items-center justify-center py-8">
+          <div className="pt-6 border-t border-[#F1F0ED] flex flex-col items-center justify-center py-8">
             <button
               onClick={handleReveal}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-xs shadow-indigo-500/25 transition-all hover:scale-102"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#2D4354] hover:bg-[#20212B] text-white font-bold text-sm shadow-md transition-all hover:scale-102 cursor-pointer"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-4 h-4 text-[#FED7A5]" />
               <span>Reveal Answer</span>
             </button>
-            <p className="text-[11px] text-slate-400 mt-2">
+            <p className="text-[11px] text-[#77756F] mt-2 font-medium">
               Try to recall the answer before revealing
             </p>
           </div>
         ) : (
-          <div className="pt-6 border-t border-slate-100 space-y-4 animate-in fade-in duration-150">
+          <div className="pt-6 border-t border-[#F1F0ED] space-y-5 animate-in fade-in duration-150">
             <div className="space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-600">
-                <CheckCircle2 className="w-4 h-4" />
+              <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[#9E6752]">
+                <CheckCircle2 className="w-4 h-4 text-[#9E6752]" />
                 <span>Answer</span>
               </div>
-              <div className="text-base sm:text-lg font-semibold text-slate-900 leading-relaxed bg-emerald-50/40 p-4 rounded-2xl border border-emerald-100">
+              <div className="text-base sm:text-lg font-semibold text-[#20212B] leading-relaxed bg-[#FFF7EC] p-5 rounded-2xl border border-[#FED7A5]">
                 <MathRenderer content={card.answer} />
               </div>
             </div>
 
             {card.explanation && (
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600 leading-relaxed">
-                <span className="font-bold text-slate-800 block mb-1">Concept Explanation:</span>
+              <div className="p-4 rounded-2xl bg-white border border-[#FED7A5] text-xs text-[#77756F] leading-relaxed shadow-xs">
+                <span className="font-bold text-[#9E6752] block mb-1">Concept Explanation:</span>
                 <MathRenderer content={card.explanation} />
               </div>
             )}
 
             {/* SRS Recall Feedback Responses */}
-            <div className="pt-4 border-t border-slate-100 space-y-3">
+            <div className="pt-4 border-t border-[#F1F0ED] space-y-3.5">
               <div className="text-center">
-                <p className="text-xs font-bold text-slate-700">How well did you remember this?</p>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-xs font-bold text-[#20212B]">How well did you remember this?</p>
+                <p className="text-[11px] text-[#77756F] mt-0.5 font-medium">
                   Select a response to schedule the next review interval
                 </p>
               </div>
@@ -251,11 +251,11 @@ const DailyRevisionSession = ({
                 <button
                   onClick={() => handleReviewResponse('again')}
                   disabled={isSubmitting}
-                  className="p-3.5 rounded-2xl border border-amber-200 bg-amber-50/60 hover:bg-amber-100/80 text-amber-900 flex flex-col items-center justify-center transition-all hover:scale-102 disabled:opacity-50"
+                  className="p-4 rounded-2xl border border-[#9E6752]/40 bg-[#FFF7EC] hover:bg-[#FED7A5]/40 text-[#20212B] flex flex-col items-center justify-center transition-all hover:scale-102 hover:shadow-xs disabled:opacity-50 cursor-pointer"
                 >
-                  <span className="text-xs font-extrabold">Again</span>
-                  <span className="text-[11px] text-amber-700 font-medium mt-0.5">Could not recall</span>
-                  <span className="text-[10px] font-bold text-amber-800 bg-amber-200/60 px-2 py-0.5 rounded-full mt-1.5">
+                  <span className="text-xs font-extrabold text-[#9E6752]">Again</span>
+                  <span className="text-[11px] text-[#77756F] font-medium mt-0.5">Could not recall</span>
+                  <span className="text-[10px] font-bold text-[#9E6752] bg-[#FED7A5]/40 px-2.5 py-0.5 rounded-full mt-1.5 border border-[#FED7A5]">
                     10 minutes
                   </span>
                 </button>
@@ -264,11 +264,11 @@ const DailyRevisionSession = ({
                 <button
                   onClick={() => handleReviewResponse('hard')}
                   disabled={isSubmitting}
-                  className="p-3.5 rounded-2xl border border-blue-200 bg-blue-50/60 hover:bg-blue-100/80 text-blue-900 flex flex-col items-center justify-center transition-all hover:scale-102 disabled:opacity-50"
+                  className="p-4 rounded-2xl border border-[#73766A]/40 bg-[#F1F0ED] hover:bg-slate-200/80 text-[#20212B] flex flex-col items-center justify-center transition-all hover:scale-102 hover:shadow-xs disabled:opacity-50 cursor-pointer"
                 >
-                  <span className="text-xs font-extrabold">Hard</span>
-                  <span className="text-[11px] text-blue-700 font-medium mt-0.5">Recalled with effort</span>
-                  <span className="text-[10px] font-bold text-blue-800 bg-blue-200/60 px-2 py-0.5 rounded-full mt-1.5">
+                  <span className="text-xs font-extrabold text-[#73766A]">Hard</span>
+                  <span className="text-[11px] text-[#77756F] font-medium mt-0.5">Recalled with effort</span>
+                  <span className="text-[10px] font-bold text-[#73766A] bg-white px-2.5 py-0.5 rounded-full mt-1.5 border border-slate-200">
                     1 day
                   </span>
                 </button>
@@ -277,19 +277,19 @@ const DailyRevisionSession = ({
                 <button
                   onClick={() => handleReviewResponse('easy')}
                   disabled={isSubmitting}
-                  className="p-3.5 rounded-2xl border border-emerald-200 bg-emerald-50/60 hover:bg-emerald-100/80 text-emerald-900 flex flex-col items-center justify-center transition-all hover:scale-102 disabled:opacity-50"
+                  className="p-4 rounded-2xl border border-[#2D4354]/40 bg-[#FAF8F5] hover:bg-[#2D4354]/10 text-[#20212B] flex flex-col items-center justify-center transition-all hover:scale-102 hover:shadow-xs disabled:opacity-50 cursor-pointer"
                 >
-                  <span className="text-xs font-extrabold">Easy</span>
-                  <span className="text-[11px] text-emerald-700 font-medium mt-0.5">Recalled correctly</span>
-                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-full mt-1.5">
+                  <span className="text-xs font-extrabold text-[#2D4354]">Easy</span>
+                  <span className="text-[11px] text-[#77756F] font-medium mt-0.5">Recalled correctly</span>
+                  <span className="text-[10px] font-bold text-[#2D4354] bg-[#2D4354]/10 px-2.5 py-0.5 rounded-full mt-1.5 border border-[#2D4354]/20">
                     3+ days
                   </span>
                 </button>
               </div>
 
               {isSubmitting && (
-                <div className="flex items-center justify-center gap-2 text-xs text-slate-400 pt-1">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                <div className="flex items-center justify-center gap-2 text-xs text-[#77756F] pt-1">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#2D4354]" />
                   <span>Calculating next interval...</span>
                 </div>
               )}

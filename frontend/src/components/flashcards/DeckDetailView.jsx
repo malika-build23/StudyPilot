@@ -60,21 +60,21 @@ const DeckDetailView = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors self-start"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-[#77839A] hover:text-[#4169E1] transition-colors self-start"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Decks</span>
         </button>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
           {/* Tab switch */}
-          <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-1 text-xs font-semibold">
+          <div className="bg-white p-1 rounded-2xl border border-slate-200/80 flex items-center gap-1 text-xs font-semibold shadow-xs">
             <button
               onClick={() => setActiveTab('study')}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl transition-all ${
                 activeTab === 'study'
-                  ? 'bg-white text-blue-600 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-gradient-to-r from-[#4169E1] to-[#3557C7] text-white shadow-xs'
+                  : 'text-[#77839A] hover:text-[#202B42]'
               }`}
             >
               <Play className="w-3.5 h-3.5" />
@@ -82,10 +82,10 @@ const DeckDetailView = ({
             </button>
             <button
               onClick={() => setActiveTab('cards')}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl transition-all ${
                 activeTab === 'cards'
-                  ? 'bg-white text-blue-600 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-gradient-to-r from-[#4169E1] to-[#3557C7] text-white shadow-xs'
+                  : 'text-[#77839A] hover:text-[#202B42]'
               }`}
             >
               <List className="w-3.5 h-3.5" />
@@ -95,15 +95,15 @@ const DeckDetailView = ({
 
           <button
             onClick={handleCreateCard}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-[#F5F7FC] text-xs font-semibold text-[#202B42] transition-colors shadow-xs"
           >
-            <Plus className="w-3.5 h-3.5 text-blue-600" />
+            <Plus className="w-3.5 h-3.5 text-[#4169E1]" />
             <span>Add Card</span>
           </button>
 
           <button
             onClick={onOpenGenerator}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#4169E1] to-[#9270DB] hover:opacity-95 text-white text-xs font-semibold shadow-xs transition-all hover:scale-102"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>AI Generate More</span>
@@ -112,7 +112,7 @@ const DeckDetailView = ({
           {onStartRevision && (
             <button
               onClick={() => onStartRevision(deck._id)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#9270DB] to-[#7B58C9] hover:opacity-95 text-white text-xs font-semibold shadow-xs transition-all hover:scale-102"
             >
               <Play className="w-3.5 h-3.5" />
               <span>Revise with SRS</span>
@@ -122,7 +122,7 @@ const DeckDetailView = ({
           <button
             onClick={() => onDeleteDeck(deck._id)}
             title="Delete Deck"
-            className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 border border-slate-200 transition-colors"
+            className="p-2 rounded-xl text-[#77839A] hover:text-red-600 hover:bg-red-50 border border-slate-200 transition-colors"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
@@ -130,29 +130,30 @@ const DeckDetailView = ({
       </div>
 
       {/* Deck Overview Banner */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex flex-wrap items-center gap-2 mb-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+      <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#4169E1]/5 via-[#9270DB]/5 to-transparent rounded-full blur-2xl pointer-events-none" />
+        <div className="relative z-10">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#4169E1]/10 text-[#4169E1] border border-[#4169E1]/20">
               {deck.subjectId?.subjectName || 'Course Deck'}
             </span>
-            <span className="text-xs text-slate-400 flex items-center gap-1">
-              <BookOpen className="w-3.5 h-3.5" />
+            <span className="text-xs text-[#77839A] flex items-center gap-1 font-medium">
+              <BookOpen className="w-3.5 h-3.5 text-[#9270DB]" />
               {deck.chapter || 'All Chapters'}
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-[#202B42] tracking-tight">
             {deck.title}
           </h2>
           {deck.description && (
-            <p className="text-xs text-slate-500 mt-1 max-w-xl leading-relaxed">{deck.description}</p>
+            <p className="text-xs text-[#77839A] mt-1 max-w-xl leading-relaxed">{deck.description}</p>
           )}
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="text-right">
-            <div className="text-2xl font-extrabold text-blue-600">{flashcards.length}</div>
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+        <div className="flex items-center gap-3 shrink-0 relative z-10">
+          <div className="text-right bg-[#F5F7FC] px-4 py-2.5 rounded-2xl border border-slate-100">
+            <div className="text-2xl font-extrabold text-[#4169E1]">{flashcards.length}</div>
+            <div className="text-[10px] font-bold text-[#77839A] uppercase tracking-wider">
               Total Cards
             </div>
           </div>

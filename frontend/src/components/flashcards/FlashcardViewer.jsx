@@ -110,21 +110,21 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
   }
 
   const difficultyColors = {
-    EASY: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    MEDIUM: 'bg-blue-50 text-blue-700 border-blue-200',
-    HARD: 'bg-amber-50 text-amber-700 border-amber-200',
+    EASY: 'bg-[#55BFA5]/15 text-[#55BFA5] border-[#55BFA5]/30',
+    MEDIUM: 'bg-[#4169E1]/15 text-[#4169E1] border-[#4169E1]/30',
+    HARD: 'bg-[#FF927E]/20 text-[#FF927E] border-[#FF927E]/30',
   };
 
   return (
     <div className="max-w-2xl mx-auto space-y-5 select-none">
       {/* Top Header & Progress Bar */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-3">
+      <div className="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-3.5">
         <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-800 truncate max-w-[220px]">{title}</span>
+          <div className="flex items-center gap-2.5">
+            <span className="font-bold text-[#202B42] truncate max-w-[220px] text-sm">{title}</span>
             <span
-              className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${
-                difficultyColors[currentCard.difficulty] || difficultyColors.MEDIUM
+              className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                difficultyColors[currentCard.difficulty] || 'bg-[#FFF7EC] text-[#9E6752] border-[#FED7A5]'
               }`}
             >
               {currentCard.difficulty || 'MEDIUM'}
@@ -132,13 +132,13 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="font-semibold text-slate-500 text-xs">
-              Card <span className="text-blue-600 font-bold">{currentIndex + 1}</span> of {total}
+            <span className="font-semibold text-[#77756F] text-xs">
+              Card <span className="text-[#2D4354] font-extrabold">{currentIndex + 1}</span> of {total}
             </span>
             <button
               onClick={handleRestart}
               title="Restart from beginning"
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              className="p-1.5 rounded-xl text-[#77756F] hover:text-[#20212B] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
             >
               <RotateCcw className="w-4 h-4" />
             </button>
@@ -146,9 +146,9 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
         </div>
 
         {/* Progress line */}
-        <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+        <div className="w-full bg-[#F1F0ED] h-2.5 rounded-full overflow-hidden p-0.5 border border-[#F1F0ED]">
           <div
-            className="bg-blue-600 h-full rounded-full transition-all duration-300 ease-out"
+            className="bg-gradient-to-r from-[#2D4354] via-[#9E6752] to-[#FED7A5] h-full rounded-full transition-all duration-300 ease-out"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -156,13 +156,13 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
 
       {/* 3D Flip Card Container */}
       <div
-        className="w-full min-h-[340px] cursor-pointer perspective"
+        className="w-full min-h-[360px] cursor-pointer"
         onClick={handleFlip}
         style={{ perspective: '1000px' }}
       >
         <div
-          className={`relative w-full min-h-[340px] rounded-3xl transition-transform duration-500 transform-style-preserve-3d shadow-sm hover:shadow-md border border-slate-200/90 ${
-            isFlipped ? 'rotate-y-180 bg-indigo-50/40' : 'bg-white'
+          className={`relative w-full min-h-[360px] rounded-3xl transition-transform duration-500 shadow-[0_8px_30px_rgb(45,67,84,0.08)] hover:shadow-[0_16px_36px_rgb(45,67,84,0.14)] border border-[#F1F0ED] ${
+            isFlipped ? 'bg-gradient-to-br from-white via-[#FFF7EC]/40 to-[#FED7A5]/10' : 'bg-white'
           }`}
           style={{
             transformStyle: 'preserve-3d',
@@ -171,35 +171,35 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
         >
           {/* FRONT FACE (Question) */}
           <div
-            className="absolute inset-0 p-8 flex flex-col justify-between backface-hidden rounded-3xl"
+            className="absolute inset-0 p-8 sm:p-10 flex flex-col justify-between rounded-3xl"
             style={{ backfaceVisibility: 'hidden' }}
           >
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#2D4354] bg-[#FAF8F5] px-3 py-1 rounded-full border border-[#2D4354]/20">
                   <HelpCircle className="w-3.5 h-3.5" />
                   <span>Question</span>
                 </span>
 
                 {currentCard.topic && (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-400">
-                    <Tag className="w-3 h-3" />
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-[#77756F] bg-[#FAF8F5] px-2.5 py-1 rounded-full border border-slate-200">
+                    <Tag className="w-3 h-3 text-[#73766A]" />
                     <span>{currentCard.topic}</span>
                   </span>
                 )}
               </div>
 
-              <div className="py-4 text-lg sm:text-xl font-bold text-slate-900 leading-relaxed">
+              <div className="py-4 text-xl sm:text-2xl font-extrabold text-[#20212B] leading-relaxed">
                 <MathRenderer content={currentCard.question} />
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5" />
+            <div className="pt-4 border-t border-[#F1F0ED] flex items-center justify-between text-xs text-[#77756F]">
+              <span className="flex items-center gap-1.5 font-medium">
+                <BookOpen className="w-3.5 h-3.5 text-[#2D4354]" />
                 <span>{currentCard.chapter || 'Chapter Concept'}</span>
               </span>
-              <span className="inline-flex items-center gap-1 text-blue-600 font-semibold bg-blue-50 px-2.5 py-1 rounded-lg">
+              <span className="inline-flex items-center gap-1.5 text-[#2D4354] font-semibold bg-[#FAF8F5] px-3 py-1 rounded-xl border border-slate-200">
                 <RotateCw className="w-3.5 h-3.5" />
                 <span>Click or Space to flip</span>
               </span>
@@ -208,7 +208,7 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
 
           {/* BACK FACE (Answer) */}
           <div
-            className="absolute inset-0 p-8 flex flex-col justify-between backface-hidden rounded-3xl rotate-y-180 bg-gradient-to-br from-indigo-50/60 to-blue-50/30"
+            className="absolute inset-0 p-8 sm:p-10 flex flex-col justify-between rounded-3xl bg-gradient-to-br from-white via-[#FFF7EC] to-[#FED7A5]/20"
             style={{
               backfaceVisibility: 'hidden',
               transform: 'rotateY(180deg)',
@@ -216,33 +216,33 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
           >
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#9E6752] bg-[#FFF7EC] px-3 py-1 rounded-full border border-[#FED7A5]">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Answer</span>
                 </span>
 
                 {currentCard.sourceReference && (
-                  <span className="text-[11px] font-medium text-slate-400 bg-white/80 px-2 py-0.5 rounded border border-slate-100">
+                  <span className="text-[11px] font-medium text-[#77756F] bg-white px-2.5 py-0.5 rounded-full border border-slate-200">
                     Ref: {currentCard.sourceReference}
                   </span>
                 )}
               </div>
 
-              <div className="py-2 text-base sm:text-lg font-semibold text-slate-900 leading-relaxed">
+              <div className="py-2 text-lg sm:text-xl font-bold text-[#20212B] leading-relaxed">
                 <MathRenderer content={currentCard.answer} />
               </div>
 
               {currentCard.explanation && (
-                <div className="mt-4 p-3.5 rounded-2xl bg-white/90 border border-indigo-100/80 text-xs text-slate-600 leading-relaxed">
-                  <span className="font-bold text-indigo-900 block mb-1">Key Context / Explanation:</span>
+                <div className="mt-4 p-4 rounded-2xl bg-white/95 border border-[#FED7A5] text-xs text-[#77756F] leading-relaxed shadow-xs">
+                  <span className="font-bold text-[#9E6752] block mb-1">Key Context / Explanation:</span>
                   <MathRenderer content={currentCard.explanation} />
                 </div>
               )}
             </div>
 
-            <div className="pt-4 border-t border-slate-200/50 flex items-center justify-between text-xs text-slate-400">
+            <div className="pt-4 border-t border-[#FED7A5]/60 flex items-center justify-between text-xs text-[#77756F]">
               <span>{currentCard.topic || 'Core Concept'}</span>
-              <span className="text-indigo-600 font-semibold flex items-center gap-1">
+              <span className="text-[#9E6752] font-semibold flex items-center gap-1.5">
                 <RotateCw className="w-3.5 h-3.5" />
                 <span>Click to flip back</span>
               </span>
@@ -256,7 +256,7 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
         <button
           onClick={handlePrev}
           disabled={currentIndex === 0}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#FAF8F5] text-[#20212B] font-semibold text-xs disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-xs cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Previous Card</span>
@@ -264,7 +264,7 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
 
         <button
           onClick={handleFlip}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold text-xs transition-colors"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5] hover:bg-[#FED7A5]/40 font-bold text-xs transition-colors cursor-pointer"
         >
           <RotateCw className="w-4 h-4" />
           <span>{isFlipped ? 'Show Question' : 'Reveal Answer'}</span>
@@ -272,7 +272,7 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
 
         <button
           onClick={handleNext}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-all shadow-xs"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white font-semibold text-xs transition-all shadow-sm hover:scale-102 cursor-pointer"
         >
           <span>{currentIndex === total - 1 ? 'Finish Deck' : 'Next Card'}</span>
           <ChevronRight className="w-4 h-4" />
@@ -280,10 +280,10 @@ const FlashcardViewer = ({ flashcards = [], title = 'Flashcard Revision', onFini
       </div>
 
       {/* Keyboard Shortcuts Hint */}
-      <div className="text-center text-[11px] text-slate-400 pt-1">
-        Keyboard Shortcuts: <kbd className="px-1.5 py-0.5 rounded bg-slate-100 font-mono text-[10px]">Space</kbd> Flip card &bull;{' '}
-        <kbd className="px-1.5 py-0.5 rounded bg-slate-100 font-mono text-[10px]">&larr;</kbd> Previous &bull;{' '}
-        <kbd className="px-1.5 py-0.5 rounded bg-slate-100 font-mono text-[10px]">&rarr;</kbd> Next
+      <div className="text-center text-[11px] text-[#77756F] pt-1">
+        Keyboard Shortcuts: <kbd className="px-2 py-0.5 rounded-md bg-white border border-slate-200 font-mono text-[10px] text-[#20212B]">Space</kbd> Flip card &bull;{' '}
+        <kbd className="px-2 py-0.5 rounded-md bg-white border border-slate-200 font-mono text-[10px] text-[#20212B]">&larr;</kbd> Previous &bull;{' '}
+        <kbd className="px-2 py-0.5 rounded-md bg-white border border-slate-200 font-mono text-[10px] text-[#202B42]">&rarr;</kbd> Next
       </div>
     </div>
   );

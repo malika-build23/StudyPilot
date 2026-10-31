@@ -117,8 +117,8 @@ const ExamCountdown = ({
 
   if (compact) {
     return (
-      <div className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
-        <Clock className="w-3 h-3 text-blue-500" />
+      <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#4169E1] bg-[#4169E1]/10 px-3 py-1 rounded-full border border-[#4169E1]/20">
+        <Clock className="w-3 h-3 text-[#4169E1]" />
         <span>
           {days > 0 ? `${days}d ` : ''}
           {pad(hours)}:{pad(minutes)}:{pad(seconds)}
@@ -128,36 +128,36 @@ const ExamCountdown = ({
   }
 
   return (
-    <div className="flex items-center gap-1.5 text-slate-800">
-      <div className="flex flex-col items-center justify-center min-w-[36px] px-2 py-1 bg-white rounded-lg border border-slate-200/80 shadow-2xs">
-        <span className="text-sm font-extrabold text-blue-700 leading-tight">
+    <div className="flex items-center gap-1.5 text-[#202B42]">
+      <div className="flex flex-col items-center justify-center min-w-[38px] px-2.5 py-1.5 bg-white rounded-xl border border-slate-100 shadow-xs">
+        <span className="text-sm font-black text-[#4169E1] leading-tight">
           {pad(days)}
         </span>
-        <span className="text-[9px] uppercase font-bold text-slate-400">Days</span>
+        <span className="text-[9px] uppercase font-bold text-[#77839A]">Days</span>
       </div>
       <span className="text-slate-300 font-bold">:</span>
 
-      <div className="flex flex-col items-center justify-center min-w-[36px] px-2 py-1 bg-white rounded-lg border border-slate-200/80 shadow-2xs">
-        <span className="text-sm font-extrabold text-blue-700 leading-tight">
+      <div className="flex flex-col items-center justify-center min-w-[38px] px-2.5 py-1.5 bg-white rounded-xl border border-slate-100 shadow-xs">
+        <span className="text-sm font-black text-[#4169E1] leading-tight">
           {pad(hours)}
         </span>
-        <span className="text-[9px] uppercase font-bold text-slate-400">Hours</span>
+        <span className="text-[9px] uppercase font-bold text-[#77839A]">Hours</span>
       </div>
       <span className="text-slate-300 font-bold">:</span>
 
-      <div className="flex flex-col items-center justify-center min-w-[36px] px-2 py-1 bg-white rounded-lg border border-slate-200/80 shadow-2xs">
-        <span className="text-sm font-extrabold text-blue-700 leading-tight">
+      <div className="flex flex-col items-center justify-center min-w-[38px] px-2.5 py-1.5 bg-white rounded-xl border border-slate-100 shadow-xs">
+        <span className="text-sm font-black text-[#4169E1] leading-tight">
           {pad(minutes)}
         </span>
-        <span className="text-[9px] uppercase font-bold text-slate-400">Mins</span>
+        <span className="text-[9px] uppercase font-bold text-[#77839A]">Mins</span>
       </div>
       <span className="text-slate-300 font-bold">:</span>
 
-      <div className="flex flex-col items-center justify-center min-w-[36px] px-2 py-1 bg-white rounded-lg border border-slate-200/80 shadow-2xs">
-        <span className="text-sm font-extrabold text-indigo-600 leading-tight">
+      <div className="flex flex-col items-center justify-center min-w-[38px] px-2.5 py-1.5 bg-white rounded-xl border border-slate-100 shadow-xs">
+        <span className="text-sm font-black text-[#9270DB] leading-tight">
           {pad(seconds)}
         </span>
-        <span className="text-[9px] uppercase font-bold text-slate-400">Secs</span>
+        <span className="text-[9px] uppercase font-bold text-[#77839A]">Secs</span>
       </div>
     </div>
   );

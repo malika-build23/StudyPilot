@@ -94,15 +94,15 @@ const RevisionPage = () => {
     <div className="space-y-8 animate-in fade-in duration-150">
       {/* Header */}
       <div>
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        <div className="flex items-center gap-2.5">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#20212B] tracking-tight">
             Spaced Repetition
           </h1>
-          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+          <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]">
             SM-2 Algorithm
           </span>
         </div>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        <p className="text-xs sm:text-sm text-[#77756F] mt-1 font-medium">
           Intelligent memory retention schedule tailored to your recall performance
         </p>
       </div>

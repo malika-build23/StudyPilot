@@ -25,24 +25,28 @@ import {
 } from 'lucide-react';
 
 const CATEGORY_COLORS = {
-  'Mid Semester Papers': 'bg-amber-50 text-amber-700 border-amber-200',
-  'End Semester Papers': 'bg-rose-50 text-rose-700 border-rose-200',
-  'Previous Year Questions': 'bg-purple-50 text-purple-700 border-purple-200',
-  'Textbooks': 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  'Reference Books': 'bg-teal-50 text-teal-700 border-teal-200',
-  'Book Notes': 'bg-indigo-50 text-indigo-700 border-indigo-200',
-  'Lecture Notes': 'bg-blue-50 text-blue-700 border-blue-200',
-  'Assignments': 'bg-cyan-50 text-cyan-700 border-cyan-200',
-  'Lab Manuals': 'bg-orange-50 text-orange-700 border-orange-200',
-  'Practical Files': 'bg-yellow-50 text-yellow-800 border-yellow-200',
-  'Formula Sheets': 'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200',
-  'Other Resources': 'bg-slate-100 text-slate-700 border-slate-200',
+  'Mid Semester Papers': 'bg-[#FED7A5]/35 text-[#9E6752] border-[#FED7A5]',
+  'End Semester Papers': 'bg-[#FFF7EC] text-[#9E6752] border-[#9E6752]/30',
+  'Previous Year Questions': 'bg-[#534145]/10 text-[#534145] border-[#534145]/25',
+  'Textbooks': 'bg-[#2D4354]/10 text-[#2D4354] border-[#2D4354]/25',
+  'Reference Books': 'bg-[#73766A]/15 text-[#73766A] border-[#73766A]/25',
+  'Book Notes': 'bg-[#FFF7EC] text-[#2D4354] border-[#2D4354]/20',
+  'Lecture Notes': 'bg-[#2D4354]/10 text-[#2D4354] border-[#2D4354]/30',
+  'Assignments': 'bg-[#73766A]/15 text-[#73766A] border-[#73766A]/30',
+  'Lab Manuals': 'bg-[#FED7A5]/35 text-[#9E6752] border-[#FED7A5]',
+  'Practical Files': 'bg-[#534145]/10 text-[#534145] border-[#534145]/25',
+  'Formula Sheets': 'bg-[#FED7A5]/40 text-[#9E6752] border-[#9E6752]/30',
+  'Other Resources': 'bg-[#FAF8F5] text-[#77756F] border-[#73766A]/20',
 };
 
 const getFileIcon = (mimeType = '', fileName = '') => {
   const lower = fileName.toLowerCase();
   if (lower.endsWith('.pdf') || mimeType.includes('pdf')) {
-    return <FileText className="w-5 h-5 text-red-500 shrink-0" />;
+    return (
+      <div className="w-9 h-9 rounded-xl bg-[#FFF7EC] text-[#9E6752] border border-[#9E6752]/30 flex items-center justify-center shrink-0 shadow-2xs">
+        <FileText className="w-5 h-5 text-[#9E6752]" />
+      </div>
+    );
   }
   if (
     lower.endsWith('.docx') ||
@@ -50,14 +54,22 @@ const getFileIcon = (mimeType = '', fileName = '') => {
     mimeType.includes('word') ||
     mimeType.includes('document')
   ) {
-    return <FileText className="w-5 h-5 text-blue-500 shrink-0" />;
+    return (
+      <div className="w-9 h-9 rounded-xl bg-[#2D4354]/10 text-[#2D4354] border border-[#2D4354]/25 flex items-center justify-center shrink-0 shadow-2xs">
+        <FileText className="w-5 h-5 text-[#2D4354]" />
+      </div>
+    );
   }
   if (
     lower.endsWith('.xlsx') ||
     lower.endsWith('.csv') ||
     mimeType.includes('sheet')
   ) {
-    return <FileSpreadsheet className="w-5 h-5 text-emerald-500 shrink-0" />;
+    return (
+      <div className="w-9 h-9 rounded-xl bg-[#73766A]/15 text-[#73766A] border border-[#73766A]/25 flex items-center justify-center shrink-0 shadow-2xs">
+        <FileSpreadsheet className="w-5 h-5 text-[#73766A]" />
+      </div>
+    );
   }
   if (
     lower.endsWith('.py') ||
@@ -65,9 +77,17 @@ const getFileIcon = (mimeType = '', fileName = '') => {
     lower.endsWith('.cpp') ||
     lower.endsWith('.java')
   ) {
-    return <FileCode className="w-5 h-5 text-indigo-500 shrink-0" />;
+    return (
+      <div className="w-9 h-9 rounded-xl bg-[#534145]/10 text-[#534145] border border-[#534145]/25 flex items-center justify-center shrink-0 shadow-2xs">
+        <FileCode className="w-5 h-5 text-[#534145]" />
+      </div>
+    );
   }
-  return <File className="w-5 h-5 text-slate-400 shrink-0" />;
+  return (
+    <div className="w-9 h-9 rounded-xl bg-[#FAF8F5] text-[#77756F] border border-[#73766A]/20 flex items-center justify-center shrink-0 shadow-2xs">
+      <File className="w-5 h-5 text-[#77756F]" />
+    </div>
+  );
 };
 
 const SmartResourceFinder = () => {
@@ -484,24 +504,24 @@ const SmartResourceFinder = () => {
   const hasConnectedFolder = connection && connection.folderId;
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-xs hover:border-blue-200 transition-all space-y-6">
+    <div className="bg-white rounded-3xl border border-[#73766A]/15 p-6 sm:p-8 shadow-[0_4px_24px_-2px_rgba(45,67,84,0.04)] hover:border-[#2D4354]/30 transition-all space-y-6">
       {/* 1. Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#73766A]/10">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#2D4354] via-[#534145] to-[#9E6752] text-[#FED7A5] flex items-center justify-center shadow-md shadow-[#2D4354]/20 shrink-0">
             <FolderSearch className="w-6 h-6" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+              <h3 className="text-lg sm:text-xl font-black text-[#20212B] tracking-tight">
                 Smart Resource Finder
               </h3>
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
-                <Sparkles className="w-3 h-3 text-blue-600" />
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#2D4354] bg-[#FED7A5]/30 px-2.5 py-0.5 rounded-full border border-[#FED7A5]">
+                <Sparkles className="w-3 h-3 text-[#9E6752]" />
                 Drive AI
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-[#77756F] mt-0.5 font-medium">
               Connect Your Academic Resources & Search Instantly
             </p>
           </div>
@@ -513,11 +533,11 @@ const SmartResourceFinder = () => {
             <button
               onClick={handleSync}
               disabled={syncing || isIndexing}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs transition-all disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[#73766A]/20 hover:border-[#2D4354]/40 bg-white hover:bg-[#FAF8F5] text-[#20212B] text-xs font-semibold shadow-2xs transition-all disabled:opacity-50 cursor-pointer"
               title="Check Google Drive for new or updated documents"
             >
               <RefreshCw
-                className={`w-3.5 h-3.5 ${syncing || isIndexing ? 'animate-spin text-blue-600' : 'text-slate-500'}`}
+                className={`w-3.5 h-3.5 ${syncing || isIndexing ? 'animate-spin text-[#9E6752]' : 'text-[#77756F]'}`}
               />
               <span>{syncing || isIndexing ? 'Syncing...' : 'Refresh Resources'}</span>
             </button>
@@ -525,7 +545,7 @@ const SmartResourceFinder = () => {
             <button
               onClick={handleDisconnect}
               disabled={disconnecting}
-              className="p-2 rounded-xl border border-slate-200 hover:border-red-200 text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+              className="p-2 rounded-xl border border-[#73766A]/20 hover:border-red-200 text-[#77756F] hover:text-red-600 hover:bg-red-50 transition-colors"
               title="Disconnect Google Drive folder"
             >
               <Unlink className="w-4 h-4" />
@@ -536,14 +556,14 @@ const SmartResourceFinder = () => {
 
       {/* Notifications */}
       {successNotice && (
-        <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center justify-between gap-2 animate-in fade-in">
+        <div className="p-3.5 rounded-2xl bg-[#FFF7EC] border border-[#FED7A5] text-[#2D4354] text-xs font-medium flex items-center justify-between gap-2 animate-in fade-in">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 shrink-0 text-[#9E6752]" />
             <span>{successNotice}</span>
           </div>
           <button
             onClick={() => setSuccessNotice('')}
-            className="text-emerald-700 hover:text-emerald-900"
+            className="text-[#77756F] hover:text-[#20212B]"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -551,14 +571,14 @@ const SmartResourceFinder = () => {
       )}
 
       {errorNotice && (
-        <div className="p-3.5 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-center justify-between gap-2 animate-in fade-in">
+        <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-center justify-between gap-2 animate-in fade-in">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
             <span>{errorNotice}</span>
           </div>
           <button
             onClick={() => setErrorNotice('')}
-            className="text-red-700 hover:text-red-900"
+            className="text-rose-700 hover:text-rose-900"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -568,13 +588,13 @@ const SmartResourceFinder = () => {
       {/* 2. Disconnected / Link Input Form */}
       {!hasConnectedFolder ? (
         <div className="space-y-5">
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#77756F] leading-relaxed">
             Connect your Google Drive folder to find notes, books, question papers and other academic resources instantly. No more digging through nested folders or losing semester study materials!
           </p>
 
           <form onSubmit={handleConnect} className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#77756F]">
                 <Link2 className="w-4 h-4" />
               </div>
               <input
@@ -583,23 +603,23 @@ const SmartResourceFinder = () => {
                 value={folderUrl}
                 onChange={(e) => setFolderUrl(e.target.value)}
                 placeholder="Paste your Google Drive folder link (e.g. https://drive.google.com/drive/folders/...)"
-                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all shadow-2xs"
+                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-[#73766A]/20 focus:border-[#2D4354] focus:ring-4 focus:ring-[#2D4354]/10 text-xs sm:text-sm text-[#20212B] placeholder:text-[#77756F]/60 outline-none transition-all shadow-2xs"
               />
             </div>
 
             <button
               type="submit"
               disabled={connecting}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-blue-500/20 hover:scale-101 active:scale-99 transition-all disabled:opacity-50 cursor-pointer shrink-0"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#2D4354] hover:bg-[#20212B] text-white font-semibold text-xs sm:text-sm shadow-md shadow-[#2D4354]/20 hover:scale-101 active:scale-99 transition-all disabled:opacity-50 cursor-pointer shrink-0"
             >
               {connecting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin text-[#FED7A5]" />
                   <span>Connecting Drive...</span>
                 </>
               ) : (
                 <>
-                  <FolderSearch className="w-4 h-4" />
+                  <FolderSearch className="w-4 h-4 text-[#FED7A5]" />
                   <span>Connect Drive</span>
                 </>
               )}
@@ -608,25 +628,25 @@ const SmartResourceFinder = () => {
 
           {/* Value Props Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100/80 text-center">
+            <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#73766A]/15 text-center">
               <span className="block text-base mb-1">⚡</span>
-              <p className="text-[11px] font-bold text-slate-700">Instant Search</p>
-              <p className="text-[10px] text-slate-400 mt-0.5">Find files by keyword</p>
+              <p className="text-[11px] font-bold text-[#20212B]">Instant Search</p>
+              <p className="text-[10px] text-[#77756F] mt-0.5">Find files by keyword</p>
             </div>
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100/80 text-center">
+            <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#73766A]/15 text-center">
               <span className="block text-base mb-1">📂</span>
-              <p className="text-[11px] font-bold text-slate-700">Recursive Scanning</p>
-              <p className="text-[10px] text-slate-400 mt-0.5">All nested subfolders</p>
+              <p className="text-[11px] font-bold text-[#20212B]">Recursive Scanning</p>
+              <p className="text-[10px] text-[#77756F] mt-0.5">All nested subfolders</p>
             </div>
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100/80 text-center">
+            <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#73766A]/15 text-center">
               <span className="block text-base mb-1">🏷️</span>
-              <p className="text-[11px] font-bold text-slate-700">Auto Classification</p>
-              <p className="text-[10px] text-slate-400 mt-0.5">PYQs, notes, books</p>
+              <p className="text-[11px] font-bold text-[#20212B]">Auto Classification</p>
+              <p className="text-[10px] text-[#77756F] mt-0.5">PYQs, notes, books</p>
             </div>
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100/80 text-center">
+            <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#73766A]/15 text-center">
               <span className="block text-base mb-1">📑</span>
-              <p className="text-[11px] font-bold text-slate-700">Direct File Links</p>
-              <p className="text-[10px] text-slate-400 mt-0.5">Open exact Drive file</p>
+              <p className="text-[11px] font-bold text-[#20212B]">Direct File Links</p>
+              <p className="text-[10px] text-[#77756F] mt-0.5">Open exact Drive file</p>
             </div>
           </div>
         </div>
@@ -634,22 +654,22 @@ const SmartResourceFinder = () => {
         /* 3. Connected Folder & Search Workspace */
         <div className="space-y-6">
           {/* Active Folder Badge & Status */}
-          <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 rounded-2xl bg-[#FED7A5]/25 border border-[#FED7A5] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-10 h-10 rounded-xl bg-[#2D4354] text-[#FED7A5] flex items-center justify-center shrink-0 shadow-xs">
                 <FolderTree className="w-5 h-5" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                  <p className="text-xs sm:text-sm font-bold text-[#20212B] truncate">
                     {connection.folderName || 'Academic Resources Folder'}
                   </p>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                    <ShieldCheck className="w-3 h-3" />
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#2D4354] bg-white px-2 py-0.5 rounded-full border border-[#73766A]/20">
+                    <ShieldCheck className="w-3 h-3 text-[#73766A]" />
                     Connected
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
+                <p className="text-[11px] text-[#77756F] flex items-center gap-2 mt-0.5">
                   <span>{connection.totalIndexedResources ?? resources.length} files indexed</span>
                   {connection.googleEmail && (
                     <>
@@ -678,8 +698,8 @@ const SmartResourceFinder = () => {
 
             {/* Indexing status indicator */}
             {isIndexing && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium animate-pulse">
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-600" />
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#FFF7EC] border border-[#FED7A5] text-[#9E6752] text-xs font-medium animate-pulse">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#9E6752]" />
                 <span>
                   {connection.indexingProgress?.currentStage || 'Scanning Drive resources...'}
                 </span>
@@ -689,8 +709,8 @@ const SmartResourceFinder = () => {
 
           {/* Search Bar */}
           <div className="space-y-3">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#77756F] group-focus-within:text-[#2D4354] transition-colors">
                 <Search className="w-4 h-4" />
               </div>
               <input
@@ -698,12 +718,12 @@ const SmartResourceFinder = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder='Search academic resources (e.g. "EMT mid sem paper", "Maths book", "Digital notes")...'
-                className="w-full pl-11 pr-10 py-3 rounded-2xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all shadow-xs"
+                className="w-full pl-11 pr-10 py-3.5 rounded-2xl border border-[#73766A]/20 focus:border-[#2D4354] focus:ring-4 focus:ring-[#2D4354]/10 text-xs sm:text-sm font-medium text-[#20212B] placeholder:text-[#77756F]/60 outline-none transition-all shadow-xs bg-white"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#77756F] hover:text-[#20212B]"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -712,17 +732,17 @@ const SmartResourceFinder = () => {
 
             {/* Category Filter Chips */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mr-1 shrink-0">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#77756F] mr-1 shrink-0">
                 Category:
               </span>
               {['All', ...new Set(['Mid Semester Papers', 'Previous Year Questions', 'Lecture Notes', 'Textbooks', 'Assignments', 'Lab Manuals', ...availableCategories])].map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1 rounded-full font-semibold text-xs transition-all whitespace-nowrap cursor-pointer shrink-0 ${
+                  className={`px-3.5 py-1.5 rounded-full font-bold text-xs transition-all whitespace-nowrap cursor-pointer shrink-0 ${
                     selectedCategory === cat
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'bg-slate-100 hover:bg-slate-200/80 text-slate-600'
+                      ? 'bg-[#2D4354] text-[#FED7A5] shadow-xs'
+                      : 'bg-[#FAF8F5] hover:bg-[#FED7A5]/25 text-[#77756F]'
                   }`}
                 >
                   {cat}
@@ -733,7 +753,7 @@ const SmartResourceFinder = () => {
             {/* Subject Filter (if multiple subjects detected) */}
             {availableSubjects.length > 0 && (
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mr-1 shrink-0">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#77756F] mr-1 shrink-0">
                   Subject:
                 </span>
                 {['All', ...availableSubjects].map((sub) => (
@@ -742,8 +762,8 @@ const SmartResourceFinder = () => {
                     onClick={() => setSelectedSubject(sub)}
                     className={`px-2.5 py-0.5 rounded-full font-medium text-[11px] transition-all whitespace-nowrap cursor-pointer shrink-0 ${
                       selectedSubject === sub
-                        ? 'bg-slate-800 text-white'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200'
+                        ? 'bg-[#2D4354] text-white'
+                        : 'bg-[#FAF8F5] hover:bg-[#FED7A5]/25 text-[#77756F] border border-[#73766A]/20'
                     }`}
                   >
                     {sub}
@@ -756,10 +776,10 @@ const SmartResourceFinder = () => {
           {/* 4. Results Section */}
           <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-bold text-slate-700">
+              <p className="text-xs font-bold text-[#20212B]">
                 {searching ? (
                   <span className="flex items-center gap-1.5">
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#2D4354]" />
                     Searching matching resources...
                   </span>
                 ) : (
@@ -773,7 +793,7 @@ const SmartResourceFinder = () => {
                     setSelectedCategory('All');
                     setSelectedSubject('All');
                   }}
-                  className="text-[11px] text-blue-600 hover:underline font-semibold"
+                  className="text-[11px] text-[#2D4354] hover:underline font-semibold"
                 >
                   Clear filters
                 </button>
@@ -790,38 +810,38 @@ const SmartResourceFinder = () => {
                   return (
                     <div
                       key={item._id || item.driveFileId}
-                      className="p-4 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-xs transition-all flex flex-col justify-between group"
+                      className="p-4.5 rounded-2xl border border-[#73766A]/15 bg-white hover:border-[#2D4354]/40 shadow-xs hover:shadow-[0_10px_28px_-4px_rgba(45,67,84,0.1)] transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between group"
                     >
-                      <div className="space-y-2">
+                      <div className="space-y-2.5">
                         {/* Top Metadata Badges */}
                         <div className="flex flex-wrap items-center gap-1.5">
                           <span
-                            className={`inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-md border ${categoryStyle}`}
+                            className={`inline-flex items-center text-[10px] font-bold px-2.5 py-0.5 rounded-md border ${categoryStyle}`}
                           >
                             {item.resourceType || 'Resource'}
                           </span>
 
                           {item.subject && (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
-                              <BookOpen className="w-3 h-3 text-slate-500" />
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#20212B] bg-[#FAF8F5] px-2 py-0.5 rounded-md border border-[#73766A]/20">
+                              <BookOpen className="w-3 h-3 text-[#2D4354]" />
                               <span className="truncate max-w-[120px]">{item.subject}</span>
                             </span>
                           )}
 
                           {item.semester && (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
-                              <GraduationCap className="w-3 h-3 text-indigo-500" />
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#2D4354] bg-[#FED7A5]/30 px-2 py-0.5 rounded-md border border-[#FED7A5]">
+                              <GraduationCap className="w-3 h-3 text-[#9E6752]" />
                               <span>{item.semester}</span>
                             </span>
                           )}
                         </div>
 
                         {/* File Name & Icon */}
-                        <div className="flex items-start gap-2.5">
+                        <div className="flex items-start gap-3">
                           {getFileIcon(item.mimeType, item.fileName)}
                           <div className="min-w-0 flex-1">
                             <h4
-                              className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug"
+                              className="text-xs sm:text-sm font-bold text-[#20212B] group-hover:text-[#2D4354] transition-colors line-clamp-2 leading-snug"
                               title={item.fileName}
                             >
                               {item.fileName}
@@ -832,18 +852,18 @@ const SmartResourceFinder = () => {
                         {/* Folder Path Breadcrumb */}
                         {item.folderPath && (
                           <p
-                            className="text-[11px] text-slate-400 flex items-center gap-1 truncate"
+                            className="text-[11px] text-[#77756F] flex items-center gap-1 truncate font-medium"
                             title={item.folderPath}
                           >
-                            <ChevronRight className="w-3 h-3 shrink-0 text-slate-300" />
+                            <ChevronRight className="w-3 h-3 shrink-0 text-[#73766A]/40" />
                             <span className="truncate">{item.folderPath}</span>
                           </p>
                         )}
                       </div>
 
                       {/* Footer: Date & Direct File Navigation */}
-                      <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-100 text-xs">
-                        <span className="text-[11px] text-slate-400">
+                      <div className="flex items-center justify-between pt-3 mt-3 border-t border-[#73766A]/10 text-xs">
+                        <span className="text-[11px] text-[#77756F] font-medium">
                           {item.lastModifiedTime
                             ? new Date(item.lastModifiedTime).toLocaleDateString(undefined, {
                                 month: 'short',
@@ -857,7 +877,7 @@ const SmartResourceFinder = () => {
                           href={item.webViewLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white font-semibold text-xs transition-all shadow-2xs group-hover:scale-102"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FAF8F5] hover:bg-[#2D4354] text-[#2D4354] hover:text-[#FED7A5] border border-[#73766A]/20 font-bold text-xs transition-all shadow-2xs group-hover:scale-102"
                           title="Open exact document in Google Drive"
                         >
                           <span>Open Resource</span>

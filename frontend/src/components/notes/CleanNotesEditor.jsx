@@ -164,16 +164,16 @@ const CleanNotesEditor = ({ note, onBack, onSaveSuccess }) => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors self-start"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-[#77756F] hover:text-[#20212B] transition-colors self-start cursor-pointer"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 text-[#2D4354]" />
           <span>Back to Clean Notes</span>
         </button>
 
         <div className="flex flex-wrap items-center gap-2">
           {saveSuccessMsg && (
-            <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-xl flex items-center gap-1 border border-emerald-200">
-              <CheckCircle2 className="w-3.5 h-3.5" />
+            <span className="text-xs font-bold text-[#2D4354] bg-[#FFF7EC] px-3 py-1.5 rounded-xl flex items-center gap-1 border border-[#FED7A5]">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#9E6752]" />
               <span>{saveSuccessMsg}</span>
             </span>
           )}
@@ -181,10 +181,10 @@ const CleanNotesEditor = ({ note, onBack, onSaveSuccess }) => {
           {/* Edit / Preview Toggle */}
           <button
             onClick={() => setIsEditing(!isEditing)}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
+            className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
               isEditing
-                ? 'bg-amber-50 text-amber-800 border-amber-300'
-                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                ? 'bg-[#FFF7EC] text-[#9E6752] border-[#FED7A5]'
+                : 'bg-white text-[#20212B] border-slate-200 hover:bg-[#FAF8F5]'
             }`}
           >
             {isEditing ? (
@@ -194,7 +194,7 @@ const CleanNotesEditor = ({ note, onBack, onSaveSuccess }) => {
               </>
             ) : (
               <>
-                <Edit3 className="w-3.5 h-3.5" />
+                <Edit3 className="w-3.5 h-3.5 text-[#2D4354]" />
                 <span>Edit Notes</span>
               </>
             )}
@@ -204,7 +204,7 @@ const CleanNotesEditor = ({ note, onBack, onSaveSuccess }) => {
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#2D4354] hover:bg-[#20212B] text-white text-xs font-semibold shadow-xs transition-all hover:scale-102 cursor-pointer"
           >
             {isSaving ? (
               <>
@@ -213,7 +213,7 @@ const CleanNotesEditor = ({ note, onBack, onSaveSuccess }) => {
               </>
             ) : (
               <>
-                <Save className="w-3.5 h-3.5" />
+                <Save className="w-3.5 h-3.5 text-[#FED7A5]" />
                 <span>Save Changes</span>
               </>
             )}
@@ -222,39 +222,40 @@ const CleanNotesEditor = ({ note, onBack, onSaveSuccess }) => {
           {/* Export PDF Button */}
           <button
             onClick={handleExportPdf}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-[#FAF8F5] text-xs font-semibold text-[#20212B] transition-colors shadow-xs cursor-pointer"
           >
-            <Printer className="w-3.5 h-3.5 text-blue-600" />
+            <Printer className="w-3.5 h-3.5 text-[#2D4354]" />
             <span>Print / PDF</span>
           </button>
 
           {/* Export DOCX Button */}
           <button
             onClick={handleExportDocx}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-[#FAF8F5] text-xs font-semibold text-[#20212B] transition-colors shadow-xs cursor-pointer"
             title="Download Word/Markdown file"
           >
-            <Download className="w-3.5 h-3.5 text-slate-500" />
+            <Download className="w-3.5 h-3.5 text-[#73766A]" />
             <span>DOCX</span>
           </button>
         </div>
       </div>
 
       {/* Note Header & Title Card */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+      <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#F1F0ED] shadow-[0_4px_24px_-2px_rgba(45,67,84,0.04)] space-y-3 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#FED7A5]/10 via-[#2D4354]/5 to-transparent rounded-full blur-2xl pointer-events-none" />
+        <div className="relative z-10 flex flex-wrap items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFF7EC] text-[#9E6752] border border-[#FED7A5]">
             {note.subjectId?.subjectName || 'Course'}
           </span>
-          <span className="text-xs text-slate-400 flex items-center gap-1">
-            <BookOpen className="w-3.5 h-3.5" />
+          <span className="text-xs text-[#77756F] flex items-center gap-1 font-medium">
+            <BookOpen className="w-3.5 h-3.5 text-[#73766A]" />
             {isEditing ? (
               <input
                 type="text"
                 value={chapter}
                 onChange={(e) => setChapter(e.target.value)}
                 placeholder="Chapter name"
-                className="px-2 py-0.5 border border-slate-200 rounded text-xs text-slate-700"
+                className="px-2.5 py-0.5 border border-slate-200 rounded-lg text-xs text-[#20212B] outline-none focus:border-[#2D4354]"
               />
             ) : (
               <span>{chapter || 'Overview Notes'}</span>
@@ -267,42 +268,42 @@ const CleanNotesEditor = ({ note, onBack, onSaveSuccess }) => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full text-xl sm:text-2xl font-extrabold text-slate-900 border-b border-blue-400 pb-1 focus:outline-none"
+            className="relative z-10 w-full text-xl sm:text-2xl font-extrabold text-[#20212B] border-b border-[#2D4354] pb-1 focus:outline-none"
           />
         ) : (
-          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="relative z-10 text-xl sm:text-2xl font-extrabold text-[#20212B] tracking-tight">
             {title}
           </h1>
         )}
 
         {/* View Tabs */}
-        <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+        <div className="relative z-10 flex items-center gap-2 pt-3 border-t border-[#F1F0ED]">
           <button
             onClick={() => setActiveTab('structured')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeTab === 'structured'
-                ? 'bg-blue-600 text-white'
-                : 'text-slate-600 hover:bg-slate-100'
+                ? 'bg-[#2D4354] text-white shadow-xs'
+                : 'text-[#77756F] hover:text-[#20212B] hover:bg-[#FAF8F5]'
             }`}
           >
             Structured Digital Notes
           </button>
           <button
             onClick={() => setActiveTab('raw')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeTab === 'raw'
-                ? 'bg-blue-600 text-white'
-                : 'text-slate-600 hover:bg-slate-100'
+                ? 'bg-[#2D4354] text-white shadow-xs'
+                : 'text-[#77756F] hover:text-[#20212B] hover:bg-[#FAF8F5]'
             }`}
           >
             Raw OCR Transcript
           </button>
           <button
             onClick={() => setActiveTab('files')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeTab === 'files'
-                ? 'bg-blue-600 text-white'
-                : 'text-slate-600 hover:bg-slate-100'
+                ? 'bg-[#2D4354] text-white shadow-xs'
+                : 'text-[#77756F] hover:text-[#20212B] hover:bg-[#FAF8F5]'
             }`}
           >
             Original Scanned Files ({note.originalFiles?.length || 0})

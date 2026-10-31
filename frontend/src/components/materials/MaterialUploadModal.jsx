@@ -6,7 +6,8 @@ import {
   X,
   AlertCircle,
   Loader2,
-  Info
+  Info,
+  Sparkles
 } from 'lucide-react';
 
 const MAX_SIZE_MB = 25;
@@ -100,21 +101,20 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
       });
 
       if (res.data?.success) {
-        setFile(null);
-        setUploadProgress(0);
-        setIsUploading(false);
-        setIsProcessing(false);
+        onUploadSuccess(res.data.data);
         onClose();
-        if (onUploadSuccess) {
-          onUploadSuccess(res.data.data || res.data.material);
-        }
+      } else {
+        setError(res.data?.message || 'Upload failed. Please try again.');
       }
     } catch (err) {
+      console.error('Error uploading material:', err);
+      setError(
+        err.response?.data?.message ||
+        'Failed to upload and parse document. Please check the file format.'
+      );
+    } finally {
       setIsUploading(false);
       setIsProcessing(false);
-      console.error('Upload failed:', err);
-      const msg = err.response?.data?.message || err.message || 'Upload failed. Please try again.';
-      setError(msg);
     }
   };
 
@@ -128,27 +128,28 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-      <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#202B42]/40 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200/80 overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Modal Header */}
-        <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-blue-50/50 via-indigo-50/30 to-white">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#4169E1] to-[#9270DB] text-white flex items-center justify-center font-bold shadow-xs">
               <UploadCloud className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+              <h3 className="text-lg font-black text-[#202B42]">
                 Upload Study Material
               </h3>
-              <p className="text-xs text-slate-500">
-                Upload lecture slides, chapters or notes (PDF, PPTX)
+              <p className="text-xs text-[#77839A] font-medium">
+                Add PDFs or PPTXs for automated concept extraction
               </p>
             </div>
           </div>
+
           <button
             onClick={onClose}
             disabled={isUploading}
-            className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors disabled:opacity-50"
+            className="p-2 text-slate-400 hover:text-[#202B42] rounded-xl hover:bg-slate-100 transition-colors disabled:opacity-50"
           >
             <X className="w-5 h-5" />
           </button>
@@ -157,8 +158,8 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
         {/* Modal Body */}
         <div className="p-6 space-y-4">
           {error && (
-            <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-start gap-2.5">
-              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+            <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold flex items-start gap-2.5 animate-in fade-in">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-500" />
               <span>{error}</span>
             </div>
           )}
@@ -170,10 +171,10 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
             onDragOver={handleDrag}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
-            className={`border-2 border-dashed rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all ${
+            className={`border-2 border-dashed rounded-3xl p-6 sm:p-8 text-center cursor-pointer transition-all duration-300 ${
               dragActive
-                ? 'border-blue-600 bg-blue-50/60'
-                : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50/60 bg-slate-50/30'
+                ? 'border-[#4169E1] bg-blue-50/70 scale-[1.01]'
+                : 'border-slate-200 hover:border-[#4169E1]/60 hover:bg-blue-50/20 bg-[#F5F7FC]/60'
             }`}
           >
             <input
@@ -184,30 +185,30 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
               className="hidden"
             />
 
-            <div className="w-12 h-12 rounded-2xl bg-white shadow-xs border border-slate-200 flex items-center justify-center mx-auto mb-3 text-blue-600">
-              <UploadCloud className="w-6 h-6" />
+            <div className="w-13 h-13 rounded-2xl bg-white shadow-xs border border-slate-200/80 flex items-center justify-center mx-auto mb-3 text-[#4169E1]">
+              <UploadCloud className="w-7 h-7" />
             </div>
 
-            <p className="text-sm font-semibold text-slate-800">
+            <p className="text-sm font-extrabold text-[#202B42]">
               {dragActive ? 'Drop your document here' : 'Click to browse or drag and drop'}
             </p>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-[#77839A] mt-1 font-medium">
               Supports PDF (.pdf) and PowerPoint (.pptx) up to {MAX_SIZE_MB}MB
             </p>
           </div>
 
           {/* Selected File Details */}
           {file && (
-            <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200/80 flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#4169E1] text-white flex items-center justify-center shrink-0 shadow-xs">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div className="truncate">
-                  <p className="text-xs font-bold text-slate-900 truncate">
+                  <p className="text-xs font-extrabold text-[#202B42] truncate">
                     {file.name}
                   </p>
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-[11px] text-[#77839A] font-medium">
                     {formatFileSize(file.size)}
                   </p>
                 </div>
@@ -220,7 +221,7 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
                     e.stopPropagation();
                     setFile(null);
                   }}
-                  className="p-1 text-slate-400 hover:text-slate-600"
+                  className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-white transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -231,26 +232,26 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
           {/* Progress / Processing Indicators */}
           {isUploading && (
             <div className="space-y-2 pt-2">
-              <div className="flex items-center justify-between text-xs font-medium">
-                <span className="text-slate-600 flex items-center gap-1.5">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-[#202B42] flex items-center gap-1.5">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#4169E1]" />
                   {isProcessing ? 'Extracting text and structure with OfficeParser...' : 'Uploading to secure storage...'}
                 </span>
-                <span className="text-blue-600 font-bold">{uploadProgress}%</span>
+                <span className="text-[#4169E1] font-bold">{uploadProgress}%</span>
               </div>
-              <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden p-0.5">
                 <div
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  className="bg-gradient-to-r from-[#4169E1] to-[#9270DB] h-full rounded-full transition-all duration-300"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
             </div>
           )}
 
-          <div className="flex items-start gap-2 p-3 rounded-xl bg-slate-50 text-[11px] text-slate-500">
-            <Info className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2 p-3 rounded-2xl bg-[#F5F7FC] text-[11px] text-[#77839A] border border-slate-200/60 font-medium">
+            <Info className="w-3.5 h-3.5 text-[#4169E1] shrink-0 mt-0.5" />
             <span>
-              Once uploaded, text is automatically extracted so you can generate chapter summaries, formula sheets, and practice questions via Gemini AI in Part B.
+              Once uploaded, text is automatically extracted so you can generate chapter summaries, formula sheets, and practice questions via Gemini AI.
             </span>
           </div>
 
@@ -260,7 +261,7 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
               type="button"
               onClick={onClose}
               disabled={isUploading}
-              className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors disabled:opacity-50"
+              className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-[#77839A] hover:text-[#202B42] hover:bg-slate-50 transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
@@ -268,11 +269,11 @@ const MaterialUploadModal = ({ isOpen, onClose, subjectId, onUploadSuccess }) =>
               type="button"
               onClick={handleUpload}
               disabled={!file || isUploading}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs shadow-blue-500/30 transition-all disabled:opacity-50 hover:scale-101"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#4169E1] to-[#3557C7] hover:from-[#3557C7] hover:to-[#2B47AC] text-white text-xs font-bold shadow-[0_4px_14px_rgba(65,105,225,0.3)] transition-all disabled:opacity-50 hover:scale-[1.02]"
             >
               {isUploading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
                   <span>{isProcessing ? 'Extracting text & pages...' : `Uploading (${uploadProgress}%)...`}</span>
                 </>
               ) : (

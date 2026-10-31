@@ -67,14 +67,14 @@ const SemesterSelect = ({
       {label && (
         <label
           htmlFor={id}
-          className="block text-xs font-bold text-slate-700 uppercase tracking-wider"
+          className="block text-xs font-bold text-[#202B42] uppercase tracking-wider"
         >
-          {label} {required && <span className="text-red-500">*</span>}
+          {label} {required && <span className="text-rose-500">*</span>}
         </label>
       )}
 
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+      <div className="relative group">
+        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#77839A] group-focus-within:text-[#4169E1] transition-colors">
           <GraduationCap className="w-4 h-4" />
         </div>
         <select
@@ -82,7 +82,7 @@ const SemesterSelect = ({
           value={selectedOption}
           onChange={handleDropdownChange}
           disabled={disabled}
-          className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 appearance-none outline-none transition-all cursor-pointer disabled:bg-slate-100 disabled:cursor-not-allowed"
+          className="w-full pl-10 pr-10 py-3 rounded-2xl border border-slate-200/90 bg-white text-sm font-semibold text-[#202B42] focus:border-[#4169E1] focus:ring-4 focus:ring-blue-500/10 shadow-xs appearance-none outline-none transition-all duration-200 cursor-pointer disabled:bg-slate-100 disabled:cursor-not-allowed"
         >
           <option value="">Select Semester or Academic Level...</option>
           {SEMESTER_OPTIONS.map((sem) => (
@@ -92,19 +92,19 @@ const SemesterSelect = ({
           ))}
           <option value="Other">Other (Custom semester or academic status)</option>
         </select>
-        <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+        <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-[#77839A]">
           <ChevronDown className="w-4 h-4" />
         </div>
       </div>
 
       {/* Conditional Custom Input for "Other" */}
       {selectedOption === 'Other' && (
-        <div className="pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="pt-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
           <label
             htmlFor={`${id}-custom`}
-            className="block text-[11px] font-semibold text-slate-600 mb-1"
+            className="block text-[11px] font-bold text-[#77839A] mb-1"
           >
-            Enter your semester or academic status <span className="text-red-500">*</span>
+            Enter your semester or academic status <span className="text-rose-500">*</span>
           </label>
           <input
             id={`${id}-custom`}
@@ -113,13 +113,13 @@ const SemesterSelect = ({
             onChange={handleCustomChange}
             placeholder="e.g. Year 1 Term 2, Postgraduate, Trimester 3, CS301"
             disabled={disabled}
-            className="w-full px-3.5 py-2 rounded-xl border border-blue-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-900 placeholder:text-slate-400 transition-all outline-none bg-blue-50/20"
+            className="w-full px-4 py-2.5 rounded-xl border border-blue-200 focus:border-[#4169E1] focus:ring-4 focus:ring-blue-500/15 text-sm font-medium text-[#202B42] placeholder:text-slate-400 transition-all outline-none bg-blue-50/30"
           />
         </div>
       )}
 
       {helperText && (
-        <p className="text-[11px] text-slate-400 leading-relaxed">{helperText}</p>
+        <p className="text-[11px] text-[#77839A] leading-relaxed font-medium">{helperText}</p>
       )}
     </div>
   );

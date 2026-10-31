@@ -152,29 +152,30 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
   ];
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden animate-in fade-in duration-200">
+    <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden animate-in fade-in duration-200">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 p-6 sm:p-7 text-white">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-blue-100 text-[11px] font-semibold backdrop-blur-xs">
+      <div className="bg-gradient-to-r from-[#4169E1] via-[#5A45D1] to-[#9270DB] p-6 sm:p-7 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-white text-[11px] font-semibold backdrop-blur-xs border border-white/25">
               <Sparkles className="w-3.5 h-3.5 text-blue-200" />
               <span>Gemini 2.5 Flash Document Intelligence</span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight truncate max-w-xl">
+            <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight truncate max-w-xl text-white">
               {material.fileName}
             </h3>
-            <p className="text-xs text-blue-100/80">
+            <p className="text-xs text-white/85">
               AI-generated academic summaries, core concept breakdowns, formulas, and revision prompts.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-center">
+          <div className="flex items-center gap-2.5 self-start sm:self-center">
             {analysis && (
               <button
                 onClick={handleGenerateAnalysis}
                 disabled={analyzing}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-medium text-xs backdrop-blur-xs transition-all disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white font-medium text-xs backdrop-blur-xs transition-all disabled:opacity-50 border border-white/20"
                 title="Regenerate with fresh Gemini analysis"
               >
                 <RotateCcw className={`w-3.5 h-3.5 ${analyzing ? 'animate-spin' : ''}`} />
@@ -184,7 +185,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
             {onClose && (
               <button
                 onClick={onClose}
-                className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold"
+                className="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold border border-white/20 transition-colors"
               >
                 Close View
               </button>
@@ -207,52 +208,52 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
       {/* Main Content: Loading, Empty (Not Analyzed Yet), or Analyzed Tabs */}
       {loading ? (
         <div className="py-20 flex flex-col items-center justify-center gap-3">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-          <p className="text-xs text-slate-500 font-medium">Checking document intelligence...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-[#4169E1]" />
+          <p className="text-xs text-[#77839A] font-medium">Checking document intelligence...</p>
         </div>
       ) : analyzing ? (
         <div className="py-20 px-6 text-center max-w-md mx-auto space-y-4">
-          <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-inner">
-            <Sparkles className="w-8 h-8 animate-spin text-blue-600" />
+          <div className="w-16 h-16 rounded-3xl bg-[#4169E1]/10 text-[#4169E1] flex items-center justify-center mx-auto shadow-inner">
+            <Sparkles className="w-8 h-8 animate-spin text-[#4169E1]" />
           </div>
           <div>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200/60 mb-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-[#4169E1]/10 text-[#4169E1] border border-[#4169E1]/20 mb-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4169E1] animate-ping" />
               Step {analysisStage + 1} of {stages.length}
             </span>
-            <h4 className="text-base font-bold text-slate-900 transition-all duration-300">
+            <h4 className="text-base font-bold text-[#202B42] transition-all duration-300">
               {stages[analysisStage]}
             </h4>
-            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+            <p className="text-xs text-[#77839A] mt-1 leading-relaxed">
               Transforming raw slides & pages into structured chapters, formulas, and revision questions.
             </p>
           </div>
           <div className="w-64 mx-auto space-y-1.5">
             <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
               <div
-                className="bg-blue-600 h-2 rounded-full transition-all duration-500 ease-out"
+                className="bg-gradient-to-r from-[#4169E1] to-[#9270DB] h-2 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${Math.round(((analysisStage + 1) / stages.length) * 100)}%` }}
               />
             </div>
-            <p className="text-[10px] text-slate-400 font-medium">
+            <p className="text-[10px] text-[#77839A] font-medium">
               Takes ~10–25s depending on document length
             </p>
           </div>
         </div>
       ) : !analysis ? (
         <div className="py-16 px-6 text-center max-w-lg mx-auto">
-          <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-3xl bg-[#4169E1]/10 text-[#4169E1] flex items-center justify-center mx-auto mb-4">
             <Brain className="w-8 h-8" />
           </div>
-          <h4 className="text-lg font-bold text-slate-900">
+          <h4 className="text-lg font-bold text-[#202B42]">
             Generate AI Document Intelligence
           </h4>
-          <p className="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#77839A] mt-2 leading-relaxed">
             Transform "{material.fileName}" into structured chapter breakdowns, definitions, formulas, and practice test prompts powered by Google Gemini.
           </p>
           <button
             onClick={handleGenerateAnalysis}
-            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-blue-500/25 transition-all hover:scale-102"
+            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#4169E1] to-[#9270DB] hover:opacity-95 text-white font-semibold text-xs sm:text-sm shadow-sm transition-all hover:scale-102"
           >
             <Sparkles className="w-4 h-4" />
             <span>Generate Comprehensive Analysis</span>
@@ -261,7 +262,7 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
       ) : (
         <div>
           {/* Navigation Tabs */}
-          <div className="flex items-center gap-1 overflow-x-auto border-b border-slate-200/80 px-6 pt-3 bg-slate-50/50">
+          <div className="flex items-center gap-1.5 overflow-x-auto border-b border-slate-100 px-6 pt-3 bg-[#F5F7FC]/60">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -271,16 +272,16 @@ const DocumentIntelligenceView = ({ material, onClose }) => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-3 border-b-2 text-xs font-bold transition-all shrink-0 ${
                     isActive
-                      ? 'border-blue-600 text-blue-600 bg-white rounded-t-xl shadow-xs'
-                      : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-100/50'
+                      ? 'border-[#4169E1] text-[#4169E1] bg-white rounded-t-xl shadow-xs'
+                      : 'border-transparent text-[#77839A] hover:text-[#202B42] hover:bg-slate-100/50'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{tab.label}</span>
                   {tab.count !== undefined && (
                     <span
-                      className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full ${
-                        isActive ? 'bg-blue-100 text-blue-700' : 'bg-slate-200/80 text-slate-600'
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        isActive ? 'bg-[#4169E1]/10 text-[#4169E1]' : 'bg-slate-200/80 text-[#77839A]'
                       }`}
                     >
                       {tab.count}

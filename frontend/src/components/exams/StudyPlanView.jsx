@@ -33,30 +33,30 @@ import {
 const TASK_TYPE_STYLES = {
   study: {
     label: 'Study',
-    badge: 'bg-blue-50 text-blue-700 border-blue-200/60',
-    dot: 'bg-blue-500',
+    badge: 'bg-[#FAF8F5] text-[#2D4354] border-[#2D4354]/30',
+    dot: 'bg-[#2D4354]',
   },
   revision: {
     label: 'Revision',
-    badge: 'bg-purple-50 text-purple-700 border-purple-200/60',
-    dot: 'bg-purple-500',
+    badge: 'bg-[#FFF7EC] text-[#9E6752] border-[#FED7A5]',
+    dot: 'bg-[#9E6752]',
   },
   practice: {
     label: 'Practice',
-    badge: 'bg-emerald-50 text-emerald-700 border-emerald-200/60',
-    dot: 'bg-emerald-500',
+    badge: 'bg-[#F1F0ED] text-[#73766A] border-slate-300',
+    dot: 'bg-[#73766A]',
   },
   buffer: {
     label: 'Buffer Time',
-    badge: 'bg-amber-50 text-amber-700 border-amber-200/60',
-    dot: 'bg-amber-500',
+    badge: 'bg-[#FFF7EC] text-[#20212B] border-[#FED7A5]',
+    dot: 'bg-[#FED7A5]',
   },
 };
 
 const PRIORITY_BADGES = {
-  high: 'bg-rose-100/80 text-rose-800 border-rose-200',
-  medium: 'bg-amber-100/80 text-amber-800 border-amber-200',
-  low: 'bg-slate-100 text-slate-600 border-slate-200',
+  high: 'bg-[#FFF7EC] text-[#9E6752] border-[#FED7A5]',
+  medium: 'bg-[#FAF8F5] text-[#73766A] border-slate-200',
+  low: 'bg-[#FAF8F5] text-[#77756F] border-slate-200',
 };
 
 const DAYS_OF_WEEK = [
