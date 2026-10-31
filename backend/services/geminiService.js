@@ -1327,6 +1327,9 @@ const analyzeDateSheet = async (extractedContent, pdfBuffer = null, academicFilt
 };
 
 // Generate an AI mnemonic from study material or manually entered content
+
+
+// Generate an AI mnemonic with visual learning content
 const generateMnemonic = async ({
   extractedContent = null,
   topic,
@@ -1367,9 +1370,9 @@ const generateMnemonic = async ({
   const ai = new GoogleGenAI({ apiKey });
 
   const prompt = `
-You are StudyPilot AI, an academic memory-assistance system.
+You are StudyPilot AI, an expert academic memory and visual learning assistant.
 
-Create an accurate and memorable mnemonic to help a college student remember the supplied academic concept.
+Transform the academic concept into an unforgettable learning experience using mnemonics, visual associations, diagrams, stories, and active recall.
 
 TOPIC:
 ${topic.trim()}
@@ -1385,32 +1388,113 @@ SOURCE MATERIAL:
 ${documentContext}
 """
 
-RULES:
+ACADEMIC RULES:
 1. Use the supplied source material as the primary source of truth.
-2. Do not invent facts, formulas, definitions, or relationships.
-3. If the source does not contain enough information to create an accurate mnemonic, return isSufficient as false.
-4. Make the mnemonic easy to remember and relevant to the actual concept.
-5. Explain how each part of the mnemonic maps to the original concept.
-6. For formula tricks, preserve the original formula exactly.
-7. Keep the explanation student-friendly and concise.
-8. Do not generate a generic mnemonic unrelated to the supplied topic.
+2. Never invent formulas, definitions, steps, or scientific relationships.
+3. Preserve technical terminology and the actual meaning of the concept.
+4. If the source does not contain sufficient information, return isSufficient as false.
+5. Make the mnemonic simple, memorable, and relevant.
+6. Explain how the mnemonic maps to the original concept.
+7. Formula tricks must preserve the original formula.
+8. All visual associations must represent genuine concepts from the source.
+9. Stories should help students remember academic sequences and relationships.
+10. Keep content concise and useful for exam revision.
 
+VISUAL ASSOCIATIONS:
+Generate 3-6 associations containing:
+- concept
+- symbol (Lucide icon name)
+- visualDescription
+- memoryHint
+- illustrationPrompt
+
+MEMORY CHART:
+Generate 3-8 rows containing:
+- keyword
+- meaning
+- association
+- importance (high, medium, low)
+
+DIAGRAM:
+Generate a Mermaid concept map or flowchart.
+- Start with flowchart TD or graph TD.
+- Use simple node IDs.
+- Use quoted labels where necessary.
+- Do not use HTML, scripts, click directives, or external links.
+- Do not include Markdown code fences.
+
+STORY SCENES:
+Generate 3-5 scenes containing:
+- sceneNumber
+- title
+- description
+- conceptsRepresented
+- visualPrompt
+
+ACTIVE RECALL:
+Generate 3-5 questions containing:
+- question
+- answer
+- hint
+
+OUTPUT:
 Return ONLY valid JSON:
 
 {
   "isSufficient": true,
-  "title": "Mnemonic title",
-  "topic": "${topic.trim()}",
-  "technique": "${technique}",
+  "title": "Creative mnemonic title",
+  "topic": "Topic name",
+  "technique": "Selected technique",
   "mnemonic": "The actual mnemonic",
   "explanation": "How to remember and use it",
   "letterMapping": {
-    "A": "Meaning represented by A",
-    "B": "Meaning represented by B"
+    "A": "Meaning represented by A"
   },
-  "originalConcept": "The accurate original academic concept",
-  "example": "A short example of applying or recalling the concept"
+  "originalConcept": "Accurate academic explanation",
+  "example": "Short academic example",
+  "visualAssociations": [
+    {
+      "concept": "Concept name",
+      "symbol": "atom",
+      "visualDescription": "Description",
+      "memoryHint": "Memory connection",
+      "illustrationPrompt": "Educational illustration description"
+    }
+  ],
+  "memoryChart": [
+    {
+      "keyword": "Keyword",
+      "meaning": "Actual meaning",
+      "association": "Memory association",
+      "importance": "high"
+    }
+  ],
+  "diagram": {
+    "type": "concept-map",
+    "source": "flowchart TD\\n A[\\"Main Concept\\"] --> B[\\"Related Concept\\"]",
+    "explanation": "Explanation of relationships"
+  },
+  "storyScenes": [
+    {
+      "sceneNumber": 1,
+      "title": "Scene title",
+      "description": "Scene description",
+      "conceptsRepresented": ["Concept 1"],
+      "visualPrompt": "Scene illustration description"
+    }
+  ],
+  "recallQuestions": [
+    {
+      "question": "Question to test memory",
+      "answer": "Correct answer",
+      "hint": "Small recall hint"
+    }
+  ]
 }
+
+Return arrays even if optional visual sections cannot be generated.
+Never return null for visualAssociations, memoryChart, storyScenes, or recallQuestions.
+Return only valid JSON.
 `;
 
   try {
@@ -1419,7 +1503,8 @@ Return ONLY valid JSON:
       contents: prompt,
       config: {
         responseMimeType: 'application/json',
-        temperature: 0.4,
+        temperature: 0.5,
+        maxOutputTokens: 8192,
       },
     });
 
@@ -1430,8 +1515,13 @@ Return ONLY valid JSON:
     }
 
     if (parsed.isSufficient === false) {
-      throw new Error('The supplied material does not contain enough information to generate an accurate mnemonic.');
+      throw new Error(
+        'The supplied material does not contain enough information to generate an accurate mnemonic.'
+      );
     }
+
+    const cleanString = (value, fallback = '') =>
+      typeof value === 'string' ? value.trim() : fallback;
 
     if (
       !parsed.title ||
@@ -1442,26 +1532,132 @@ Return ONLY valid JSON:
       throw new Error('Gemini returned incomplete mnemonic content.');
     }
 
+    const visualAssociations = Array.isArray(parsed.visualAssociations)
+      ? parsed.visualAssociations
+          .filter((item) => item && item.concept)
+          .slice(0, 6)
+          .map((item) => ({
+            concept: cleanString(item.concept),
+            symbol: cleanString(item.symbol, 'lightbulb'),
+            visualDescription: cleanString(item.visualDescription),
+            memoryHint: cleanString(item.memoryHint),
+            illustrationPrompt: cleanString(item.illustrationPrompt),
+          }))
+      : [];
+
+    const memoryChart = Array.isArray(parsed.memoryChart)
+      ? parsed.memoryChart
+          .filter((item) => item && item.keyword)
+          .slice(0, 8)
+          .map((item) => ({
+            keyword: cleanString(item.keyword),
+            meaning: cleanString(item.meaning),
+            association: cleanString(item.association),
+            importance: ['high', 'medium', 'low'].includes(item.importance)
+              ? item.importance
+              : 'medium',
+          }))
+      : [];
+
+    const storyScenes = Array.isArray(parsed.storyScenes)
+      ? parsed.storyScenes
+          .filter((scene) => scene && scene.description)
+          .slice(0, 5)
+          .map((scene, index) => ({
+            sceneNumber: Number.isInteger(scene.sceneNumber)
+              ? scene.sceneNumber
+              : index + 1,
+            title: cleanString(scene.title, `Scene ${index + 1}`),
+            description: cleanString(scene.description),
+            conceptsRepresented: Array.isArray(scene.conceptsRepresented)
+              ? scene.conceptsRepresented
+                  .filter((concept) => typeof concept === 'string')
+                  .slice(0, 8)
+              : [],
+            visualPrompt: cleanString(scene.visualPrompt),
+          }))
+      : [];
+
+    const recallQuestions = Array.isArray(parsed.recallQuestions)
+      ? parsed.recallQuestions
+          .filter(
+            (item) =>
+              item &&
+              typeof item.question === 'string' &&
+              item.question.trim() &&
+              typeof item.answer === 'string' &&
+              item.answer.trim()
+          )
+          .slice(0, 5)
+          .map((item) => ({
+            question: cleanString(item.question),
+            answer: cleanString(item.answer),
+            hint: cleanString(item.hint),
+          }))
+      : [];
+
+    let diagram = {
+      type: 'concept-map',
+      source: '',
+      explanation: '',
+    };
+
+    if (parsed.diagram && typeof parsed.diagram === 'object') {
+      const diagramSource = cleanString(parsed.diagram.source);
+
+      const isValidMermaid =
+        /^(flowchart|graph)\s+(TB|TD|BT|RL|LR)\b/.test(diagramSource) &&
+        diagramSource.length <= 12000 &&
+        !/<script|<\/script|javascript:|%%\s*\{|\bclick\s+[A-Za-z0-9_]+/i.test(
+          diagramSource
+        );
+
+      if (isValidMermaid) {
+        diagram = {
+          type: [
+            'flowchart',
+            'concept-map',
+            'process',
+            'hierarchical',
+            'block-diagram',
+            'step-by-step',
+          ].includes(parsed.diagram.type)
+            ? parsed.diagram.type
+            : 'concept-map',
+          source: diagramSource,
+          explanation: cleanString(parsed.diagram.explanation),
+        };
+      }
+    }
+
+    const letterMapping =
+      parsed.letterMapping &&
+      typeof parsed.letterMapping === 'object' &&
+      !Array.isArray(parsed.letterMapping)
+        ? parsed.letterMapping
+        : null;
+
     return {
-      title: String(parsed.title).trim(),
-      topic: String(parsed.topic || topic).trim(),
+      title: cleanString(parsed.title),
+      topic: cleanString(parsed.topic, topic),
       technique,
-      mnemonic: String(parsed.mnemonic).trim(),
-      explanation: String(parsed.explanation).trim(),
-      letterMapping:
-        parsed.letterMapping &&
-        typeof parsed.letterMapping === 'object' &&
-        !Array.isArray(parsed.letterMapping)
-          ? parsed.letterMapping
-          : null,
-      originalConcept: String(parsed.originalConcept).trim(),
-      example: String(parsed.example || '').trim(),
+      mnemonic: cleanString(parsed.mnemonic),
+      explanation: cleanString(parsed.explanation),
+      letterMapping,
+      originalConcept: cleanString(parsed.originalConcept),
+      example: cleanString(parsed.example),
+      visualAssociations,
+      memoryChart,
+      diagram,
+      storyScenes,
+      recallQuestions,
     };
   } catch (error) {
     console.error('[Gemini Mnemonic Generation Error]:', error);
     throw new Error(`Mnemonic generation failed: ${error.message}`);
   }
 };
+
 
 // Generate an academic Mermaid diagram from study material or manual content
 const generateDiagram = async ({

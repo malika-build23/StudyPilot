@@ -1,6 +1,71 @@
 
 const mongoose = require('mongoose');
 
+const visualAssociationSchema = new mongoose.Schema(
+  {
+    concept: { type: String, required: true },
+    symbol: { type: String, default: 'lightbulb' },
+    visualDescription: { type: String, default: '' },
+    memoryHint: { type: String, default: '' },
+    illustrationPrompt: { type: String, default: '' },
+  },
+  { _id: false }
+);
+
+const memoryChartSchema = new mongoose.Schema(
+  {
+    keyword: { type: String, required: true },
+    meaning: { type: String, default: '' },
+    association: { type: String, default: '' },
+    importance: {
+      type: String,
+      enum: ['high', 'medium', 'low'],
+      default: 'medium',
+    },
+  },
+  { _id: false }
+);
+
+const recallQuestionSchema = new mongoose.Schema(
+  {
+    question: { type: String, required: true },
+    answer: { type: String, required: true },
+    hint: { type: String, default: '' },
+  },
+  { _id: false }
+);
+
+const storySceneSchema = new mongoose.Schema(
+  {
+    sceneNumber: { type: Number, required: true },
+    title: { type: String, default: '' },
+    description: { type: String, required: true },
+    conceptsRepresented: [{ type: String }],
+    visualPrompt: { type: String, default: '' },
+  },
+  { _id: false }
+);
+
+const diagramSchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      enum: [
+        'flowchart',
+        'concept-map',
+        'process',
+        'hierarchical',
+        'block-diagram',
+        'step-by-step',
+      ],
+      default: 'concept-map',
+    },
+    source: { type: String, default: '' },
+    explanation: { type: String, default: '' },
+  },
+  { _id: false }
+);
+
 const mnemonicSchema = new mongoose.Schema(
   {
     userId: {
@@ -19,6 +84,7 @@ const mnemonicSchema = new mongoose.Schema(
       ref: 'StudyMaterial',
       default: null,
     },
+
     topic: {
       type: String,
       required: true,
@@ -64,6 +130,36 @@ const mnemonicSchema = new mongoose.Schema(
     example: {
       type: String,
       default: '',
+    },
+
+    // NEW: Visual memory associations
+    visualAssociations: {
+      type: [visualAssociationSchema],
+      default: [],
+    },
+
+    // NEW: Keyword-to-meaning memory chart
+    memoryChart: {
+      type: [memoryChartSchema],
+      default: [],
+    },
+
+    // NEW: Mermaid diagram data
+    diagram: {
+      type: diagramSchema,
+      default: () => ({}),
+    },
+
+    // NEW: Story-based memory scenes
+    storyScenes: {
+      type: [storySceneSchema],
+      default: [],
+    },
+
+    // NEW: Active recall questions
+    recallQuestions: {
+      type: [recallQuestionSchema],
+      default: [],
     },
   },
   {

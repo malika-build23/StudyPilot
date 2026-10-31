@@ -9,6 +9,9 @@ const getUserId = (req) => req.user._id;
 
 const validObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
+const escapeRegex = (value) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 const validateSubject = async (subjectId, userId) => {
   if (!subjectId || !validObjectId(subjectId)) {
     throw new Error('A valid subject ID is required.');
@@ -128,6 +131,13 @@ const saveMnemonic = async (req, res) => {
       letterMapping,
       originalConcept,
       example,
+
+      // New visual-memory fields
+      visualAssociations,
+      memoryChart,
+      diagram,
+      storyScenes,
+      recallQuestions,
     } = req.body;
 
     if (
@@ -163,6 +173,29 @@ const saveMnemonic = async (req, res) => {
       letterMapping: letterMapping || null,
       originalConcept: originalConcept.trim(),
       example: example || '',
+
+      // Save visual-memory content
+      visualAssociations: Array.isArray(visualAssociations)
+        ? visualAssociations
+        : [],
+
+      memoryChart: Array.isArray(memoryChart)
+        ? memoryChart
+        : [],
+
+      diagram: diagram || {
+        type: 'concept-map',
+        source: '',
+        explanation: '',
+      },
+
+      storyScenes: Array.isArray(storyScenes)
+        ? storyScenes
+        : [],
+
+      recallQuestions: Array.isArray(recallQuestions)
+        ? recallQuestions
+        : [],
     });
 
     return res.status(201).json({
@@ -203,13 +236,13 @@ const getMnemonics = async (req, res) => {
 
     if (topic?.trim()) {
       filter.topic = {
-        $regex: topic.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+        $regex: escapeRegex(topic.trim()),
         $options: 'i',
       };
     }
 
     if (search?.trim()) {
-      const safeSearch = search.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const safeSearch = escapeRegex(search.trim());
 
       filter.$or = [
         { title: { $regex: safeSearch, $options: 'i' } },
@@ -294,6 +327,13 @@ const updateMnemonic = async (req, res) => {
       'letterMapping',
       'originalConcept',
       'example',
+
+      // New visual-memory fields
+      'visualAssociations',
+      'memoryChart',
+      'diagram',
+      'storyScenes',
+      'recallQuestions',
     ];
 
     const updates = {};
