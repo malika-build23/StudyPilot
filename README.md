@@ -2,7 +2,9 @@
 
 <div align="center">
 
-![StudyPilot AI Banner](frontend/src/assets/illustrations/element_student_hero.png)
+<img src="./frontend/src/assets/illustrations/hero_student.png" alt="StudyPilot AI Banner" width="480" />
+
+<br />
 
 **Transform course notes, lecture slides, and date sheets into structured intelligence, adaptive mock exams, and visual study plans.**
 
