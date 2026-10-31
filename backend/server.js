@@ -24,6 +24,10 @@ const studyPlanRoutes = require('./routes/studyPlanRoutes');
 const dateSheetRoutes = require('./routes/dateSheetRoutes');
 const mnemonicRoutes = require('./routes/mnemonicRoutes');
 const diagramRoutes = require('./routes/diagramRoutes');
+const flashcardRoutes = require('./routes/flashcardRoutes');
+const revisionRoutes = require('./routes/revisionRoutes');
+const cleanNoteRoutes = require('./routes/cleanNoteRoutes');
+
 // Express Application
 const app = express();
 
@@ -38,12 +42,19 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (like mobile apps, curl, postman)
+      // Allow requests with no origin (like mobile apps, curl, postman)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+
+      if (
+        allowedOrigins.indexOf(origin) !== -1 ||
+        process.env.NODE_ENV !== 'production'
+      ) {
         return callback(null, true);
       }
-      return callback(new Error('CORS policy does not allow access from the specified Origin.'));
+
+      return callback(
+        new Error('CORS policy does not allow access from the specified Origin.')
+      );
     },
     credentials: true,
   })
@@ -77,6 +88,10 @@ app.use('/api/study-plans', studyPlanRoutes);
 app.use('/api/date-sheets', dateSheetRoutes);
 app.use('/api/mnemonics', mnemonicRoutes);
 app.use('/api/diagrams', diagramRoutes);
+app.use('/api/flashcards', flashcardRoutes);
+app.use('/api/revision', revisionRoutes);
+app.use('/api/clean-notes', cleanNoteRoutes);
+
 // 404 Handler
 app.use((req, res, next) => {
   res.status(404).json({
@@ -88,16 +103,20 @@ app.use((req, res, next) => {
 // Centralized Error Handling Middleware
 app.use(errorHandler);
 
-
 const PORT = process.env.PORT || 5000;
 
 let server;
+
 const startServer = async () => {
   try {
     await connectDB();
+
     server = app.listen(PORT, () => {
-      console.log(`[StudyPilot AI] Backend running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+      console.log(
+        `[StudyPilot AI] Backend running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`
+      );
     });
+
     return server;
   } catch (err) {
     console.error('Fatal: Failed to start StudyPilot AI server:', err);

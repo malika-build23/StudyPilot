@@ -12,6 +12,9 @@ import SubjectsPage from './pages/SubjectsPage';
 import SubjectWorkspacePage from './pages/SubjectWorkspacePage';
 import ProfilePage from './pages/ProfilePage';
 import ExamPlannerPage from './pages/ExamPlannerPage';
+import FlashcardsPage from './pages/FlashcardsPage';
+import RevisionPage from './pages/RevisionPage';
+import CleanNotesPage from './pages/CleanNotesPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -35,6 +38,9 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/subjects" element={<SubjectsPage />} />
             <Route path="/subjects/:id" element={<SubjectWorkspacePage />} />
+            <Route path="/flashcards" element={<FlashcardsPage />} />
+            <Route path="/revision" element={<RevisionPage />} />
+            <Route path="/clean-notes" element={<CleanNotesPage />} />
             <Route path="/exams" element={<ExamPlannerPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>

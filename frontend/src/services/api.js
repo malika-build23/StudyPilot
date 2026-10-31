@@ -153,7 +153,7 @@ export const userAPI = {
   updateProfile: (data) => api.put('/users/profile', data),
 };
 
-// Phase 5 - AI Mnemonics Generator
+// Phase 5 Part A - AI Mnemonics Generator
 export const mnemonicsAPI = {
   generate: (data) => api.post('/mnemonics/generate', data),
   save: (data) => api.post('/mnemonics', data),
@@ -163,7 +163,7 @@ export const mnemonicsAPI = {
   delete: (id) => api.delete(`/mnemonics/${id}`),
 };
 
-// Phase 5 - AI Diagram Generator
+// Phase 5 Part A - AI Diagram Generator
 export const diagramsAPI = {
   generate: (data) => api.post('/diagrams/generate', data),
   save: (data) => api.post('/diagrams', data),
@@ -172,5 +172,41 @@ export const diagramsAPI = {
   delete: (id) => api.delete(`/diagrams/${id}`),
 };
 
+// Phase 5 Part B - Flashcard Services
+export const flashcardsAPI = {
+  generate: (data) => api.post('/flashcards/generate', data),
+  getDecks: (params) => api.get('/flashcards/decks', { params }),
+  getDeckById: (id) => api.get(`/flashcards/decks/${id}`),
+  createDeck: (data) => api.post('/flashcards/decks', data),
+  deleteDeck: (id) => api.delete(`/flashcards/decks/${id}`),
+  createCard: (data) => api.post('/flashcards', data),
+  updateCard: (id, data) => api.put(`/flashcards/${id}`, data),
+  deleteCard: (id) => api.delete(`/flashcards/${id}`),
+};
+
+// Phase 5 Part B - Spaced Repetition Services
+export const revisionAPI = {
+  getOverview: () => api.get('/revision/overview'),
+  getToday: (params) => api.get('/revision/today', { params }),
+  submitReview: (flashcardId, rating) =>
+    api.post(`/revision/${flashcardId}/review`, { rating }),
+  getHistory: (params) => api.get('/revision/history', { params }),
+};
+
+// Phase 5 Part B - Clean Notes Converter Services
+export const cleanNotesAPI = {
+  upload: (formData, onUploadProgress) =>
+    api.post('/clean-notes/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress,
+    }),
+  getAll: (params) => api.get('/clean-notes', { params }),
+  getById: (id) => api.get(`/clean-notes/${id}`),
+  update: (id, data) => api.put(`/clean-notes/${id}`, data),
+  reprocess: (id) => api.post(`/clean-notes/${id}/process`),
+  exportUrl: (id, format = 'html') => `/api/clean-notes/${id}/export?format=${format}`,
+  delete: (id) => api.delete(`/clean-notes/${id}`),
+};
 
 export default api;
+

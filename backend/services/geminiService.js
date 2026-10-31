@@ -111,7 +111,7 @@ const callGeminiWithRetry = async (ai, options, maxRetries = 2) => {
   throw lastError || new Error('Gemini API call failed across all retries and fallback models.');
 };
 
-// Safe JSON parser for AI outputs
+// Safe JSON parser for AI outputs with resilient LaTeX backslash recovery
 const parseAiJsonResponse = (rawText) => {
   if (!rawText) return null;
   let cleaned = rawText.trim();
@@ -124,7 +124,33 @@ const parseAiJsonResponse = (rawText) => {
   }
 
   cleaned = cleaned.trim();
-  return JSON.parse(cleaned);
+
+  try {
+    return JSON.parse(cleaned);
+  } catch (initialErr) {
+    // Strategy 1: Fix invalid JSON escape characters (e.g. \s, \a, \d, \i, \D, etc. common in LaTeX)
+    try {
+      const fixedInvalidEscapes = cleaned.replace(/\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4})/g, '\\\\');
+      return JSON.parse(fixedInvalidEscapes);
+    } catch (err2) {
+      // Strategy 2: Fix LaTeX commands like \frac, \text, \times where backslashes precede letters
+      try {
+        const fixedLatex = cleaned.replace(/\\([a-zA-Z])/g, '\\\\$1');
+        return JSON.parse(fixedLatex);
+      } catch (err3) {
+        // Strategy 3: Handle unescaped newlines/tabs inside JSON string literals
+        try {
+          const fixedNewlines = cleaned
+            .replace(/[\r\n\t]/g, ' ')
+            .replace(/\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4})/g, '\\\\');
+          return JSON.parse(fixedNewlines);
+        } catch (err4) {
+          console.error('[parseAiJsonResponse]: Failed to parse JSON. Error:', initialErr.message);
+          throw initialErr;
+        }
+      }
+    }
+  }
 };
 
 // Generate complete structured document analysis
@@ -440,6 +466,290 @@ ${documentContext}
   } catch (err) {
     console.error('[Gemini Quiz Generation Error]:', err);
     throw new Error(`Quiz generation failed: ${err.message}`);
+  }
+};
+
+/**
+ * Generate interactive academic flashcards using Gemini AI
+ * @param {string|object} extractedContent - Text or pages object from OfficeParser
+ * @param {object} options - { fileName, cardCount, difficulty, chapter, topic }
+ * @returns {Promise<Array>} Array of validated flashcard objects
+ */
+const generateFlashcardCards = async (
+  extractedContent,
+  { fileName, cardCount = 10, difficulty = 'MEDIUM', chapter = '', topic = '' } = {}
+) => {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is missing from environment variables.');
+  }
+
+  const documentContext = formatDocumentContext(extractedContent);
+  if (!documentContext || documentContext.length < 15) {
+    throw new Error('Document content is empty. Cannot generate flashcards.');
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+  const targetCount = Math.max(1, Math.min(30, parseInt(cardCount, 10) || 10));
+  const normalizedDiff = ['EASY', 'MEDIUM', 'HARD'].includes(String(difficulty).toUpperCase())
+    ? String(difficulty).toUpperCase()
+    : 'MEDIUM';
+
+  const scopeDetails = [
+    chapter ? `Focus specifically on chapter: "${chapter}".` : '',
+    topic ? `Focus specifically on topic: "${topic}".` : '',
+  ].filter(Boolean).join(' ');
+
+  const prompt = `You are StudyPilot AI, an elite academic flashcard generator.
+Generate exactly ${targetCount} high-yield, interactive revision flashcards using ONLY the supplied academic study material.
+
+Document: "${fileName || 'Academic Material'}"
+Target Difficulty: ${normalizedDiff}
+${scopeDetails ? `Scope Requirement: ${scopeDetails}` : ''}
+
+FLASHCARD GENERATION RULES:
+1. Generate exactly ${targetCount} unique, non-repetitive flashcards.
+2. Mix multiple question styles across the cards:
+   - Precise definitions & terminology.
+   - Conceptual understanding & core mechanisms.
+   - Formula-based questions (use standard LaTeX formatted expressions like $E = mc^2$ or $\\sigma = \\frac{F}{A}$ where mathematical formulas appear in the source).
+   - Crisp short-answer questions.
+   - Practical application or scenario-based questions.
+3. Keep the "question" direct, unambiguous, and focused on active recall.
+4. Keep the "answer" clear, accurate, and high-yield (1-3 sentences or clear bullet points).
+5. Provide a helpful "explanation" that reinforces why the answer is correct or provides additional revision context.
+6. Set "difficulty" strictly to "${normalizedDiff}".
+7. "chapter": Chapter name from source material (or "${chapter || 'General'}").
+8. "topic": Specific subtopic or concept name tested by this card.
+9. "sourceReference": Specific page, slide, or section reference if identifiable (e.g., "Page 3" or "Section 2.1"), or "Document Excerpt".
+10. Ground EVERY question strictly in the provided study material. Do not invent unrelated facts.
+11. JSON ESCAPING: In any mathematical formulas, write backslashes as double backslashes (e.g. \\\\frac, \\\\sigma) so that output is strictly valid parseable JSON.
+
+You must output ONLY valid JSON matching this schema:
+{
+  "flashcards": [
+    {
+      "question": "Question text",
+      "answer": "Concise, accurate answer",
+      "explanation": "Clear explanation",
+      "difficulty": "${normalizedDiff}",
+      "chapter": "Chapter name",
+      "topic": "Topic name",
+      "sourceReference": "Page or Section reference"
+    }
+  ]
+}
+
+STUDY MATERIAL:
+"""
+${documentContext}
+"""
+`;
+
+  try {
+    const response = await callGeminiWithRetry(ai, {
+      model: DEFAULT_MODEL,
+      contents: prompt,
+      config: {
+        responseMimeType: 'application/json',
+        temperature: 0.2,
+      },
+    });
+
+    const result = parseAiJsonResponse(response.text);
+    if (!result || !Array.isArray(result.flashcards)) {
+      throw new Error('Gemini returned an invalid flashcards response structure.');
+    }
+
+    if (result.flashcards.length === 0) {
+      throw new Error('No flashcards could be generated from the provided content.');
+    }
+
+    // Validate and sanitize flashcard items
+    const seenQuestions = new Set();
+    const validatedCards = [];
+
+    for (const card of result.flashcards) {
+      if (!card || typeof card.question !== 'string' || !card.question.trim()) continue;
+      if (typeof card.answer !== 'string' || !card.answer.trim()) continue;
+
+      const qKey = card.question.trim().toLowerCase();
+      if (seenQuestions.has(qKey)) continue; // Avoid duplicate or repetitive questions
+      seenQuestions.add(qKey);
+
+      validatedCards.push({
+        question: card.question.trim(),
+        answer: card.answer.trim(),
+        explanation: typeof card.explanation === 'string' ? card.explanation.trim() : '',
+        difficulty: normalizedDiff,
+        chapter: (card.chapter || chapter || 'General').trim(),
+        topic: (card.topic || topic || 'Core Concept').trim(),
+        sourceReference: (card.sourceReference || 'Document Excerpt').trim(),
+      });
+
+      if (validatedCards.length >= targetCount) break;
+    }
+
+    if (validatedCards.length === 0) {
+      throw new Error('Failed to validate any flashcards from AI output.');
+    }
+
+    return validatedCards;
+  } catch (err) {
+    console.error('[Gemini Flashcard Generation Error]:', err);
+    throw new Error(`Flashcard generation failed: ${err.message}`);
+  }
+};
+
+/**
+ * Convert raw text and/or scanned notes images into clean, structured academic notes with Gemini AI
+ * @param {string} rawText - Extracted text (from OCR or text-layer)
+ * @param {Array<{mimeType: string, base64: string}>} [imageParts] - Optional image buffers for multimodal vision OCR
+ * @param {object} [metadata] - Optional { subjectName, chapterTitle, originalFileName }
+ * @returns {Promise<object>} Structured clean notes object
+ */
+const structureCleanNotes = async (rawText = '', imageParts = [], metadata = {}) => {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is missing from environment variables.');
+  }
+
+  const hasText = typeof rawText === 'string' && rawText.trim().length > 10;
+  const hasImages = Array.isArray(imageParts) && imageParts.length > 0;
+
+  if (!hasText && !hasImages) {
+    throw new Error('No text or image content provided for clean notes conversion.');
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const prompt = `You are StudyPilot AI, an expert academic note transcription and structuring system.
+Your mission is to transcribe handwritten notes, fix OCR noise, and organize raw contents into clean, highly readable, structured digital study notes.
+
+Subject: "${metadata.subjectName || 'Academic Course'}"
+Chapter / Topic: "${metadata.chapterTitle || 'Lecture Notes'}"
+Source Document: "${metadata.originalFileName || 'Handwritten Notes'}"
+
+RULES & INSTRUCTIONS:
+1. PRESERVE ACADEMIC MEANING: Do not omit important facts, steps, definitions, or equations.
+2. HANDWRITING & OCR RECOVERY:
+   - Correct obvious spelling errors and OCR glitches caused by messy handwriting.
+   - For completely illegible or ambiguous words/symbols, mark them explicitly as "[Unclear: ...]" or "[?]" instead of inventing unsupported content. List any such notes in "unclearTextNotes".
+3. FORMULAS & MATH:
+   - Convert all mathematical formulas, fractions, powers, subscripts, summations, integrals, Greek letters into clean LaTeX expressions (e.g. $E = mc^2$, $\\int_0^\\infty f(x)dx$, $\\sum_{i=1}^n x_i$).
+4. STRUCTURE:
+   - Organize into hierarchical main headings and subheadings.
+   - Extract key definitions with concise definitions.
+   - Extract formula sheets with variable explanations.
+   - Extract important key bullet points and highlights.
+   - Construct markdown/tabular representations where tables or comparisons exist in the notes.
+5. JSON ESCAPING:
+   - Output MUST be strictly valid, standard parseable JSON.
+   - In all LaTeX expressions and mathematical formulas, ensure backslashes are properly escaped with double backslashes (e.g. \\\\frac{a}{b}, \\\\sigma, \\\\int) so bad escaped character syntax errors never occur.
+
+Output strictly valid JSON with this exact structure:
+{
+  "title": "Clean, descriptive title for these notes",
+  "subject": "${metadata.subjectName || ''}",
+  "chapter": "${metadata.chapterTitle || ''}",
+  "rawOcrText": "Full reconstructed cleaned transcript of the handwritten text",
+  "headings": [
+    {
+      "title": "Main Heading 1",
+      "content": "Explanation and notes under this heading",
+      "subheadings": [
+        {
+          "title": "Subheading 1.1",
+          "content": "Detailed notes, bullet points, or concepts"
+        }
+      ]
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Term Name",
+      "definition": "Precise definition"
+    }
+  ],
+  "formulas": [
+    {
+      "name": "Formula Name / Law",
+      "expression": "$$LaTeX Formula$$",
+      "explanation": "Explanation of variables and symbols"
+    }
+  ],
+  "keyPoints": [
+    "High-yield bullet point 1",
+    "High-yield bullet point 2"
+  ],
+  "tables": [
+    {
+      "title": "Comparison or Summary Table",
+      "headers": ["Col 1", "Col 2"],
+      "rows": [["Val A1", "Val A2"], ["Val B1", "Val B2"]]
+    }
+  ],
+  "highlights": [
+    "Crucial exam takeaway or reminder"
+  ],
+  "unclearTextNotes": [
+    "Optional note about any illegible sections"
+  ]
+}
+
+${hasText ? `RAW EXTRACTED TEXT FROM NOTES:\n"""\n${rawText.slice(0, 100000)}\n"""` : ''}
+`;
+
+  try {
+    const contents = [];
+
+    // If multimodal images provided (e.g. JPG, PNG, scanned PDF pages)
+    if (hasImages) {
+      for (const img of imageParts) {
+        if (img && img.mimeType && img.base64) {
+          contents.push({
+            inlineData: {
+              mimeType: img.mimeType,
+              data: img.base64,
+            },
+          });
+        }
+      }
+    }
+
+    contents.push({ text: prompt });
+
+    const response = await callGeminiWithRetry(ai, {
+      model: DEFAULT_MODEL,
+      contents,
+      config: {
+        responseMimeType: 'application/json',
+        temperature: 0.15,
+        maxOutputTokens: 8192,
+      },
+    });
+
+    const parsed = parseAiJsonResponse(response?.text);
+    if (!parsed || typeof parsed !== 'object') {
+      throw new Error('Gemini did not return valid JSON for clean notes structuring.');
+    }
+
+    return {
+      title: parsed.title || metadata.chapterTitle || 'Clean Lecture Notes',
+      subject: parsed.subject || metadata.subjectName || '',
+      chapter: parsed.chapter || metadata.chapterTitle || '',
+      rawOcrText: parsed.rawOcrText || rawText || '',
+      headings: Array.isArray(parsed.headings) ? parsed.headings : [],
+      definitions: Array.isArray(parsed.definitions) ? parsed.definitions : [],
+      formulas: Array.isArray(parsed.formulas) ? parsed.formulas : [],
+      keyPoints: Array.isArray(parsed.keyPoints) ? parsed.keyPoints : [],
+      tables: Array.isArray(parsed.tables) ? parsed.tables : [],
+      highlights: Array.isArray(parsed.highlights) ? parsed.highlights : [],
+      unclearTextNotes: Array.isArray(parsed.unclearTextNotes) ? parsed.unclearTextNotes : [],
+    };
+  } catch (err) {
+    console.error('[Gemini Clean Notes Structuring Error]:', err);
+    throw new Error(`Clean notes processing failed: ${err.message}`);
   }
 };
 
@@ -1291,6 +1601,8 @@ module.exports = {
   answerDocumentQuestion,
   formatDocumentContext,
   generateQuizQuestions,
+  generateFlashcardCards,
+  structureCleanNotes,
   generateStudySchedule,
   analyzeDateSheet,
   generateMnemonic,

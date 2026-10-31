@@ -10,6 +10,9 @@ import {
   LogOut,
   Compass,
   Sparkles,
+  Layers,
+  RotateCcw,
+  FileEdit,
   X
 } from 'lucide-react';
 
@@ -35,16 +38,22 @@ const Sidebar = ({ isOpen, onClose }) => {
       icon: BookOpenCheck,
     },
     {
-      label: 'Study Materials',
-      icon: FileText,
-      comingSoon: true,
-      badge: 'Phase 2',
+      to: '/flashcards',
+      label: 'AI Flashcards',
+      icon: Layers,
+      badge: 'Phase 5',
     },
     {
-      label: 'AI Assistant',
-      icon: Bot,
-      comingSoon: true,
-      badge: 'Phase 3',
+      to: '/revision',
+      label: 'Spaced Revision',
+      icon: RotateCcw,
+      badge: 'Phase 5',
+    },
+    {
+      to: '/clean-notes',
+      label: 'Clean Notes',
+      icon: FileEdit,
+      badge: 'Phase 5',
     },
     {
       to: '/exams',

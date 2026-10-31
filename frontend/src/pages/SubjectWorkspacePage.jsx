@@ -8,6 +8,8 @@ import MaterialsList from '../components/materials/MaterialsList';
 import DocumentIntelligenceView from '../components/ai/DocumentIntelligenceView';
 import QuizGenerationView from '../components/quiz/QuizGenerationView';
 import PerformanceAnalyticsView from '../components/analytics/PerformanceAnalyticsView';
+import FlashcardGeneratorModal from '../components/flashcards/FlashcardGeneratorModal';
+import CleanNotesUploadModal from '../components/notes/CleanNotesUploadModal';
 import MnemonicGenerator from '../components/ai/MnemonicGenerator';
 import DiagramGenerator from '../components/ai/DiagramGenerator';
 import {
@@ -22,7 +24,11 @@ import {
   ChevronRight,
   Loader2,
   AlertCircle,
-  Sparkles
+  Sparkles,
+  Layers,
+  RotateCcw,
+  FileEdit,
+  Play
 } from 'lucide-react';
 
 const SubjectWorkspacePage = () => {
@@ -46,6 +52,10 @@ const SubjectWorkspacePage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Phase 5 Part B Modals
+  const [flashcardModalOpen, setFlashcardModalOpen] = useState(false);
+  const [cleanNotesModalOpen, setCleanNotesModalOpen] = useState(false);
 
   // Fetch subject details
   useEffect(() => {
@@ -382,6 +392,132 @@ const SubjectWorkspacePage = () => {
 
         <PerformanceAnalyticsView subjectId={id} />
       </div>
+      {/* PHASE 5 PART B: FLASHCARDS, SPACED REPETITION & CLEAN NOTES */}
+      <div className="space-y-4 pt-4 border-t border-slate-200/80">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+              <Layers className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                Phase 5: Flashcards, Spaced Revision & Clean Notes
+              </h3>
+              <p className="text-xs text-slate-500">
+                Active recall question decks, intelligent SM-2 memory retention, and handwritten OCR conversion
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
+            Phase 5 Part B Active
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Card 1: AI Flashcards */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-all">
+            <div>
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <Layers className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">
+                  AI Generator
+                </span>
+              </div>
+              <h4 className="text-sm font-bold text-slate-900">
+                AI Flashcards Generator
+              </h4>
+              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Generate interactive active-recall question cards from this subject's uploaded slides or textbook chapters.
+              </p>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+              <button
+                onClick={() => setFlashcardModalOpen(true)}
+                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Generate Cards</span>
+              </button>
+              <Link
+                to={`/flashcards?subject=${id}`}
+                className="px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors"
+              >
+                View Decks
+              </Link>
+            </div>
+          </div>
+
+          {/* Card 2: Spaced Repetition */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-all">
+            <div>
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                  <RotateCcw className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700">
+                  SM-2 Algorithm
+                </span>
+              </div>
+              <h4 className="text-sm font-bold text-slate-900">
+                Spaced Repetition System
+              </h4>
+              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Schedule smart revision intervals (Again, Hard, Easy) to permanently retain high-yield subject concepts.
+              </p>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-slate-100">
+              <Link
+                to={`/revision?subject=${id}`}
+                className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition-colors"
+              >
+                <Play className="w-3.5 h-3.5" />
+                <span>Start Subject Revision</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Card 3: Clean Notes Converter */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-all">
+            <div>
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <FileEdit className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">
+                  OCR & Formatter
+                </span>
+              </div>
+              <h4 className="text-sm font-bold text-slate-900">
+                Clean Notes Converter
+              </h4>
+              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Upload handwritten notebook photos or scanned notes to transcribe, clean, and structure with formulas.
+              </p>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+              <button
+                onClick={() => setCleanNotesModalOpen(true)}
+                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors"
+              >
+                <UploadCloud className="w-3.5 h-3.5" />
+                <span>Upload Notes</span>
+              </button>
+              <Link
+                to={`/clean-notes?subject=${id}`}
+                className="px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors"
+              >
+                View Notes
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* FUTURE ROADMAP MODULES (PHASE 3 & 4) */}
       <div className="space-y-4 pt-4 border-t border-slate-200/80">
         <div className="flex items-center justify-between">
@@ -460,6 +596,25 @@ const SubjectWorkspacePage = () => {
         onConfirm={handleDelete}
         subjectName={subject.subjectName}
         isDeleting={isDeleting}
+      />
+
+      <FlashcardGeneratorModal
+        isOpen={flashcardModalOpen}
+        onClose={() => setFlashcardModalOpen(false)}
+        preselectedSubjectId={id}
+        preselectedMaterialId={selectedMaterial?._id}
+        onGenerated={() => {
+          navigate(`/flashcards?subject=${id}`);
+        }}
+      />
+
+      <CleanNotesUploadModal
+        isOpen={cleanNotesModalOpen}
+        onClose={() => setCleanNotesModalOpen(false)}
+        preselectedSubjectId={id}
+        onUploadSuccess={() => {
+          navigate(`/clean-notes?subject=${id}`);
+        }}
       />
     </div>
   );
