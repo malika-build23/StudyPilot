@@ -223,5 +223,23 @@ export const cleanNotesAPI = {
   delete: (id) => api.delete(`/clean-notes/${id}`),
 };
 
+// Smart Resource Finder Services (Google Drive academic resources)
+export const resourcesAPI = {
+  getAuthUrl: (folderUrl = '') =>
+    api.get('/resources/auth-url', { params: { folderUrl } }),
+  oauthCallback: (code, folderUrl = '') =>
+    api.post('/resources/oauth-callback', { code, folderUrl }),
+  connect: (folderUrl) => api.post('/resources/connect', { folderUrl }),
+  connectWithToken: (accessToken, folderUrl) =>
+    api.post('/resources/connect-token', { accessToken, folderUrl }),
+  getConnection: () => api.get('/resources/connection'),
+  getIndexStatus: () => api.get('/resources/index-status'),
+  indexFolder: () => api.post('/resources/index'),
+  search: (data) => api.post('/resources/search', data),
+  getAll: (params) => api.get('/resources', { params }),
+  sync: () => api.post('/resources/sync'),
+  disconnect: () => api.delete('/resources/disconnect'),
+};
+
 export default api;
 
