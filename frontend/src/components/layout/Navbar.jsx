@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Compass, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const Navbar = () => {
   const { isAuthenticated } = useAuth();
@@ -10,8 +10,8 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-8 h-18 flex items-center justify-between">
         {/* Brand Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xs shadow-blue-500/30 group-hover:scale-105 transition-transform">
-            <Compass className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+            <img src="/logo.png" alt="StudyPilot Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">

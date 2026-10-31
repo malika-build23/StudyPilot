@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { userAPI } from '../services/api';
 import SemesterSelect from '../components/common/SemesterSelect';
 import { GoogleLogo } from '../components/auth/GoogleSignInButton';
+import { getAvatarUrl } from '../utils/avatar';
 import {
   Mail,
   Calendar,
@@ -171,7 +172,7 @@ const ProfilePage = () => {
     );
   }
 
-  const currentAvatar = avatarPreview || profileData?.avatar;
+  const currentAvatar = avatarPreview || getAvatarUrl(profileData?.avatar);
   const isGoogleAvatar =
     Boolean(profileData?.avatar) &&
     (profileData.avatar.includes('googleusercontent.com') || profileData.isGoogleUser);

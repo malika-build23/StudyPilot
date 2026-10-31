@@ -1,12 +1,14 @@
 const dns = require('dns');
 const mongoose = require('mongoose');
 
-// On Windows or certain networks, Node.js c-ares DNS resolver can fail on SRV lookups (querySrv ECONNREFUSED).
-// Setting public DNS resolvers ensures Atlas mongodb+srv URIs resolve reliably.
-try {
-  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
-} catch (e) {
-  // Ignore if unable to override DNS servers
+// On Windows or certain residential networks, Node.js c-ares DNS resolver can fail on SRV lookups (querySrv ECONNREFUSED).
+// Only set custom DNS on Windows; Linux containers (Render, Railway, Docker) manage their own internal DNS.
+if (process.platform === 'win32') {
+  try {
+    dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+  } catch (e) {
+    // Ignore if unable to override DNS servers
+  }
 }
 
 const connectDB = async () => {
@@ -15,6 +17,7 @@ const connectDB = async () => {
     primaryUri = `${primaryUri}studypilot_ai?retryWrites=true&w=majority`;
   }
 
+  const isProduction = process.env.NODE_ENV === 'production';
   const localUri = 'mongodb://127.0.0.1:27017/studypilot_ai';
 
   try {
@@ -24,10 +27,14 @@ const connectDB = async () => {
     console.log(`[Database] MongoDB Connected: ${conn.connection.host} (DB: ${conn.connection.name})`);
     return conn;
   } catch (error) {
-    console.warn(`[Database Warning] Primary connection failed: ${error.message}`);
-    // If primary was remote Atlas and failed (e.g. IP whitelist / network drop), fallback to local MongoDB
-    if (primaryUri !== localUri) {
-      console.log('[Database] Resetting connection pool and attempting fallback to local MongoDB (mongodb://127.0.0.1:27017/studypilot_ai)...');
+    console.error(`\n[Database Error] Failed to connect to MongoDB Atlas: ${error.message}`);
+    console.error(`[Troubleshooting] If deploying to Render/Vercel/Railway:`);
+    console.error(`1. Go to MongoDB Atlas (cloud.mongodb.com) -> Security -> Network Access.`);
+    console.error(`2. Ensure IP Access List includes "0.0.0.0/0" (Allow Access from Anywhere).\n`);
+
+    // In local development, attempt fallback to local MongoDB instance
+    if (!isProduction && primaryUri !== localUri) {
+      console.log('[Database] Development mode: Attempting fallback to local MongoDB (mongodb://127.0.0.1:27017/studypilot_ai)...');
       try {
         await mongoose.disconnect();
         const localConn = await mongoose.connect(localUri, {

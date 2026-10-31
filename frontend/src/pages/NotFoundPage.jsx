@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import { Compass, Home } from 'lucide-react';
+import { Home } from 'lucide-react';
 
 const NotFoundPage = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 text-center">
-      <div className="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6">
-        <Compass className="w-8 h-8" />
+      <div className="w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center mb-6">
+        <img src="/logo.png" alt="StudyPilot Logo" className="w-full h-full object-contain" />
       </div>
       <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">404</h1>
       <h2 className="text-xl font-bold text-slate-800 mt-2">Page Not Found</h2>

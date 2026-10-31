@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { useAuth } from '../../context/AuthContext';
+import { getAvatarUrl } from '../../utils/avatar';
 import { Menu, Plus } from 'lucide-react';
 
 const AppLayout = ({ onOpenNewSubject }) => {
@@ -66,7 +67,7 @@ const AppLayout = ({ onOpenNewSubject }) => {
             <div className="flex items-center gap-2.5 pl-1">
               {user?.avatar ? (
                 <img
-                  src={user.avatar}
+                  src={getAvatarUrl(user.avatar)}
                   alt={user?.name || 'User'}
                   className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-xs"
                 />
