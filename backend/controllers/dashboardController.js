@@ -1,4 +1,5 @@
 const Subject = require('../models/Subject');
+const StudyMaterial = require('../models/StudyMaterial');
 
 // @desc    Get dashboard statistics for authenticated student
 // @route   GET /api/dashboard/stats
@@ -7,14 +8,28 @@ exports.getDashboardStats = async (req, res, next) => {
   try {
     const userId = req.user._id;
 
-    // Fetch subjects count and most recent subjects
-    const [totalSubjects, recentSubjects] = await Promise.all([
+    // Fetch subjects count, study materials count, and recent records
+    const [totalSubjects, totalStudyMaterials, recentSubjects, recentMaterials] = await Promise.all([
       Subject.countDocuments({ userId }),
+      StudyMaterial.countDocuments({ userId }),
       Subject.find({ userId }).sort({ updatedAt: -1 }).limit(5).lean(),
+      StudyMaterial.find({ userId }).sort({ createdAt: -1 }).limit(5).lean(),
     ]);
 
     // Format recent activities from real actions or welcome event
     const recentActivity = [];
+
+    if (recentMaterials.length > 0) {
+      recentMaterials.forEach((mat) => {
+        recentActivity.push({
+          id: `act-mat-${mat._id}`,
+          type: 'material_uploaded',
+          title: `Uploaded document: ${mat.fileName}`,
+          description: `Format: ${mat.fileType?.toUpperCase()} (${(mat.fileSize / 1024).toFixed(1)} KB)`,
+          timestamp: mat.createdAt,
+        });
+      });
+    }
 
     if (recentSubjects.length > 0) {
       recentSubjects.forEach((sub) => {
@@ -28,8 +43,12 @@ exports.getDashboardStats = async (req, res, next) => {
       });
     }
 
+    // Sort combined activities by timestamp desc and take top 5
+    recentActivity.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const topActivities = recentActivity.slice(0, 5);
+
     // Always append account setup event as baseline activity
-    recentActivity.push({
+    topActivities.push({
       id: `act-welcome-${userId}`,
       type: 'account_created',
       title: 'Joined StudyPilot AI',
@@ -47,11 +66,11 @@ exports.getDashboardStats = async (req, res, next) => {
         },
         metrics: {
           totalSubjects,
-          totalStudyMaterials: 0, // Zero in Phase 1
-          preparationProgress: 0,  // Zero in Phase 1
+          totalStudyMaterials, // Live database count
+          preparationProgress: 0,
         },
-        upcomingExams: [],         // Empty state for Phase 1
-        recentActivity,
+        upcomingExams: [],
+        recentActivity: topActivities,
       },
     });
   } catch (error) {

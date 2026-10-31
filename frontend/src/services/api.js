@@ -41,6 +41,7 @@ api.interceptors.response.use(
 export const authAPI = {
   register: (data) => api.post('/auth/register', data),
   login: (data) => api.post('/auth/login', data),
+  googleLogin: (credential) => api.post('/auth/google', { credential }),
   getMe: () => api.get('/auth/me'),
 };
 
@@ -51,6 +52,94 @@ export const subjectsAPI = {
   create: (data) => api.post('/subjects', data),
   update: (id, data) => api.put(`/subjects/${id}`, data),
   delete: (id) => api.delete(`/subjects/${id}`),
+};
+
+// Study Material Services (Part A)
+export const materialsAPI = {
+  upload: (formData, onUploadProgress) =>
+    api.post('/materials/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress,
+    }),
+  getBySubject: (subjectId) => api.get(`/materials/subject/${subjectId}`),
+  getById: (id) => api.get(`/materials/${id}`),
+  delete: (id) => api.delete(`/materials/${id}`),
+};
+
+// AI Document Intelligence Services (Part B)
+export const aiAPI = {
+  analyseMaterial: (materialId) => api.post(`/ai/materials/${materialId}/analyse`),
+  getAnalysis: (materialId) => api.get(`/ai/materials/${materialId}/analysis`),
+  askQuestion: (materialId, question) =>
+    api.post(`/ai/materials/${materialId}/ask`, { question }),
+};
+
+// Quiz Generation & Attempt Services (Phase 3 - Part A)
+export const quizAPI = {
+  generate: (data) => api.post('/quizzes/generate', data),
+  getById: (quizId) => api.get(`/quizzes/${quizId}`),
+  getBySubject: (subjectId) => api.get(`/quizzes/subject/${subjectId}`),
+  submit: (quizId, answers) =>
+    api.post(`/quizzes/${quizId}/submit`, { answers }),
+};
+
+// Quiz Evaluation & Mistake Results (Phase 3 - Part B)
+export const evaluationAPI = {
+  evaluate: (attemptId) => api.post(`/attempts/${attemptId}/evaluate`),
+  getResult: (attemptId) => api.get(`/attempts/${attemptId}/result`),
+};
+
+// Performance Analytics & Weak Topics (Phase 3 - Part B)
+export const analyticsAPI = {
+  getOverview: () => api.get('/analytics/overview'),
+  getWeakTopics: () => api.get('/analytics/weak-topics'),
+  getBySubject: (subjectId) => api.get(`/analytics/${subjectId}`),
+};
+
+
+// Exam Services (Phase 4 - Smart Exam Planner)
+export const examsAPI = {
+  create: (data) => api.post('/exams', data),
+  getAll: () => api.get('/exams'),
+  getById: (id) => api.get(`/exams/${id}`),
+  update: (id, data) => api.put(`/exams/${id}`, data),
+  delete: (id) => api.delete(`/exams/${id}`),
+
+  // Smart Exam Planner endpoints
+  getOverview: () => api.get('/exams/overview'),
+  getUpcoming: () => api.get('/exams/upcoming'),
+  getCalendar: (params) => api.get('/exams/calendar', { params }),
+  getCompleted: () => api.get('/exams/completed'),
+
+  getUniversity: () => api.get('/exams/university'),
+  createUniversity: (data) => api.post('/exams/university', data),
+
+  getPractical: () => api.get('/exams/practical'),
+  createPractical: (data) => api.post('/exams/practical', data),
+  updatePractical: (id, data) => api.put(`/exams/practical/${id}`, data),
+  deletePractical: (id) => api.delete(`/exams/practical/${id}`),
+};
+
+// Date Sheet Services (Smart Exam Planner)
+export const dateSheetsAPI = {
+  upload: (formData) =>
+    api.post('/date-sheets/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+  getAll: () => api.get('/date-sheets'),
+  getById: (id) => api.get(`/date-sheets/${id}`),
+  analyze: (id) => api.post(`/date-sheets/${id}/analyze`),
+  filter: (id, data) => api.post(`/date-sheets/${id}/filter`, data),
+  confirm: (id, data) => api.post(`/date-sheets/${id}/confirm`, data),
+};
+
+// Study Plan Services (Phase 4 - Part A)
+export const studyPlansAPI = {
+  generate: (examId) => api.post('/study-plans/generate', { examId }),
+  getByExam: (examId) => api.get(`/study-plans/${examId}`),
+  updateTask: (planId, taskId, completed) =>
+    api.patch(`/study-plans/${planId}/tasks/${taskId}`, { completed }),
+  regenerate: (planId) => api.post(`/study-plans/${planId}/regenerate`),
 };
 
 // Dashboard Services

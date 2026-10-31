@@ -1,21 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { subjectsAPI } from '../services/api';
+import { subjectsAPI, materialsAPI } from '../services/api';
 import SubjectModal from '../components/subjects/SubjectModal';
 import DeleteConfirmModal from '../components/subjects/DeleteConfirmModal';
+import MaterialUploadModal from '../components/materials/MaterialUploadModal';
+import MaterialsList from '../components/materials/MaterialsList';
+import DocumentIntelligenceView from '../components/ai/DocumentIntelligenceView';
+import QuizGenerationView from '../components/quiz/QuizGenerationView';
+import PerformanceAnalyticsView from '../components/analytics/PerformanceAnalyticsView';
 import {
   ArrowLeft,
   Calendar,
   Edit2,
   Trash2,
-  FileText,
+  UploadCloud,
   Brain,
-  HelpCircle,
   CheckCircle,
   BarChart2,
   ChevronRight,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  Sparkles
 } from 'lucide-react';
 
 const SubjectWorkspacePage = () => {
@@ -26,13 +31,21 @@ const SubjectWorkspacePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Edit and Delete Modals
+  // Study Materials state (Part A)
+  const [materials, setMaterials] = useState([]);
+  const [materialsLoading, setMaterialsLoading] = useState(false);
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+
+  // Selected Material for Gemini AI Intelligence (Part B)
+  const [selectedMaterial, setSelectedMaterial] = useState(null);
+
+  // Subject Edit & Delete Modals
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Fetch subject details
   useEffect(() => {
     const fetchSubject = async () => {
       try {
@@ -53,6 +66,35 @@ const SubjectWorkspacePage = () => {
     };
 
     fetchSubject();
+  }, [id]);
+
+  // Fetch materials for this subject
+  const fetchMaterials = async () => {
+    try {
+      setMaterialsLoading(true);
+      const res = await materialsAPI.getBySubject(id);
+      if (res.data?.success) {
+        const mats = res.data.data || res.data.materials || [];
+        setMaterials(mats);
+        // If a material was selected, update its reference; otherwise auto-select the first one
+        if (selectedMaterial) {
+          const updated = mats.find((m) => m._id === selectedMaterial._id);
+          setSelectedMaterial(updated || (mats.length > 0 ? mats[0] : null));
+        } else if (mats.length > 0) {
+          setSelectedMaterial(mats[0]);
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching materials:', err);
+    } finally {
+      setMaterialsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchMaterials();
+    }
   }, [id]);
 
   const handleUpdate = async (formData) => {
@@ -81,6 +123,20 @@ const SubjectWorkspacePage = () => {
       alert(err.response?.data?.message || 'Failed to delete subject.');
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteMaterial = async (materialId) => {
+    try {
+      const res = await materialsAPI.delete(materialId);
+      if (res.data?.success) {
+        if (selectedMaterial?._id === materialId) {
+          setSelectedMaterial(null);
+        }
+        fetchMaterials();
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to delete material.');
     }
   };
 
@@ -116,44 +172,30 @@ const SubjectWorkspacePage = () => {
 
   const futureModules = [
     {
-      title: 'Uploaded Study Materials',
-      phase: 'Phase 2',
-      desc: 'Upload lecture slides, syllabus documents, and textbooks (PDF, DOCX) for automated analysis.',
-      icon: FileText,
-      color: 'bg-blue-50 text-blue-600',
-    },
-    {
-      title: 'Chapter Summaries',
-      phase: 'Phase 2',
-      desc: 'AI-generated concise summaries, key definitions, and concept breakdown cards.',
-      icon: Brain,
-      color: 'bg-indigo-50 text-indigo-600',
-    },
-    {
-      title: 'Important Questions',
+      title: 'Interactive Quizzes & Mock Tests',
       phase: 'Phase 3',
-      desc: 'Curated high-yield practice prompts and past paper problem sets.',
-      icon: HelpCircle,
+      desc: 'Adaptive mock exams generated from your uploaded materials to evaluate concept retention and identify weak zones.',
+      icon: CheckCircle,
       color: 'bg-emerald-50 text-emerald-600',
     },
     {
-      title: 'Diagnostic Quizzes',
+      title: 'Mistake Analysis & Weak Topics',
       phase: 'Phase 3',
-      desc: 'Adaptive mock tests to evaluate concept retention and identify weak knowledge zones.',
-      icon: CheckCircle,
+      desc: 'Deep diagnostic feedback on test mistakes with tailored concept review recommendations.',
+      icon: Brain,
       color: 'bg-amber-50 text-amber-600',
     },
     {
-      title: 'Performance Analytics',
+      title: 'Study Planner & Readiness Analytics',
       phase: 'Phase 4',
-      desc: 'Readiness scores, revision schedule timers, and topic mastery matrices.',
+      desc: 'Exam countdown timelines, spaced repetition schedules, and overall syllabus mastery metrics.',
       icon: BarChart2,
       color: 'bg-purple-50 text-purple-600',
     },
   ];
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-150">
+    <div className="space-y-8 animate-in fade-in duration-150">
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center gap-2 text-xs font-medium text-slate-400">
         <Link to="/dashboard" className="hover:text-slate-700 transition-colors">
@@ -210,36 +252,154 @@ const SubjectWorkspacePage = () => {
         </div>
       </div>
 
-      {/* Prepared Workspace Zones (Coming Soon Architecture) */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
+      {/* PART A: STUDY MATERIALS SECTION */}
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className="text-base sm:text-lg font-bold text-slate-900">
-              Workspace Study Modules
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                Course Study Materials
+              </h3>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
+                Phase 2 Active
+              </span>
+            </div>
             <p className="text-xs text-slate-500">
-              Architecture prepared for upcoming phase integrations
+              Upload PDF textbooks or PowerPoint slides (.pptx). Text is automatically extracted for Gemini AI processing.
             </p>
           </div>
-          <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
-            Roadmap Aligned
+
+          <button
+            onClick={() => setUploadModalOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xs shadow-blue-500/25 transition-all self-start sm:self-auto hover:scale-102"
+          >
+            <UploadCloud className="w-4 h-4" />
+            <span>Upload Document</span>
+          </button>
+        </div>
+
+        {materials.length === 0 && !materialsLoading ? (
+          <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/80 text-center shadow-xs">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-3">
+              <UploadCloud className="w-7 h-7" />
+            </div>
+            <h4 className="text-sm font-bold text-slate-900">
+              No study materials uploaded yet
+            </h4>
+            <p className="text-xs text-slate-500 mt-1.5 max-w-md mx-auto leading-relaxed">
+              Upload course syllabi, lecture slides, or textbook chapters (PDF or PPTX). Gemini AI will generate chapter summaries, formula sheets, and practice question banks.
+            </p>
+            <button
+              onClick={() => setUploadModalOpen(true)}
+              className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all"
+            >
+              <UploadCloud className="w-4 h-4" />
+              <span>Upload First Document</span>
+            </button>
+          </div>
+        ) : (
+          <MaterialsList
+            materials={materials}
+            loading={materialsLoading}
+            onDeleteMaterial={handleDeleteMaterial}
+            onSelectForAnalysis={(mat) => setSelectedMaterial(mat)}
+            selectedMaterialId={selectedMaterial?._id}
+          />
+        )}
+      </div>
+
+      {/* PART B: GEMINI AI DOCUMENT INTELLIGENCE VIEW */}
+      {selectedMaterial && (
+        <div className="space-y-4 pt-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                  Gemini AI Document Intelligence
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Active Document: <span className="font-semibold text-slate-800">{selectedMaterial.fileName}</span>
+                </p>
+              </div>
+            </div>
+
+            <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">
+              Part B Enabled
+            </span>
+          </div>
+
+          <DocumentIntelligenceView
+            material={selectedMaterial}
+            onClose={() => setSelectedMaterial(null)}
+          />
+        </div>
+      )}
+      {/* PHASE 3: AI QUIZ GENERATION */}
+{selectedMaterial && (
+  <div className="space-y-4 pt-2">
+    <QuizGenerationView
+      subjectId={id}
+      material={selectedMaterial}
+    />
+  </div>
+)}
+
+      {/* PHASE 3 PART B: SUBJECT DIAGNOSTIC ANALYTICS & WEAK TOPICS */}
+      <div className="space-y-4 pt-4 border-t border-slate-200/80">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
+              <BarChart2 className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                Course Diagnostic Analytics & Weak-Topic Detection
+              </h3>
+              <p className="text-xs text-slate-500">
+                Live performance metrics, mistake analysis patterns, and revision directives
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">
+            Phase 3 Part B Active
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <PerformanceAnalyticsView subjectId={id} />
+      </div>
+      {/* FUTURE ROADMAP MODULES (PHASE 3 & 4) */}
+      <div className="space-y-4 pt-4 border-t border-slate-200/80">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-bold text-slate-900">
+              Future Study Tools Roadmap
+            </h3>
+            <p className="text-xs text-slate-500">
+              Upcoming Phase 3 & Phase 4 modules built on top of your document intelligence
+            </p>
+          </div>
+          <span className="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-full">
+            Coming in Phase 3 & 4
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {futureModules.map((mod, index) => {
             const Icon = mod.icon;
             return (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-all relative overflow-hidden"
+                className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-all"
               >
                 <div>
                   <div className="flex items-start justify-between mb-3">
-                    <div className={`w-10 h-10 rounded-xl ${mod.color} flex items-center justify-center`}>
-                      <Icon className="w-5 h-5" />
+                    <div className={`w-9 h-9 rounded-xl ${mod.color} flex items-center justify-center`}>
+                      <Icon className="w-4 h-4" />
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200/60">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
                       {mod.phase}
                     </span>
                   </div>
@@ -252,7 +412,7 @@ const SubjectWorkspacePage = () => {
                   </p>
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-medium text-slate-400">
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-medium text-slate-400">
                   <span>Status</span>
                   <span className="text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded">
                     Coming Soon
@@ -264,7 +424,16 @@ const SubjectWorkspacePage = () => {
         </div>
       </div>
 
-      {/* Edit Subject Modal */}
+      {/* Modals */}
+      <MaterialUploadModal
+        isOpen={uploadModalOpen}
+        onClose={() => setUploadModalOpen(false)}
+        subjectId={id}
+        onUploadSuccess={() => {
+          fetchMaterials();
+        }}
+      />
+
       <SubjectModal
         isOpen={editModalOpen}
         onClose={() => setEditModalOpen(false)}
@@ -273,7 +442,6 @@ const SubjectWorkspacePage = () => {
         isSubmitting={isSubmitting}
       />
 
-      {/* Delete Subject Modal */}
       <DeleteConfirmModal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}

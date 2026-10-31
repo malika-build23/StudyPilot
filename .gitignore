@@ -26,3 +26,24 @@ frontend/dist/
 Thumbs.db
 .vscode/
 .idea/
+
+# Testing files
+test-*.js
+backend/test-*.js
+frontend/test-*.js
+test-phase*
+backend/test-phase*
+test-phase1-backend*
+backend/test-phase1-backend.js
+test-phase2-part-b*
+backend/test-phase2-part-b.js
+test-phase3-part-b*
+test-phase3-partb*
+backend/test-phase3-part-b*
+backend/test-phase3-partb*
+*.test.js
+*.spec.js
+tests/
+test/
+test-ui-enhancements*
+backend/test-ui-enhancements*

@@ -51,8 +51,14 @@ const studyMaterialSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+
+studyMaterialSchema.virtual('fileUrl').get(function () {
+  return this._fileUrl || null;
+});
 
 studyMaterialSchema.index({ userId: 1, subjectId: 1, createdAt: -1 });
 

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import GoogleSignInButton from '../components/auth/GoogleSignInButton';
+import SemesterSelect from '../components/common/SemesterSelect';
 import { Compass, User, Mail, Lock, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 
 const RegisterPage = () => {
@@ -9,6 +11,7 @@ const RegisterPage = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    semester: '',
   });
   const [clientError, setClientError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,7 +51,8 @@ const RegisterPage = () => {
       formData.name,
       formData.email,
       formData.password,
-      formData.confirmPassword
+      formData.confirmPassword,
+      formData.semester
     );
     setIsSubmitting(false);
 
@@ -85,6 +89,26 @@ const RegisterPage = () => {
               <span>{displayedError}</span>
             </div>
           )}
+
+          {/* Direct Google Sign-Up / Sign-In */}
+          <div className="mb-5">
+            <GoogleSignInButton
+              text="Continue with Google"
+              onSuccess={() => navigate('/dashboard')}
+            />
+          </div>
+
+          {/* Clean OR divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-3 text-slate-400 font-semibold tracking-wider">
+                or register with email
+              </span>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Full Name */}
@@ -128,6 +152,15 @@ const RegisterPage = () => {
                 />
               </div>
             </div>
+
+            {/* Academic Semester Selection */}
+            <SemesterSelect
+              id="register-semester"
+              label="Academic Semester / Level (Optional)"
+              value={formData.semester}
+              onChange={(val) => setFormData((prev) => ({ ...prev, semester: val }))}
+              helperText="You can also set or change this anytime in your profile settings."
+            />
 
             {/* Password */}
             <div>

@@ -11,6 +11,7 @@ import DashboardPage from './pages/DashboardPage';
 import SubjectsPage from './pages/SubjectsPage';
 import SubjectWorkspacePage from './pages/SubjectWorkspacePage';
 import ProfilePage from './pages/ProfilePage';
+import ExamPlannerPage from './pages/ExamPlannerPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/subjects" element={<SubjectsPage />} />
             <Route path="/subjects/:id" element={<SubjectWorkspacePage />} />
+            <Route path="/exams" element={<ExamPlannerPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
 

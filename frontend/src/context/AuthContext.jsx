@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (name, email, password, confirmPassword) => {
+  const register = async (name, email, password, confirmPassword, semester = '') => {
     setAuthError(null);
     try {
       const res = await authAPI.register({
@@ -72,6 +72,7 @@ export const AuthProvider = ({ children }) => {
         email,
         password,
         confirmPassword,
+        semester,
       });
       const { token: receivedToken, user: receivedUser } = res.data;
 
@@ -90,21 +91,46 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateProfileName = async (newName) => {
+  const googleLogin = async (credential) => {
+    setAuthError(null);
     try {
-      const res = await userAPI.updateProfile({ name: newName });
+      const res = await authAPI.googleLogin(credential);
+      const { token: receivedToken, user: receivedUser } = res.data;
+
+      setToken(receivedToken);
+      setUser(receivedUser);
+
+      localStorage.setItem('studypilot_token', receivedToken);
+      localStorage.setItem('studypilot_user', JSON.stringify(receivedUser));
+
+      return { success: true };
+    } catch (err) {
+      const message =
+        err.response?.data?.message || 'Google sign-in failed. Please try again.';
+      setAuthError(message);
+      return { success: false, error: message };
+    }
+  };
+
+  const updateProfile = async (profileData) => {
+    try {
+      const res = await userAPI.updateProfile(profileData);
       if (res.data?.success && res.data?.data) {
-        const updated = { ...user, name: res.data.data.name };
+        const updated = { ...user, ...res.data.data };
         setUser(updated);
         localStorage.setItem('studypilot_user', JSON.stringify(updated));
         return { success: true, data: res.data.data };
       }
-      return { success: false, error: 'Failed to update name.' };
+      return { success: false, error: 'Failed to update profile.' };
     } catch (err) {
       const message =
-        err.response?.data?.message || 'Failed to update profile name.';
+        err.response?.data?.message || 'Failed to update profile.';
       return { success: false, error: message };
     }
+  };
+
+  const updateProfileName = async (newName) => {
+    return updateProfile({ name: newName });
   };
 
   const value = {
@@ -115,8 +141,10 @@ export const AuthProvider = ({ children }) => {
     setAuthError,
     login,
     register,
-    logout,
+    googleLogin,
+    updateProfile,
     updateProfileName,
+    logout,
     isAuthenticated: !!token && !!user,
   };
 

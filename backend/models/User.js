@@ -16,13 +16,34 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
         'Please provide a valid email address',
       ],
     },
     passwordHash: {
       type: String,
-      required: [true, 'Password hash is required'],
+      default: '',
+    },
+    semester: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: [50, 'Semester description cannot exceed 50 characters'],
+    },
+    branch: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: [100, 'Branch description cannot exceed 100 characters'],
+    },
+    googleId: {
+      type: String,
+      default: null,
+      sparse: true,
+    },
+    avatar: {
+      type: String,
+      default: '',
     },
   },
   {
@@ -32,6 +53,7 @@ const userSchema = new mongoose.Schema(
 
 // Method to verify password
 userSchema.methods.comparePassword = async function (enteredPassword) {
+  if (!this.passwordHash) return false;
   return await bcrypt.compare(enteredPassword, this.passwordHash);
 };
 
@@ -42,6 +64,11 @@ userSchema.methods.toSafeObject = function () {
     _id: this._id,
     name: this.name,
     email: this.email,
+    semester: this.semester || '',
+    branch: this.branch || '',
+    googleId: this.googleId || null,
+    avatar: this.avatar || '',
+    isGoogleUser: Boolean(this.googleId),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
   };

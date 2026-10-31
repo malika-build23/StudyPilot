@@ -15,7 +15,7 @@ const generateToken = (userId) => {
 // @access  Public
 exports.register = async (req, res, next) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, confirmPassword, semester } = req.body;
 
     // Validation
     if (!name || !email || !password) {
@@ -59,6 +59,7 @@ exports.register = async (req, res, next) => {
       name: name.trim(),
       email: trimmedEmail,
       passwordHash,
+      semester: semester ? semester.trim() : '',
     });
 
     const token = generateToken(user._id);
@@ -113,6 +114,105 @@ exports.login = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: 'Logged in successfully.',
+      token,
+      user: user.toSafeObject(),
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Authenticate or register student using Google ID token
+// @route   POST /api/auth/google
+// @access  Public
+exports.googleAuth = async (req, res, next) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({
+        success: false,
+        message: 'Google identity credential token is required.',
+      });
+    }
+
+    const googleClientId = process.env.GOOGLE_CLIENT_ID;
+    if (!googleClientId) {
+      return res.status(503).json({
+        success: false,
+        message:
+          'Google authentication is not yet configured on this server. Please set GOOGLE_CLIENT_ID in backend/.env.',
+      });
+    }
+
+    const { OAuth2Client } = require('google-auth-library');
+    const client = new OAuth2Client(googleClientId);
+
+    let payload;
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: googleClientId,
+      });
+      payload = ticket.getPayload();
+    } catch (verifyErr) {
+      console.error('Google token verification failed:', verifyErr.message);
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid or expired Google identity token. Please try again.',
+      });
+    }
+
+    if (!payload || !payload.email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Google token does not contain a verified email address.',
+      });
+    }
+
+    const googleEmail = payload.email.toLowerCase().trim();
+    const googleName = payload.name || payload.given_name || googleEmail.split('@')[0];
+    const googleSub = payload.sub;
+    const picture = payload.picture || '';
+
+    // Check if user exists
+    let user = await User.findOne({ email: googleEmail });
+
+    if (user) {
+      // Existing user: Link Google ID and update avatar if missing
+      let modified = false;
+      if (!user.googleId) {
+        user.googleId = googleSub;
+        modified = true;
+      }
+      if (!user.avatar && picture) {
+        user.avatar = picture;
+        modified = true;
+      }
+      if (modified) {
+        await user.save();
+      }
+    } else {
+      // New user: Create account safely with random bcrypt password hash
+      const randomPassword =
+        Math.random().toString(36).slice(-8) + Date.now().toString(36) + '!SP';
+      const salt = await bcrypt.genSalt(10);
+      const passwordHash = await bcrypt.hash(randomPassword, salt);
+
+      user = await User.create({
+        name: googleName.trim(),
+        email: googleEmail,
+        passwordHash,
+        googleId: googleSub,
+        avatar: picture,
+      });
+    }
+
+    const token = generateToken(user._id);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Signed in with Google successfully.',
       token,
       user: user.toSafeObject(),
     });

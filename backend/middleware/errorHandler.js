@@ -49,6 +49,20 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
+  // Multer File Upload Errors
+  if (err.name === 'MulterError') {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).json({
+        success: false,
+        message: 'File size exceeds 25MB limit. Please upload a smaller document.',
+      });
+    }
+    return res.status(400).json({
+      success: false,
+      message: `File upload error: ${err.message}`,
+    });
+  }
+
   res.status(error.statusCode || 500).json({
     success: false,
     message: error.message || 'Internal Server Error',

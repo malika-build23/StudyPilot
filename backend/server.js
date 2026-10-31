@@ -14,10 +14,15 @@ const authRoutes = require('./routes/authRoutes');
 const subjectRoutes = require('./routes/subjectRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const userRoutes = require('./routes/userRoutes');
-
-// Initialize MongoDB connection
-connectDB();
-
+const materialRoutes = require('./routes/materialRoutes');
+const aiRoutes = require('./routes/aiRoutes');
+const quizRoutes = require('./routes/quizRoutes');
+const attemptRoutes = require('./routes/attemptRoutes');
+const analyticsRoutes = require('./routes/analyticsRoutes');
+const examRoutes = require('./routes/examRoutes');
+const studyPlanRoutes = require('./routes/studyPlanRoutes');
+const dateSheetRoutes = require('./routes/dateSheetRoutes');
+// Express Application
 const app = express();
 
 // Middleware
@@ -60,6 +65,14 @@ app.use('/api/auth', authRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/materials', materialRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/quizzes', quizRoutes);
+app.use('/api/attempts', attemptRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/exams', examRoutes);
+app.use('/api/study-plans', studyPlanRoutes);
+app.use('/api/date-sheets', dateSheetRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {
@@ -72,10 +85,23 @@ app.use((req, res, next) => {
 // Centralized Error Handling Middleware
 app.use(errorHandler);
 
+
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
-  console.log(`[StudyPilot AI] Backend running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-});
+let server;
+const startServer = async () => {
+  try {
+    await connectDB();
+    server = app.listen(PORT, () => {
+      console.log(`[StudyPilot AI] Backend running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    });
+    return server;
+  } catch (err) {
+    console.error('Fatal: Failed to start StudyPilot AI server:', err);
+    process.exit(1);
+  }
+};
 
-module.exports = { app, server };
+startServer();
+
+module.exports = { app, startServer };

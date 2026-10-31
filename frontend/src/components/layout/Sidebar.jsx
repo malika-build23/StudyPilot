@@ -47,9 +47,9 @@ const Sidebar = ({ isOpen, onClose }) => {
       badge: 'Phase 3',
     },
     {
-      label: 'Study Planner',
+      to: '/exams',
+      label: 'Exam Planner',
       icon: CalendarDays,
-      comingSoon: true,
       badge: 'Phase 4',
     },
     {
@@ -152,7 +152,18 @@ const Sidebar = ({ isOpen, onClose }) => {
                         isActive ? 'text-white' : 'text-slate-500'
                       }`}
                     />
-                    <span>{item.label}</span>
+                    <span className="flex-1 text-left">{item.label}</span>
+                    {item.badge && (
+                      <span
+                        className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded ${
+                          isActive
+                            ? 'bg-white/20 text-white'
+                            : 'bg-blue-100 text-blue-700'
+                        }`}
+                      >
+                        {item.badge}
+                      </span>
+                    )}
                   </>
                 )}
               </NavLink>

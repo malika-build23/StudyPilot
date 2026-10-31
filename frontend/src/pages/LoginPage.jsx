@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import GoogleSignInButton from '../components/auth/GoogleSignInButton';
 import { Compass, Mail, Lock, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 
 const LoginPage = () => {
@@ -72,6 +73,26 @@ const LoginPage = () => {
               <span>{displayedError}</span>
             </div>
           )}
+
+          {/* Direct Google Sign-In */}
+          <div className="mb-5">
+            <GoogleSignInButton
+              text="Continue with Google"
+              onSuccess={() => navigate(from, { replace: true })}
+            />
+          </div>
+
+          {/* Clean OR divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-3 text-slate-400 font-semibold tracking-wider">
+                or sign in with email
+              </span>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Address */}

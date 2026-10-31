@@ -26,6 +26,9 @@ exports.getUserProfile = async (req, res, next) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        semester: user.semester || '',
+        avatar: user.avatar || '',
+        isGoogleUser: Boolean(user.googleId),
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
         totalSubjects,
@@ -36,14 +39,14 @@ exports.getUserProfile = async (req, res, next) => {
   }
 };
 
-// @desc    Update user profile (name)
+// @desc    Update user profile (name, semester)
 // @route   PUT /api/users/profile
 // @access  Private
 exports.updateUserProfile = async (req, res, next) => {
   try {
-    const { name } = req.body;
+    const { name, semester } = req.body;
 
-    if (!name || !name.trim()) {
+    if (name !== undefined && !name.trim()) {
       return res.status(400).json({
         success: false,
         message: 'Name cannot be empty.',
@@ -58,7 +61,13 @@ exports.updateUserProfile = async (req, res, next) => {
       });
     }
 
-    user.name = name.trim();
+    if (name && name.trim()) {
+      user.name = name.trim();
+    }
+    if (semester !== undefined) {
+      user.semester = typeof semester === 'string' ? semester.trim() : '';
+    }
+
     await user.save();
 
     const totalSubjects = await Subject.countDocuments({ userId: user._id });
@@ -70,6 +79,9 @@ exports.updateUserProfile = async (req, res, next) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        semester: user.semester || '',
+        avatar: user.avatar || '',
+        isGoogleUser: Boolean(user.googleId),
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
         totalSubjects,

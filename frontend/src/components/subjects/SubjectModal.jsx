@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, BookOpen, Loader2 } from 'lucide-react';
+import SemesterSelect from '../common/SemesterSelect';
 
 const SubjectModal = ({ isOpen, onClose, onSubmit, initialData = null, isSubmitting = false }) => {
   const [formData, setFormData] = useState({
@@ -92,22 +93,13 @@ const SubjectModal = ({ isOpen, onClose, onSubmit, initialData = null, isSubmitt
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-              Semester / Term / Course Code (Optional)
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="e.g. Semester 3, Fall 2026, CS201"
-                value={formData.semester}
-                onChange={(e) =>
-                  setFormData({ ...formData, semester: e.target.value })
-                }
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-900 placeholder:text-slate-400 transition-all outline-none"
-              />
-            </div>
-          </div>
+          <SemesterSelect
+            id="subject-semester-select"
+            label="Semester / Term / Course Code (Optional)"
+            value={formData.semester}
+            onChange={(val) => setFormData({ ...formData, semester: val })}
+            helperText="Choose Semester 1–8 or select Other to enter terms like Fall 2026 or Course Codes."
+          />
 
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { 
   UploadCloud, 
   BookOpen, 
@@ -9,16 +10,18 @@ import {
 } from 'lucide-react';
 
 const steps = [
-  { label: 'Upload', icon: UploadCloud, desc: 'Course materials & notes' },
-  { label: 'Understand', icon: BookOpen, desc: 'AI concept breakdowns' },
-  { label: 'Learn', icon: BrainCircuit, desc: 'High-yield summaries' },
-  { label: 'Test', icon: CheckSquare, desc: 'Adaptive diagnostic quizzes' },
-  { label: 'Analyse', icon: BarChart3, desc: 'Weak area performance' },
-  { label: 'Plan', icon: CalendarClock, desc: 'Dynamic exam schedules' },
+  { label: 'Upload', icon: UploadCloud, desc: 'Course materials & notes', path: '/subjects' },
+  { label: 'Understand', icon: BookOpen, desc: 'AI concept breakdowns', path: '/subjects' },
+  { label: 'Learn', icon: BrainCircuit, desc: 'High-yield summaries', path: '/subjects' },
+  { label: 'Test', icon: CheckSquare, desc: 'Adaptive diagnostic quizzes', path: '/subjects' },
+  { label: 'Analyse', icon: BarChart3, desc: 'Weak area performance', path: '/dashboard' },
+  { label: 'Plan', icon: CalendarClock, desc: 'Dynamic exam schedules', path: '/exams' },
   { label: 'Succeed', icon: Award, desc: 'Target grade achieved' },
 ];
 
 const WorkflowBanner = ({ compact = false }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs mb-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-slate-100 gap-2">
@@ -41,7 +44,10 @@ const WorkflowBanner = ({ compact = false }) => {
           return (
             <div
               key={step.label}
-              className="group relative flex flex-col items-center text-center p-3 rounded-xl bg-slate-50/70 hover:bg-blue-50/60 border border-slate-100 hover:border-blue-200 transition-all duration-200"
+              onClick={() => step.path && navigate(step.path)}
+              className={`group relative flex flex-col items-center text-center p-3 rounded-xl bg-slate-50/70 hover:bg-blue-50/60 border border-slate-100 hover:border-blue-200 transition-all duration-200 ${
+                step.path ? 'cursor-pointer hover:shadow-xs' : ''
+              }`}
             >
               <div className="w-9 h-9 rounded-lg bg-white shadow-xs border border-slate-200/60 flex items-center justify-center text-blue-600 mb-2 group-hover:scale-105 group-hover:bg-blue-600 group-hover:text-white transition-all">
                 <Icon className="w-4 h-4" />

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { dashboardAPI, subjectsAPI } from '../services/api';
+import { dashboardAPI, subjectsAPI, examsAPI } from '../services/api';
 import WorkflowBanner from '../components/common/WorkflowBanner';
 import SubjectModal from '../components/subjects/SubjectModal';
+import PerformanceAnalyticsView from '../components/analytics/PerformanceAnalyticsView';
 import {
   BookOpen,
   FileText,
@@ -17,7 +18,8 @@ import {
   Calendar,
   ChevronRight,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  GraduationCap
 } from 'lucide-react';
 
 const DashboardPage = () => {
@@ -25,6 +27,7 @@ const DashboardPage = () => {
   const navigate = useNavigate();
 
   const [stats, setStats] = useState(null);
+  const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -36,9 +39,16 @@ const DashboardPage = () => {
   const fetchStats = async () => {
     try {
       setLoading(true);
-      const res = await dashboardAPI.getStats();
-      if (res.data?.success) {
-        setStats(res.data.data);
+      const [statsRes, examsRes] = await Promise.allSettled([
+        dashboardAPI.getStats(),
+        examsAPI.getAll(),
+      ]);
+
+      if (statsRes.status === 'fulfilled' && statsRes.value.data?.success) {
+        setStats(statsRes.value.data.data);
+      }
+      if (examsRes.status === 'fulfilled' && examsRes.value.data?.success) {
+        setExams(examsRes.value.data.data || []);
       }
     } catch (err) {
       console.error('Error fetching dashboard stats:', err);
@@ -92,9 +102,17 @@ const DashboardPage = () => {
         <div className="absolute bottom-0 right-20 -mb-16 w-48 h-48 rounded-full bg-indigo-500/20 blur-xl pointer-events-none" />
 
         <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-blue-100 text-xs font-semibold backdrop-blur-xs mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-blue-200" />
-            <span>Academic Command Center</span>
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-blue-100 text-xs font-semibold backdrop-blur-xs">
+              <Sparkles className="w-3.5 h-3.5 text-blue-200" />
+              <span>Academic Command Center</span>
+            </div>
+            {user?.semester && (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold backdrop-blur-xs">
+                <GraduationCap className="w-3.5 h-3.5 text-blue-100" />
+                <span>{user.semester}</span>
+              </div>
+            )}
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             Welcome back, {user?.name || 'Student'}! 👋
@@ -224,28 +242,105 @@ const DashboardPage = () => {
                   Upcoming Examinations
                 </h3>
               </div>
-              <span className="text-[11px] font-semibold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
-                Phase 4 Planner
+              <span className="text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
+                Phase 4 Active
               </span>
             </div>
 
-            {/* Empty State */}
-            <div className="py-10 px-4 text-center flex flex-col items-center">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50/80 text-blue-600 flex items-center justify-center mb-4">
-                <Calendar className="w-7 h-7" />
+            {exams && exams.length > 0 ? (
+              <div className="py-3 divide-y divide-slate-100">
+                {exams.slice(0, 3).map((exam) => {
+                  const now = new Date();
+                  const examDate = new Date(exam.examDate);
+                  const diffDays = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
+                  const subjectName = exam.subjectId?.name || 'Subject';
+                  const subjectCode = exam.subjectId?.code || '';
+
+                  let badgeColor = 'bg-blue-50 text-blue-700 border-blue-100';
+                  let badgeText = `In ${diffDays}d`;
+                  if (diffDays < 0) {
+                    badgeColor = 'bg-slate-100 text-slate-500 border-slate-200';
+                    badgeText = 'Past';
+                  } else if (diffDays === 0) {
+                    badgeColor = 'bg-rose-100 text-rose-800 border-rose-200 font-bold animate-pulse';
+                    badgeText = 'Today!';
+                  } else if (diffDays === 1) {
+                    badgeColor = 'bg-amber-100 text-amber-800 border-amber-200 font-bold';
+                    badgeText = 'Tomorrow';
+                  }
+
+                  return (
+                    <div
+                      key={exam._id}
+                      onClick={() => navigate(`/exams?examId=${exam._id}`)}
+                      className="py-3 flex items-center justify-between gap-3 cursor-pointer hover:bg-slate-50/80 -mx-2 px-2 rounded-xl transition-colors group"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 truncate max-w-[120px]">
+                            {subjectCode ? `${subjectCode} • ` : ''}{subjectName}
+                          </span>
+                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${badgeColor}`}>
+                            {badgeText}
+                          </span>
+                        </div>
+                        <p className="text-xs font-bold text-slate-900 group-hover:text-blue-600 truncate transition-colors">
+                          {exam.examName}
+                        </p>
+                        <p className="text-[11px] text-slate-400">
+                          {examDate.toLocaleDateString(undefined, {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          })} • {exam.dailyAvailableHours}h daily prep
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/exams?examId=${exam._id}`);
+                        }}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-white transition-colors"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
-              <h4 className="text-sm font-bold text-slate-800">
-                No examinations scheduled yet
-              </h4>
-              <p className="text-xs text-slate-500 max-w-sm mt-1.5 leading-relaxed">
-                Exam scheduling, target revision deadlines, and readiness trackers will be activated in Phase 4: Study Planner & Analytics.
-              </p>
-            </div>
+            ) : (
+              /* Empty State */
+              <div className="py-8 px-4 text-center flex flex-col items-center">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50/80 text-blue-600 flex items-center justify-center mb-3">
+                  <Calendar className="w-6 h-6" />
+                </div>
+                <h4 className="text-sm font-bold text-slate-800">
+                  No examinations scheduled yet
+                </h4>
+                <p className="text-xs text-slate-500 max-w-sm mt-1 leading-relaxed">
+                  Schedule your upcoming midterms and finals to unlock personalized AI study schedules.
+                </p>
+                <button
+                  onClick={() => navigate('/exams')}
+                  className="mt-3.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Schedule Exam</span>
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span>Automated countdowns</span>
-            <span className="text-blue-600 font-medium">Coming Soon</span>
+            <span>Automated AI study timelines</span>
+            <button
+              onClick={() => navigate('/exams')}
+              className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1"
+            >
+              <span>View Exam Planner</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
 
@@ -305,6 +400,30 @@ const DashboardPage = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* 5. Phase 3 Part B: Diagnostic Performance & Topic Mastery Analytics */}
+      <div className="space-y-4 pt-4 border-t border-slate-200/80">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
+              <TrendingUp className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                Academic Performance & Diagnostic Mastery
+              </h3>
+              <p className="text-xs text-slate-500">
+                Real-time multi-quiz accuracy, score history, and weak-topic detection
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">
+            Phase 3 Part B Active
+          </span>
+        </div>
+
+        <PerformanceAnalyticsView />
       </div>
 
       {/* Modal: Create Subject */}

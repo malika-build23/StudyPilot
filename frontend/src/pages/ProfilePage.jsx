@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { userAPI } from '../services/api';
+import SemesterSelect from '../components/common/SemesterSelect';
 import {
   Mail,
   Calendar,
@@ -14,12 +15,13 @@ import {
 } from 'lucide-react';
 
 const ProfilePage = () => {
-  const { updateProfileName } = useAuth();
+  const { updateProfile } = useAuth();
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Name edit form state
+  // Edit form state
   const [nameInput, setNameInput] = useState('');
+  const [semesterInput, setSemesterInput] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -31,6 +33,7 @@ const ProfilePage = () => {
       if (res.data?.success) {
         setProfileData(res.data.data);
         setNameInput(res.data.data.name || '');
+        setSemesterInput(res.data.data.semester || '');
       }
     } catch (err) {
       console.error('Error fetching profile:', err);
@@ -44,7 +47,7 @@ const ProfilePage = () => {
     fetchProfile();
   }, []);
 
-  const handleUpdateName = async (e) => {
+  const handleUpdateProfile = async (e) => {
     e.preventDefault();
     if (!nameInput.trim()) {
       setErrorMessage('Name cannot be empty.');
@@ -55,15 +58,22 @@ const ProfilePage = () => {
     setSuccessMessage('');
     setIsUpdating(true);
 
-    const result = await updateProfileName(nameInput.trim());
+    const result = await updateProfile({
+      name: nameInput.trim(),
+      semester: semesterInput.trim(),
+    });
     setIsUpdating(false);
 
     if (result.success) {
-      setProfileData((prev) => ({ ...prev, name: result.data.name }));
-      setSuccessMessage('Student name updated successfully!');
+      setProfileData((prev) => ({
+        ...prev,
+        name: result.data.name,
+        semester: result.data.semester,
+      }));
+      setSuccessMessage('Student profile details updated successfully!');
       setTimeout(() => setSuccessMessage(''), 4000);
     } else {
-      setErrorMessage(result.error || 'Failed to update name.');
+      setErrorMessage(result.error || 'Failed to update profile.');
     }
   };
 
@@ -107,6 +117,12 @@ const ProfilePage = () => {
                 <ShieldCheck className="w-3.5 h-3.5" />
                 Verified Student
               </span>
+              {profileData?.semester && (
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
+                  <GraduationCap className="w-3.5 h-3.5" />
+                  {profileData.semester}
+                </span>
+              )}
               <span className="text-[11px] text-slate-400 flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
                 Joined{' '}
@@ -140,19 +156,21 @@ const ProfilePage = () => {
               <GraduationCap className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-slate-500 font-medium">Current Status</p>
-              <p className="text-lg font-extrabold text-slate-900">Active Student</p>
+              <p className="text-xs text-slate-500 font-medium">Academic Semester</p>
+              <p className="text-lg font-extrabold text-slate-900">
+                {profileData?.semester || 'Not Selected'}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Edit Name Form */}
+        {/* Edit Name & Semester Form */}
         <div className="pt-6">
           <h4 className="text-sm font-bold text-slate-900 mb-1">
             Update Student Information
           </h4>
           <p className="text-xs text-slate-500 mb-4">
-            Change how your name is displayed across StudyPilot AI workspaces.
+            Change your display name and academic semester across StudyPilot AI.
           </p>
 
           {successMessage && (
@@ -169,7 +187,7 @@ const ProfilePage = () => {
             </div>
           )}
 
-          <form onSubmit={handleUpdateName} className="space-y-4 max-w-md">
+          <form onSubmit={handleUpdateProfile} className="space-y-4 max-w-md">
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Full Name
@@ -183,6 +201,13 @@ const ProfilePage = () => {
                 className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-900 transition-all outline-none"
               />
             </div>
+
+            <SemesterSelect
+              value={semesterInput}
+              onChange={setSemesterInput}
+              label="Academic Semester / Level"
+              helperText="Select your active semester or choose Other for custom degrees and terms."
+            />
 
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
@@ -202,7 +227,11 @@ const ProfilePage = () => {
             <div className="pt-2">
               <button
                 type="submit"
-                disabled={isUpdating || nameInput.trim() === profileData?.name}
+                disabled={
+                  isUpdating ||
+                  (nameInput.trim() === (profileData?.name || '') &&
+                    semesterInput.trim() === (profileData?.semester || ''))
+                }
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xs shadow-blue-500/30 transition-all disabled:opacity-50 disabled:pointer-events-none"
               >
                 {isUpdating ? (
